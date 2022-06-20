@@ -1,0 +1,21 @@
+.co-file-dropzone .co-m-nav-title--detail.co-m-nav-title {
+  display: none;
+}
+
+.node-selector-list {
+  max-height: 17rem;
+  overflow: auto;
+}
+
+.node-health-check-editor-yaml-view {
+  display: flex;
+  flex-grow: 1;
+}
+
+.node-health-check-editor-yaml-view .yaml-editor__buttons {
+  display: none;
+}
+
+#info-inline-alert {
+  margin-bottom: unset;
+}

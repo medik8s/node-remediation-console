@@ -1,0 +1,100 @@
+[
+  {
+    "type": "console.flag/model",
+    "properties": {
+      "flag": "FLAG",
+      "model": {
+        "group": "remediation.medik8s.io",
+        "version": "v1alpha1",
+        "kind": "NodeHealthCheck"
+      }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": ["/node-remediation-console"],
+      "component": {
+        "$codeRef": "nodeHealthCheckListPage.default"
+      }
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "admin-node-remediation-console",
+      "perspective": "admin",
+      "section": "compute",
+      "name": "%plugin__node-remediation-console-plugin~NodeHealthChecks%",
+      "href": "/node-remediation-console",
+      "insertAfter": "nodes"
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  },
+  {
+    "type": "console.resource/create",
+    "properties": {
+      "model": {
+        "kind": "NodeHealthCheck",
+        "group": "remediation.medik8s.io",
+        "version": "v1alpha1"
+      },
+      "component": {
+        "$codeRef": "nodeHealthCheckCreatePage.default"
+      }
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  },
+  {
+    "type": "console.page/resource/list",
+    "properties": {
+      "model": {
+        "kind": "NodeHealthCheck",
+        "group": "remediation.medik8s.io",
+        "version": "v1alpha1"
+      },
+      "component": {
+        "$codeRef": "nodeHealthCheckListPage.default"
+      }
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  },
+  {
+    "type": "console.page/resource/details",
+    "properties": {
+      "model": {
+        "kind": "NodeHealthCheck",
+        "group": "remediation.medik8s.io",
+        "version": "v1alpha1"
+      },
+      "component": {
+        "$codeRef": "nodeHealthCheckDetailsPage.default"
+      }
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "path": [
+        "/k8s/cluster/remediation.medik8s.io~v1alpha1~NodeHealthCheck/:name/edit"
+      ],
+      "component": { "$codeRef": "nodeHealthCheckEditPage.default" }
+    },
+    "flags": {
+      "required": ["FLAG"]
+    }
+  }
+]

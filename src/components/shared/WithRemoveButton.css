@@ -1,0 +1,7 @@
+#remove-button {
+  align-self: flex-end;
+}
+
+#remove-button button {
+  padding-left: unset;
+}
