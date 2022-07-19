@@ -1,4 +1,8 @@
-
-sudo docker build -t $IMAGE .
-sudo docker run -it --rm -d -p 9001:80 $IMAGE &
-sudo docker push $IMAGE
+if [ $# -eq 0 ]
+  then
+    echo "Usage: build-image.sh <image>"
+    exit 0
+fi
+IMAGE=$1
+docker build -t $IMAGE .
+docker push $IMAGE

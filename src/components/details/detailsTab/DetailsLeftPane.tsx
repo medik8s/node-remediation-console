@@ -1,9 +1,9 @@
-import { Timestamp } from "@openshift-console/dynamic-plugin-sdk";
 import { DescriptionList } from "@patternfly/react-core";
 import { DetailsItem } from "components/copiedFromConsole/utils/details-item";
 import { LabelList } from "components/copiedFromConsole/utils/label-list";
 import OwnerReferences from "components/copiedFromConsole/utils/OwnerReferences";
 import { Selector } from "components/copiedFromConsole/utils/selector";
+import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";

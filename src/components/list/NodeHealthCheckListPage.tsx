@@ -33,6 +33,7 @@ import { withFallback } from "components/copiedFromConsole/error/error-boundary"
 import { sortable, SortByDirection } from "@patternfly/react-table";
 import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
 import { EmptyBox } from "components/copiedFromConsole/status-box";
+import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
 
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],
@@ -103,8 +104,8 @@ const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
         />
       </TableData>
       <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
-        {/* <Timestamp timestamp={obj.metadata.creationTimestamp} /> */}
-        {obj.metadata.creationTimestamp}
+        <Timestamp timestamp={obj.metadata.creationTimestamp} />
+        {/* {obj.metadata.creationTimestamp} */}
       </TableData>
       <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
         <Remediator obj={obj} />
