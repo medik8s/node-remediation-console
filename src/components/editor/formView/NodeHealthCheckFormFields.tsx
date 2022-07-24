@@ -70,9 +70,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
           name="formData.name"
           label={t("Name")}
           data-test="NodeHealthCheck-name"
-          helpText={t(
-            "A unique name for the NodeHealthCheck within the project"
-          )}
+          helpText={t("A unique name for the NodeHealthCheck")}
         />
         <RemediatorField
           formViewFieldName={formViewFieldName}

@@ -1,6 +1,6 @@
 import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import * as React from "react";
-import NodeHealthCheckPage from "./NodeHealthCheckPage";
+import NodeHealthCheckPage from "./NodeHealthCheckForm";
 
 const NodeHealthCheckCreatePage = () => {
   return (

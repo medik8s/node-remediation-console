@@ -6,7 +6,7 @@ import { Grid, GridItem } from "@patternfly/react-core";
 import { Loading } from "components/copiedFromConsole/status-box";
 import { SectionHeading } from "components/copiedFromConsole/utils/headings";
 import { NodeHealthCheckModel } from "data/model";
-import { getName } from "data/selectors";
+import { getName } from "data/nodeHealthCheck";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";

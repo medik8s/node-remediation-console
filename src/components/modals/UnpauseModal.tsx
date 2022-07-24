@@ -13,10 +13,11 @@ import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
 import { LoadingInline } from "components/copiedFromConsole/status-box";
 import * as React from "react";
 import * as _ from "lodash";
-import { getPauseRequests } from "data/selectors";
+import { getPauseRequests } from "data/nodeHealthCheck";
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";
+import * as pluralize from "pluralize";
 
 type PauseReasonFieldProps = {
   pauseReasons: string[];
@@ -24,14 +25,11 @@ type PauseReasonFieldProps = {
 
 const PauseReasons: React.FC<PauseReasonFieldProps> = ({ pauseReasons }) => {
   return (
-    <p>
+    <TextContent>
       {pauseReasons.map((value, idx) => (
-        <>
-          <span>{value}</span>
-          <br />
-        </>
+        <Text>{value}</Text>
       ))}
-    </p>
+    </TextContent>
   );
 };
 
@@ -54,7 +52,11 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
     setIsSubmitting(false);
     onClose();
   };
-
+  const pauseReasonsTxt = pluralize("reason", pauseRequests.length);
+  const infoMessage =
+    pauseRequests.length > 1
+      ? `All the pause ${pauseReasonsTxt} will be removed`
+      : `The pause ${pauseReasonsTxt} will be removed`;
   return (
     <Modal
       isOpen={isOpen}
@@ -63,7 +65,12 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
       title={t("Unpause NodeHealthCheck")}
       description={t("Are you sure you want to unpause Node health check?")}
       actions={[
-        <Button key="confirm" variant="primary" onClick={onSubmit}>
+        <Button
+          key="confirm"
+          variant="primary"
+          onClick={onSubmit}
+          isDisabled={isSubmitting}
+        >
           {t("Unpause")}
         </Button>,
         <Button key="cancel" variant="link" onClick={onClose}>
@@ -74,7 +81,9 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
       <Stack hasGutter>
         <StackItem>
           <TextContent id="#pause-reason">
-            <Text component={TextVariants.h4}>{t("Pause reason(s)")}</Text>
+            <Text component={TextVariants.h4}>
+              {t(`Pause ${pauseReasonsTxt}`)}
+            </Text>
             {pauseRequests && <PauseReasons pauseReasons={pauseRequests} />}
           </TextContent>
         </StackItem>
@@ -84,7 +93,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
               size="sm"
               color="var(--pf-global--info-color--100)"
             />
-            &nbsp;{t("All the pause reason(s) will be removed.")}
+            &nbsp;{`${infoMessage}`}
           </Text>
         </StackItem>
       </Stack>

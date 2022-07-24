@@ -19,11 +19,6 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
     return null;
   }
 
-  const onCloseDelete = () => {
-    modalsContext.closeModal();
-    onDelete();
-  };
-
   return (
     <>
       {modalsContext.isOpen(ModalId.PAUSE) && (
@@ -50,8 +45,9 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
       {modalsContext.isOpen(ModalId.DELETE) && (
         <DeleteModal
           isOpen={modalsContext.isOpen(ModalId.DELETE)}
-          onClose={onCloseDelete}
+          onClose={modalsContext.closeModal}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
+          onDelete={onDelete}
         />
       )}
     </>

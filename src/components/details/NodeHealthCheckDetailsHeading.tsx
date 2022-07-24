@@ -1,7 +1,7 @@
 import useNodeHealthCheckActions from "components/actions/useNodeHealthCheckActions";
 import { PageHeading } from "components/copiedFromConsole/utils/headings";
 import { NodeHealthCheckModel } from "data/model";
-import { getName, getPhase } from "data/selectors";
+import { getName, getPhase } from "data/nodeHealthCheck";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import * as React from "react";

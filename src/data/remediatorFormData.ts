@@ -30,8 +30,14 @@ const getBuiltInRemediatorTemplate = (
 
 export const getRemediator = (
   initialRemediationTemplate: RemediationTemplate,
-  remediationTemplate: RemediationTemplate
+  remediationTemplate: RemediationTemplate | undefined
 ): FormDataRemediator => {
+  if (!remediationTemplate) {
+    return {
+      kind: RemediatorKind.SNR,
+      template: BuiltInRemediationTemplate.ResourceDeletion,
+    };
+  }
   const builtInTemplate = getBuiltInRemediatorTemplate(
     initialRemediationTemplate,
     remediationTemplate

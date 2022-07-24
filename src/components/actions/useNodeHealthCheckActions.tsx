@@ -1,6 +1,6 @@
 import { NodeHealthCheck } from "data/types";
 import { ModalId } from "components/modals/Modals";
-import { getName, getPauseRequests } from "data/selectors";
+import { getName, getPauseRequests } from "data/nodeHealthCheck";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { Action } from "@openshift-console/dynamic-plugin-sdk";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";

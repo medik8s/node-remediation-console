@@ -58,6 +58,7 @@ export type NodeHealthCheckSpec = {
   remediationTemplate: RemediationTemplate;
   minHealthy?: string;
   unhealthyConditions?: UnhealthyConditions;
+  pauseRequests?: string[];
 };
 
 export type BasicResourceInfo = {
@@ -67,7 +68,7 @@ export type BasicResourceInfo = {
 };
 
 export type InitialNodeHealthCheck = {
-  spec: Required<NodeHealthCheckSpec>;
+  spec: Omit<Required<NodeHealthCheckSpec>, "pauseRequests">;
 } & BasicResourceInfo;
 
 export enum StatusPhase {
@@ -85,9 +86,7 @@ export type NodeHealthCheckStatus = {
 };
 
 export type NodeHealthCheck = BasicResourceInfo & {
-  spec?: NodeHealthCheckSpec & {
-    pauseRequests?: string[];
-  };
+  spec?: NodeHealthCheckSpec;
   status?: NodeHealthCheckStatus;
 };
 

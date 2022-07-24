@@ -2,6 +2,7 @@ import {
   K8sResourceCommon,
   MatchLabels,
 } from "@openshift-console/dynamic-plugin-sdk";
+import * as _ from "lodash";
 import { isParseError, ParseErrorCode, throwParseError } from "./parseErrors";
 import {
   MatchExpression,
@@ -19,8 +20,7 @@ export const getLabelDisplayName = (key: string, value: string) => {
 };
 
 const getMatchExpressionLabelDisplayNames = (
-  matchExpressions: MatchExpression[] | undefined,
-  deleteUnsupported: boolean
+  matchExpressions: MatchExpression[] | undefined
 ): string[] => {
   if (!matchExpressions) {
     return [];
@@ -52,10 +52,7 @@ export const getNodeSelectorLabelDisplayNames = (
   try {
     return [
       ...getMatchLabelsDisplayNames(selector.matchLabels),
-      ...getMatchExpressionLabelDisplayNames(
-        selector.matchExpressions,
-        deleteInvalid
-      ),
+      ...getMatchExpressionLabelDisplayNames(selector.matchExpressions),
     ];
   } catch (err) {
     if (deleteInvalid) {
@@ -71,9 +68,11 @@ export const getNodeSelectorLabelDisplayNames = (
   }
 };
 
-export const getNodeSelector = (labelDisplayNames: string[]): NodeSelector => {
+export const getNodeSelector = (
+  labelDisplayNames: string[]
+): NodeSelector | undefined => {
   if (labelDisplayNames.length === 0) {
-    return { matchLabels: {} };
+    return undefined;
   }
   const matchExpressions: MatchExpression[] = [];
   const matchLabels: MatchLabels = {};

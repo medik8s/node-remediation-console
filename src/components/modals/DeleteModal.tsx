@@ -6,29 +6,33 @@ import {
   ModalVariant,
 } from "@patternfly/react-core";
 import { deleteNodeHealthCheck } from "apis/nodeHealthCheckApis";
-import { getName } from "data/selectors";
+import { getName } from "data/nodeHealthCheck";
 import * as React from "react";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheckModalProps } from "./propTypes";
 
-const DeleteModal: React.FC<NodeHealthCheckModalProps> = ({
-  isOpen,
-  nodeHealthCheck,
-  onClose,
-}) => {
+const DeleteModal: React.FC<
+  NodeHealthCheckModalProps & { onDelete: () => void }
+> = ({ isOpen, nodeHealthCheck, onClose, onDelete }) => {
   if (!isOpen) {
     return null;
   }
   const [error, setError] = React.useState<boolean>();
+  const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const { t } = useNodeHealthCheckTranslation();
-  const onDelete = () => {
+  const onClickDelete = async () => {
     try {
-      deleteNodeHealthCheck(nodeHealthCheck);
+      setIsDeleting(true);
+      await deleteNodeHealthCheck(nodeHealthCheck);
+      setIsDeleting(false);
+      onClose();
+      if (onDelete) {
+        onDelete();
+      }
     } catch (err) {
       setError(err);
       return;
     }
-    onClose();
   };
   const name = getName(nodeHealthCheck);
   return (
@@ -43,7 +47,8 @@ const DeleteModal: React.FC<NodeHealthCheckModalProps> = ({
           aria-label="delete"
           key="confirm"
           variant={ButtonVariant.danger}
-          onClick={onDelete}
+          onClick={onClickDelete}
+          isDisabled={isDeleting}
         >
           {t("Delete")}
         </Button>,

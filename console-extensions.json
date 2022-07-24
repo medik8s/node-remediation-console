@@ -11,26 +11,13 @@
     }
   },
   {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
-      "path": ["/node-remediation-console"],
-      "component": {
-        "$codeRef": "nodeHealthCheckListPage.default"
-      }
-    },
-    "flags": {
-      "required": ["FLAG"]
-    }
-  },
-  {
     "type": "console.navigation/href",
     "properties": {
       "id": "admin-node-remediation-console",
       "perspective": "admin",
       "section": "compute",
       "name": "%plugin__node-remediation-console-plugin~NodeHealthChecks%",
-      "href": "/node-remediation-console",
+      "href": "/k8s/cluster/remediation.medik8s.io~v1alpha1~NodeHealthCheck",
       "insertAfter": "nodes"
     },
     "flags": {

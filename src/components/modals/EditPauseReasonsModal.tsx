@@ -145,7 +145,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
           key="confirm"
           variant="primary"
           onClick={onConfirm}
-          isDisabled={hasEmptyValue()}
+          isDisabled={hasEmptyValue() || isSubmitting}
         >
           {confirmButtonText}
         </Button>,

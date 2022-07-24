@@ -1,4 +1,4 @@
-import { getPauseRequests } from "data/selectors";
+import { getPauseRequests } from "data/nodeHealthCheck";
 import * as React from "react";
 
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -12,7 +12,7 @@ const EditPauseModal: React.FC<NodeHealthCheckModalProps> = ({
   const { t } = useNodeHealthCheckTranslation();
   return (
     <EditPauseReasonsModal
-      title={t("Edit pause reason(s)")}
+      title={t("Edit pause reasons")}
       failureErrorMessage={t("Failed to edit pause reasons")}
       confirmButtonText="Save"
       initialPauseReasons={getPauseRequests(nodeHealthCheck)}

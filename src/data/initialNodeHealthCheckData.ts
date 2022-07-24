@@ -15,11 +15,6 @@ const initialUnhealthyConditions: UnhealthyConditions = [
     status: UnhealthyConditionStatus.False,
     type: "Ready",
   },
-  {
-    duration: "300ms",
-    status: UnhealthyConditionStatus.Unknown,
-    type: "Ready",
-  },
 ];
 
 export const initialSpec = {

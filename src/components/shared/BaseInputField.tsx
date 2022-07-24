@@ -3,6 +3,7 @@ import { FormGroup, ValidatedOptions } from "@patternfly/react-core";
 import { useField } from "formik";
 import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
 import { BaseInputFieldProps } from "./field-types";
+import { useFormikValidationFix } from "components/copiedFromConsole/hooks/formik-validation-fix";
 
 const BaseInputField: React.FC<
   BaseInputFieldProps & {
@@ -26,6 +27,7 @@ const BaseInputField: React.FC<
   const fieldId = getFieldId(name, "input");
   const isValid = !(touched && error);
   const errorMessage = !isValid ? error : "";
+  useFormikValidationFix(field.value);
   return (
     <FormGroup
       fieldId={fieldId}

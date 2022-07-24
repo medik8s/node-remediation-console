@@ -11,6 +11,7 @@ import {
 import { initialNodeHealthCheckData } from "./initialNodeHealthCheckData";
 import { load } from "js-yaml";
 import { getNodeSelector } from "./nodeSelectorData";
+import { getPauseRequests } from "./nodeHealthCheck";
 
 const getRemediatorTemplate = (
   initialRemediationTemplate: RemediationTemplate,
@@ -42,26 +43,47 @@ export const formDataToNodeHealthCheckSpec = (
 
 export const formDataToNodeHealthCheck = (
   formData: NodeHealthCheckFormData,
-  existingNodeHealthCheck?: NodeHealthCheck
+  existingNodeHealthCheck: NodeHealthCheck
 ) => {
-  const { name } = formData;
+  const formDataSpec = formDataToNodeHealthCheckSpec(formData);
+  const pauseRequests = getPauseRequests(existingNodeHealthCheck);
   return {
     ...initialNodeHealthCheckData,
     ...existingNodeHealthCheck,
     metadata: {
       ...existingNodeHealthCheck?.metadata,
-      name,
+      name: formData.name,
     },
-    spec: formDataToNodeHealthCheckSpec(formData),
+    spec: {
+      ...formDataSpec,
+      pauseRequests: pauseRequests.length > 0 ? pauseRequests : undefined,
+    },
   };
 };
 
+export const yamlTextToNodeHealthCheck = (
+  existingNodeHealthCheck: NodeHealthCheck,
+  yamlText: string
+): NodeHealthCheck => {
+  const nodeHealthCheck = load(yamlText) as NodeHealthCheck;
+  nodeHealthCheck.metadata = {
+    ...existingNodeHealthCheck.metadata,
+    ...nodeHealthCheck.metadata,
+  };
+  return nodeHealthCheck;
+};
+
 export const toNodeHealthCheck = (
+  existingNodeHealthCheck: NodeHealthCheck | undefined,
   values: NodeHealthCheckFormValues
 ): NodeHealthCheck => {
-  const yamlData = load(values.yamlData);
+  const nodeHealthCheckYaml = yamlTextToNodeHealthCheck(
+    existingNodeHealthCheck,
+    values.yamlData
+  );
   if (values.editorType === EditorType.YAML) {
-    return yamlData;
+    return nodeHealthCheckYaml;
   }
-  return formDataToNodeHealthCheck(values.formData, yamlData);
+
+  return formDataToNodeHealthCheck(values.formData, existingNodeHealthCheck);
 };

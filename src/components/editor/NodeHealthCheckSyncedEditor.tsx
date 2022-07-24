@@ -6,12 +6,11 @@ import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { EditorType } from "../copiedFromConsole/synced-editor/editor-toggle";
 import { FormFooter } from "../copiedFromConsole/form-utils";
 import { getFormData } from "data/formData";
-import { sanitizeToYaml, sanitizeToForm } from "data/sanitizeToView";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "components/copiedFromConsole/formik-fields/SyncedEditorField";
-import { load } from "js-yaml";
 import "./editor.css";
 import YamlEditorField from "./YamlEditorField";
+import { toYamlText } from "data/toYamlText";
 const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
   "console.createNodeHealthCheck.editor.lastView";
 
@@ -37,10 +36,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   const { t } = useNodeHealthCheckTranslation();
   const { setFieldValue } = useFormikContext<NodeHealthCheckFormValues>();
 
-  const disableSubmit =
-    (values.editorType === EditorType.YAML
-      ? !dirty
-      : !dirty || !_.isEmpty(errors)) || isSubmitting;
+  const disableSubmit = !dirty || !_.isEmpty(errors) || isSubmitting;
 
   const yamlEditor = React.useMemo(
     () => <YamlEditorField fieldName="yamlData" />,
@@ -75,23 +71,24 @@ export const NodeHealthCheckSyncedEditor: React.FC<
         formContext={{
           name: "formData",
           editor: formEditor,
-          sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) =>
-            sanitizeToForm(values.formData, yamlNodeHealthCheck, false),
+          sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
+            return getFormData(yamlNodeHealthCheck, false);
+          },
         }}
         yamlContext={{
           name: "yamlData",
           editor: yamlEditor,
           sanitizeTo: () =>
-            sanitizeToYaml(
+            toYamlText(
               values.formData,
-              _.merge({}, originalNodeHealthCheck, load(values.yamlData))
+              originalNodeHealthCheck,
+              values.yamlData
             ),
         }}
         lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
         noMargin
         formErrorCallback={() => {
-          setFieldValue("formParsingError", undefined);
-          return sanitizeToForm(values.formData, originalNodeHealthCheck, true);
+          return getFormData(originalNodeHealthCheck, true);
         }}
         formParsingError={values.formParsingError}
       />

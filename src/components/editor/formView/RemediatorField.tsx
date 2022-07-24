@@ -18,6 +18,7 @@ import {
   useIsSNR,
 } from "./remediatorFieldUtils";
 import DropdownField from "components/shared/DropdownField";
+import { useFormikValidationFix } from "components/copiedFromConsole/hooks/formik-validation-fix";
 
 const RadioGroupOptions = [
   {
@@ -51,8 +52,9 @@ const RemediatorKindGroup = ({
 }: FormViewFieldProps & { templateFieldName: string }) => {
   const [, , { setValue: setKind }] =
     useField<FormDataRemediator["kind"]>(fieldName);
-  const [, , { setValue: setRemediationTemplate }] =
+  const [{ value: template }, , { setValue: setRemediationTemplate }] =
     useField<FormDataRemediator["template"]>(templateFieldName);
+  useFormikValidationFix(template);
   const onChange = (kind: RemediatorKind) => {
     setKind(kind);
     if (kind === RemediatorKind.CUSTOM) {

@@ -58,19 +58,19 @@ const NodeHealthCheckPage_: React.FC<NodeHealthCheckProps> = ({
     actions: FormikHelpers<NodeHealthCheckFormValues>
   ) => {
     let resourceCall;
-    const nodeHealthCheck: NodeHealthCheck = toNodeHealthCheck(values);
+    const updatedNodeHealthCheck: NodeHealthCheck = toNodeHealthCheck(
+      nodeHealthCheck,
+      values
+    );
     if (isCreateFlow) {
       resourceCall = k8sCreate({
         model: NodeHealthCheckModel,
-        data: nodeHealthCheck,
+        data: updatedNodeHealthCheck,
       });
     } else {
-      const editNodeHealthCheckData = _.cloneDeep(nodeHealthCheck);
-      editNodeHealthCheckData.metadata = nodeHealthCheck?.metadata;
-
       resourceCall = k8sUpdate({
         model: NodeHealthCheckModel,
-        data: editNodeHealthCheckData,
+        data: updatedNodeHealthCheck,
         name,
       });
     }

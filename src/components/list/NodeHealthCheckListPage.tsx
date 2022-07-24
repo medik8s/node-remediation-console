@@ -62,9 +62,9 @@ const columns: TableColumn<NodeHealthCheck>[] = [
     transforms: [sortable],
   },
   {
-    title: "Created",
-    id: "created",
-    sort: "metadata.creationTimestamp",
+    title: "Status",
+    id: "status",
+    sort: "status.phase",
     transforms: [sortable],
   },
   {
@@ -74,9 +74,9 @@ const columns: TableColumn<NodeHealthCheck>[] = [
     transforms: [sortable],
   },
   {
-    title: "Status",
-    id: "status",
-    sort: "status.phase",
+    title: "Created",
+    id: "created",
+    sort: "metadata.creationTimestamp",
     transforms: [sortable],
   },
   { title: "", id: "kabab-menu" },
@@ -103,15 +103,15 @@ const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
           namespace={obj.metadata.namespace}
         />
       </TableData>
-      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
-        <Timestamp timestamp={obj.metadata.creationTimestamp} />
-        {/* {obj.metadata.creationTimestamp} */}
+      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
+        <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
       </TableData>
       <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
         <Remediator obj={obj} />
       </TableData>
-      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
-        <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
+      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
+        <Timestamp timestamp={obj.metadata.creationTimestamp} />
+        {/* {obj.metadata.creationTimestamp} */}
       </TableData>
       <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
         <NodeHealthCheckActionsMenu

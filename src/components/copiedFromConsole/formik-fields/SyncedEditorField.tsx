@@ -90,6 +90,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
           content = await formContext.sanitizeTo(content);
         } catch (e) {
           // Failed to sanitize, discard invalid data
+          console.error(e);
           content = null;
         }
       }
@@ -108,6 +109,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
     const newYAML = dump(prune?.(formData) ?? formData, yamlData, {
       skipInvalid: true,
     });
+    console.log({ newYAML });
     setFieldValue(
       yamlContext.name,
       yamlContext.sanitizeTo ? yamlContext.sanitizeTo(newYAML) : newYAML

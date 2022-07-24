@@ -20,6 +20,10 @@ export const getNodeRoles = (node: NodeKind): string[] => {
 export const getNodeRole = (node: NodeKind): string =>
   getNodeRoles(node).includes("master") ? "master" : "worker";
 
+export const getNodeRolesText = (node: NodeKind): string => {
+  return getNodeRoles(node).sort().join(", ") ?? "-";
+};
+
 export const getNodeAddresses = (node: NodeKind): NodeAddress[] =>
   _.get(node, "status.addresses", []);
 

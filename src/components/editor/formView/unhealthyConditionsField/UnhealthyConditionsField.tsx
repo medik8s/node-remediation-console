@@ -24,6 +24,7 @@ import "./unhealthyConditions.css";
 import DurationField from "./DurationField";
 import StatusField from "./StatusField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { useFormikValidationFix } from "components/copiedFromConsole/hooks/formik-validation-fix";
 
 const AddUnhealthyCondition: React.FC<{
   onPush: ArrayHelpers["push"];
@@ -66,6 +67,7 @@ export const UnhealthyConditionArray: React.FC<{
   fieldName: string;
 }> = ({ fieldName }) => {
   const [{ value }] = useField<FormDataUnhealthyCondition[]>(fieldName);
+  useFormikValidationFix(value ? value.length : value);
   if (!value) {
     return null;
   }

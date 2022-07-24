@@ -1,31 +1,33 @@
 import * as yup from "yup";
 import { EditorType } from "components/copiedFromConsole/synced-editor/editor-toggle";
 import { RemediatorKind } from "./types";
-//TODO: add minHealthy validation
 
-const DURATION_REGEX = /^([0-9]+(.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
+const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
 const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
+const NAME_REGEX = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
 const requiredSchema = yup.string().required("Required");
 
 const customRemediatorSchema = yup.object({
   apiVersion: requiredSchema,
   kind: requiredSchema,
   name: requiredSchema,
-  template: requiredSchema,
+  namespace: requiredSchema,
 });
 
 const formDataSchema = yup.object({
-  name: requiredSchema,
+  name: requiredSchema.matches(new RegExp(NAME_REGEX), {
+    message: `Expected value matches regular expression: ${NAME_REGEX}`,
+  }),
   minHealthy: requiredSchema.concat(
-    yup.string().matches(MIN_HEALTHY_REGEX, {
-      message: `Must match the following: ${MIN_HEALTHY_REGEX} `,
+    yup.string().matches(new RegExp(MIN_HEALTHY_REGEX), {
+      message: `Expected value is a percentage or a number. For example: 25 or 70%`,
     })
   ),
   unhealthyConditions: yup.array().of(
     yup.object().shape({
       duration: requiredSchema.concat(
-        yup.string().matches(DURATION_REGEX, {
-          message: `Must match the following: ${DURATION_REGEX}`,
+        yup.string().matches(new RegExp(DURATION_REGEX), {
+          message: `Expected value matches regular expression: ${DURATION_REGEX}`,
         })
       ),
     })

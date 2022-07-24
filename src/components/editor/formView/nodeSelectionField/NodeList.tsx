@@ -5,7 +5,7 @@ import {
   TableData,
   VirtualizedTable,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { getNodeRole } from "components/copiedFromConsole/selectors/node";
+import { getNodeRolesText } from "components/copiedFromConsole/selectors/node";
 import { NodeKind } from "components/copiedFromConsole/types/node";
 import { nodeKind } from "data/model";
 import * as React from "react";
@@ -29,8 +29,8 @@ const sortByStatus = (nodes: NodeKind[], sortDirection: SortByDirection) => {
 
 const sortByRole = (nodes: NodeKind[], sortDirection: SortByDirection) => {
   return nodes.sort((node1: NodeKind, node2: NodeKind) => {
-    const role1 = getNodeRole(node1);
-    const role2 = getNodeRole(node2);
+    const role1 = getNodeRolesText(node1);
+    const role2 = getNodeRolesText(node2);
     if (role1 === role2) {
       return 0;
     }
@@ -63,7 +63,6 @@ const columns: TableColumn<NodeKind>[] = [
 ];
 
 const NodeRow: React.FC<RowProps<NodeKind>> = ({ obj, activeColumnIDs }) => {
-  const role = getNodeRole(obj);
   return (
     <>
       <TableData id={columns[0].id} activeColumnIDs={activeColumnIDs}>
@@ -77,7 +76,7 @@ const NodeRow: React.FC<RowProps<NodeKind>> = ({ obj, activeColumnIDs }) => {
         <NodeStatus node={obj}></NodeStatus>
       </TableData>
       <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
-        {role}
+        {getNodeRolesText(obj)}
       </TableData>
     </>
   );

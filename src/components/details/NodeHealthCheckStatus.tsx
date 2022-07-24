@@ -12,7 +12,7 @@ import {
 } from "@patternfly/react-icons";
 import { ModalId } from "components/modals/Modals";
 import { useModals } from "components/modals/ModalsContext";
-import { getPauseRequests, getPhase } from "data/selectors";
+import { getPauseRequests, getPhase } from "data/nodeHealthCheck";
 import {
   NodeHealthCheck,
   StatusPhase,
@@ -88,7 +88,7 @@ const PopoverContent: React.FC<{
   reason: string;
 }> = ({ nodeHealthCheck, phase, reason }) => {
   const pauseReasons = getPauseRequests(nodeHealthCheck);
-  const showPausePopover = pauseReasons && pauseReasons.length;
+  const showPausePopover = pauseReasons.length > 0;
   const { getLabel } = usePhaseLabels();
   return (
     <TextContent>

@@ -16,11 +16,19 @@ const LabelsSelector: React.FC<{
   formViewFieldName: string;
   fieldName;
 }> = ({ nodes, formViewFieldName, fieldName }) => {
-  const isSNR = useIsSNR(formViewFieldName);
-  const [{ value }, , { setValue }] = useField<string[]>(fieldName);
-  const disableLabel = (label) => label === getNodeWorkerLabel() && isSNR;
   //handling of SNR and master nodes: since SNR doesn't support master nodes, worker node label is defined by default
   //and is disabled with a popover explaining why it's disabled
+  const isSNR = useIsSNR(formViewFieldName);
+  const [{ value }, , { setValue }] = useField<string[]>(fieldName);
+  const workerLabel = getNodeWorkerLabel();
+  React.useEffect(() => {
+    if (isSNR && !value.includes(workerLabel)) {
+      //restore worker loabel if removed
+      value.unshift(workerLabel);
+    }
+  }, [isSNR]);
+
+  const disableLabel = (label) => label === workerLabel && isSNR;
   const { t } = useNodeHealthCheckTranslation();
 
   const onSelect: SelectProps["onSelect"] = (event, selection) => {

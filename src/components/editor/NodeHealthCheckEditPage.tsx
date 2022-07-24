@@ -6,7 +6,7 @@ import { NodeHealthCheck } from "data/types";
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { RouteComponentProps } from "react-router";
-import NodeHealthCheckPage from "./NodeHealthCheckPage";
+import NodeHealthCheckPage from "./NodeHealthCheckForm";
 
 export type NodeHealthCheckEditPageProps = RouteComponentProps<{
   name: string;
