@@ -22,7 +22,6 @@ import {
 } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
-import { ModalsContextProvider } from "components/modals/ModalsContext";
 import "./list.css";
 import NodeHealthCheckStatus from "../details/NodeHealthCheckStatus";
 import NotAvailable from "./NotAvailable";
@@ -34,6 +33,7 @@ import { sortable, SortByDirection } from "@patternfly/react-table";
 import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
 import { EmptyBox } from "components/copiedFromConsole/status-box";
 import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
+import { ModalsContextProvider } from "components/modals/ModalsContext";
 
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],

@@ -5,12 +5,20 @@ import { useModals } from "./ModalsContext";
 import PauseModal from "./PauseModal";
 import { UnpauseModal } from "./UnpauseModal";
 import "./modals.css";
+import { LabelsModal } from "components/copiedFromConsole/LabelsModal/LabelsModal";
+import {
+  updateNodeHealthCheckAnnotations,
+  updateNodeHealthCheckLabels,
+} from "apis/nodeHealthCheckApis";
+import { AnnotationsModal } from "components/copiedFromConsole/AnnotationsModal/AnnotationsModal";
 
 export enum ModalId {
   PAUSE = "pause",
   UNPAUSE = "unpause",
   EDIT_PAUSE = "edit_pause",
   DELETE = "delete",
+  EDIT_LABELS = "edit_labels",
+  EDIT_ANNOTATIONS = "edit_annotations",
 }
 
 const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
@@ -48,6 +56,32 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
           onClose={modalsContext.closeModal}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
           onDelete={onDelete}
+        />
+      )}
+      {modalsContext.isOpen(ModalId.EDIT_LABELS) && (
+        <LabelsModal
+          isOpen={modalsContext.isOpen(ModalId.EDIT_LABELS)}
+          onClose={modalsContext.closeModal}
+          obj={modalsContext.getNodeHealthCheck()}
+          onLabelsSubmit={(labels) =>
+            updateNodeHealthCheckLabels(
+              modalsContext.getNodeHealthCheck(),
+              labels
+            )
+          }
+        />
+      )}
+      {modalsContext.isOpen(ModalId.EDIT_ANNOTATIONS) && (
+        <AnnotationsModal
+          isOpen={modalsContext.isOpen(ModalId.EDIT_ANNOTATIONS)}
+          onClose={modalsContext.closeModal}
+          obj={modalsContext.getNodeHealthCheck()}
+          onSubmit={(annotations) =>
+            updateNodeHealthCheckAnnotations(
+              modalsContext.getNodeHealthCheck(),
+              annotations
+            )
+          }
         />
       )}
     </>

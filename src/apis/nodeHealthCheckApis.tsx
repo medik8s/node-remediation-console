@@ -47,3 +47,30 @@ export const deleteNodeHealthCheck = (
     resource: nodeHealthCheck,
   });
 };
+
+export const updateNodeHealthCheckLabels = (
+  nodeHealthCheck: NodeHealthCheck,
+  labels: { [key: string]: string }
+) => {
+  const newNodeHealthCheck: NodeHealthCheck = {
+    ...nodeHealthCheck,
+    metadata: {
+      ...nodeHealthCheck.metadata,
+      labels,
+    },
+  };
+  return updateNodeHealthCheck(newNodeHealthCheck);
+};
+
+export const updateNodeHealthCheckAnnotations = (
+  nodeHealthCheck: NodeHealthCheck,
+  annotations: { [key: string]: string }
+) => {
+  const newNodeHealthCheck: NodeHealthCheck = {
+    ...nodeHealthCheck,
+    metadata: {
+      annotations,
+    },
+  };
+  return updateNodeHealthCheck(newNodeHealthCheck);
+};

@@ -1,10 +1,10 @@
-import { DescriptionList } from "@patternfly/react-core";
 import { DetailsItem } from "components/copiedFromConsole/utils/details-item";
 import { nodeHealthCheckKind } from "data/model";
 import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
+import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
 import NodeHealthCheckStatus from "../NodeHealthCheckStatus";
 
@@ -12,9 +12,9 @@ export const DetailsRightPane: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
 }> = ({ nodeHealthCheck }) => {
   const { t } = useNodeHealthCheckTranslation();
-
+  const descriptions = usePropertyDescriptions();
   return (
-    <DescriptionList>
+    <dl className="co-m-pane__details">
       <DetailsItem
         label={t("Remediator")}
         obj={nodeHealthCheck}
@@ -26,6 +26,7 @@ export const DetailsRightPane: React.FC<{
         label={t("Min Healthy")}
         obj={nodeHealthCheck}
         path="spec.minHealthy"
+        description={descriptions.minHealthy}
         resourceKind={nodeHealthCheckKind.kind}
       ></DetailsItem>
 
@@ -33,6 +34,7 @@ export const DetailsRightPane: React.FC<{
         label={t("Observed nodes")}
         obj={nodeHealthCheck}
         path="status.observedNodes"
+        description={descriptions.observedNodes}
         resourceKind={nodeHealthCheckKind.kind}
       ></DetailsItem>
 
@@ -40,13 +42,13 @@ export const DetailsRightPane: React.FC<{
         label={t("Healthy nodes")}
         obj={nodeHealthCheck}
         path="status.healthyNodes"
+        description={descriptions.healthyNodes}
         resourceKind={nodeHealthCheckKind.kind}
       ></DetailsItem>
 
       <DetailsItem
         label={t("Status")}
         obj={nodeHealthCheck}
-        path={"status.phase"}
         resourceKind={nodeHealthCheckKind.kind}
       >
         <NodeHealthCheckStatus
@@ -54,6 +56,6 @@ export const DetailsRightPane: React.FC<{
           withPopover={true}
         />
       </DetailsItem>
-    </DescriptionList>
+    </dl>
   );
 };

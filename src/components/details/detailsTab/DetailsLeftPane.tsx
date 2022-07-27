@@ -1,13 +1,15 @@
-import { DescriptionList } from "@patternfly/react-core";
 import { DetailsItem } from "components/copiedFromConsole/utils/details-item";
 import { LabelList } from "components/copiedFromConsole/utils/label-list";
 import OwnerReferences from "components/copiedFromConsole/utils/OwnerReferences";
 import { Selector } from "components/copiedFromConsole/utils/selector";
 import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
+import { ModalId } from "components/modals/Modals";
+import { useModals } from "components/modals/ModalsContext";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
+import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
 
 export type ResourceSummaryProps = {
@@ -20,14 +22,16 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
   canEdit,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
+  const descriptions = usePropertyDescriptions();
   const { metadata } = resource;
-
+  const modalsContext = useModals();
   return (
-    <DescriptionList>
+    <dl className="co-m-pane__details">
       <DetailsItem
         label={t("Name")}
         obj={resource}
         path={"metadata.name"}
+        description={descriptions.name}
         resourceKind={nodeHealthCheckKind.kind}
       />
       <DetailsItem
@@ -38,6 +42,8 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         canEdit={canEdit}
         editAsGroup
         resourceKind={nodeHealthCheckKind.kind}
+        onEdit={(e) => modalsContext.openModal(ModalId.EDIT_LABELS, resource)}
+        description={descriptions.labels}
       >
         <LabelList kind={nodeHealthCheckStringKind} labels={metadata.labels} />
       </DetailsItem>
@@ -46,6 +52,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         obj={resource}
         path="metadata.annotations"
         resourceKind={nodeHealthCheckKind.kind}
+        description={descriptions.annotations}
       >
         {t("{{count}} annotation", {
           count: _.size(metadata.annotations),
@@ -55,6 +62,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         label={t("Node selector")}
         obj={resource}
         path={"spec.selector"}
+        description={descriptions.selector}
         resourceKind={nodeHealthCheckKind.kind}
       >
         <Selector
@@ -67,6 +75,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         obj={resource}
         path="metadata.creationTimestamp"
         resourceKind={nodeHealthCheckKind.kind}
+        description={descriptions.created_at}
       >
         <Timestamp timestamp={metadata.creationTimestamp} />
       </DetailsItem>
@@ -75,9 +84,10 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         obj={resource}
         path="metadata.ownerReferences"
         resourceKind={nodeHealthCheckKind.kind}
+        description={descriptions.owner}
       >
         <OwnerReferences obj={resource} />
       </DetailsItem>
-    </DescriptionList>
+    </dl>
   );
 };
