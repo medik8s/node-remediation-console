@@ -1,7 +1,10 @@
 import { k8sDelete, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
+import { K8sResourceKind } from "components/copiedFromConsole/k8s/types";
 import { NodeHealthCheckModel } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import * as _ from "lodash";
+import * as React from "react";
+import { useAllMachineHealthChecks } from "./useMachineHealthCheckApi";
 
 export const updateNodeHealthCheck = (
   nodeHealthCheck: NodeHealthCheck
@@ -73,4 +76,34 @@ export const updateNodeHealthCheckAnnotations = (
     },
   };
   return updateNodeHealthCheck(newNodeHealthCheck);
+};
+
+const isTerminatingMachineHealthCheck = (
+  machineHealthCheck: K8sResourceKind
+) => {
+  return (
+    machineHealthCheck.spec.unhealthyConditions &&
+    machineHealthCheck.spec.unhealthyConditions.length === 1 &&
+    machineHealthCheck.spec.unhealthyConditions[0].type === "Terminating"
+  );
+};
+
+export const useNodeHealthChecksDisabled = () => {
+  const [machineHealthChecks, loaded, error] = useAllMachineHealthChecks();
+  const isDisabled = React.useMemo(() => {
+    if (!machineHealthChecks || !loaded || error) {
+      return false;
+    }
+    if (machineHealthChecks.length > 1) {
+      return true;
+    }
+    if (machineHealthChecks.length === 1) {
+      return !isTerminatingMachineHealthCheck(machineHealthChecks[0]);
+    }
+    return false;
+  }, [machineHealthChecks, loaded, error]);
+  React.useEffect(() => {
+    console.log(machineHealthChecks);
+  }, [machineHealthChecks]);
+  return [isDisabled, loaded, error];
 };

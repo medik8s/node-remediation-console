@@ -41,7 +41,7 @@ const HelpText: React.FC = () => {
   );
 };
 
-const NodeHealthCheckPage_: React.FC<NodeHealthCheckProps> = ({
+const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   name,
   title,
   nodeHealthCheck,
@@ -105,6 +105,6 @@ const NodeHealthCheckPage_: React.FC<NodeHealthCheckProps> = ({
   );
 };
 
-const NodeHealthCheckPage = withFallback(NodeHealthCheckPage_);
+const NodeHealthCheckForm = withFallback(NodeHealthCheckForm__);
 
-export default NodeHealthCheckPage;
+export default NodeHealthCheckForm;

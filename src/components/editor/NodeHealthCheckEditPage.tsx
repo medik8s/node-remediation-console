@@ -6,7 +6,7 @@ import { NodeHealthCheck } from "data/types";
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { RouteComponentProps } from "react-router";
-import NodeHealthCheckPage from "./NodeHealthCheckForm";
+import NodeHealthCheckForm from "./NodeHealthCheckForm";
 
 export type NodeHealthCheckEditPageProps = RouteComponentProps<{
   name: string;
@@ -29,7 +29,7 @@ const NodeHealthCheckEditPage: React.FC<NodeHealthCheckEditPageProps> = ({
     return <ErrorState />;
   }
   const nodeHealthCheckForm = (
-    <NodeHealthCheckPage
+    <NodeHealthCheckForm
       name={name}
       nodeHealthCheck={nodeHealthCheck}
       title={title}

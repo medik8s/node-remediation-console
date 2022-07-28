@@ -1,11 +1,15 @@
-import { K8sModel } from "@openshift-console/dynamic-plugin-sdk";
+import {
+  ExtensionK8sKindVersionModel,
+  ExtensionK8sModel,
+  K8sModel,
+} from "@openshift-console/dynamic-plugin-sdk";
 
-export const nodeKind = {
+export const nodeKind: ExtensionK8sKindVersionModel = {
   kind: "Node",
   version: "v1",
 };
 
-export const nodeHealthCheckKind = {
+export const nodeHealthCheckKind: ExtensionK8sModel = {
   kind: "NodeHealthCheck",
   group: "remediation.medik8s.io",
   version: "v1alpha1",
@@ -29,4 +33,15 @@ export const NodeHealthCheckModel: K8sModel = {
 
 export const getVersion = () => {
   return `${nodeHealthCheckKind.group}/${nodeHealthCheckKind.version}`;
+};
+
+export const machineHealthCheckKind: ExtensionK8sModel = {
+  kind: "MachineHealthCheck",
+  group: "machine.openshift.io",
+  version: "v1beta1",
+};
+
+export const namespaceKind: ExtensionK8sKindVersionModel = {
+  kind: "Namespace",
+  version: "v1",
 };

@@ -3,158 +3,68 @@ import {
   ListPageHeader,
   ListPageBody,
   ListPageCreate,
-  VirtualizedTable,
   useK8sWatchResource,
-  TableData,
-  RowProps,
-  ResourceLink,
-  TableColumn,
   useListPageFilter,
   ListPageFilter,
   //Timestamp,
 } from "@openshift-console/dynamic-plugin-sdk";
 
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import {
-  nodeHealthCheckKind,
-  NodeHealthCheckModel,
-  nodeHealthCheckStringKind,
-} from "data/model";
+import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
-import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
 import "./list.css";
-import NodeHealthCheckStatus from "../details/NodeHealthCheckStatus";
-import NotAvailable from "./NotAvailable";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
-import NodeHealthCheckActionsMenu from "components/actions/NodeHealthCheckActionsMenu";
 import Modals from "components/modals/Modals";
-import { withFallback } from "components/copiedFromConsole/error/error-boundary";
-import { sortable, SortByDirection } from "@patternfly/react-table";
 import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
-import { EmptyBox } from "components/copiedFromConsole/status-box";
-import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
+import { LoadingBox } from "components/copiedFromConsole/status-box";
 import { ModalsContextProvider } from "components/modals/ModalsContext";
-
-const sortByRemediator = (
-  nodeHealthChecks: NodeHealthCheck[],
-  sortDirection: SortByDirection
-) => {
-  return nodeHealthChecks.sort(
-    (nodeHealthCheck1: NodeHealthCheck, nodeHealthCheck2: NodeHealthCheck) => {
-      const remediator1 = getNodeHealthCheckRemediatorLabel(nodeHealthCheck1);
-      const remediator2 = getNodeHealthCheckRemediatorLabel(nodeHealthCheck2);
-      if (remediator1 === remediator2) {
-        return 0;
-      }
-      if (remediator1 > remediator2 && sortDirection === SortByDirection.asc) {
-        return 1;
-      }
-      return -1;
-    }
-  );
-};
-
-const columns: TableColumn<NodeHealthCheck>[] = [
-  {
-    title: "Name",
-    id: "name",
-    sort: "metadata.name",
-    transforms: [sortable],
-  },
-  {
-    title: "Status",
-    id: "status",
-    sort: "status.phase",
-    transforms: [sortable],
-  },
-  {
-    title: "Remediator",
-    id: "remediator",
-    sort: sortByRemediator,
-    transforms: [sortable],
-  },
-  {
-    title: "Created",
-    id: "created",
-    sort: "metadata.creationTimestamp",
-    transforms: [sortable],
-  },
-  { title: "", id: "kabab-menu" },
-];
-
-const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
-  const remediatorLabel = getNodeHealthCheckRemediatorLabel(obj);
-  if (!remediatorLabel) {
-    return <NotAvailable />;
-  }
-  return <>{remediatorLabel}</>;
-};
-
-const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
-  obj,
-  activeColumnIDs,
-}) => {
-  return (
-    <>
-      <TableData id={columns[0].id} activeColumnIDs={activeColumnIDs}>
-        <ResourceLink
-          groupVersionKind={nodeHealthCheckKind}
-          name={obj.metadata.name}
-          namespace={obj.metadata.namespace}
-        />
-      </TableData>
-      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
-        <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
-      </TableData>
-      <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
-        <Remediator obj={obj} />
-      </TableData>
-      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
-        <Timestamp timestamp={obj.metadata.creationTimestamp} />
-        {/* {obj.metadata.creationTimestamp} */}
-      </TableData>
-      <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
-        <NodeHealthCheckActionsMenu
-          nodeHealthCheck={obj}
-          isKababToggle={true}
-        ></NodeHealthCheckActionsMenu>
-      </TableData>
-    </>
-  );
-};
-
-type NodeHealthchecksTableProps = {
-  data: NodeHealthCheck[];
-  unfilteredData: NodeHealthCheck[];
-  loaded: boolean;
-  loadError: any;
-};
-
-const EmptyNodeHealthChecks: React.FC = () => {
-  return <EmptyBox label={NodeHealthCheckModel.labelPlural}></EmptyBox>;
-};
-
-const NodeHealthchecksTable: React.FC<NodeHealthchecksTableProps> = ({
-  data,
-  unfilteredData,
-  loaded,
-  loadError,
-}) => {
-  return (
-    <VirtualizedTable<NodeHealthCheck>
-      data={data}
-      unfilteredData={unfilteredData}
-      loaded={loaded}
-      loadError={loadError}
-      columns={columns}
-      Row={NodeHealthcheckRow}
-      EmptyMsg={EmptyNodeHealthChecks}
-    />
-  );
-};
+import ErrorState from "components/shared/ErrorState";
+import { Alert, Button } from "@patternfly/react-core";
+import { useNodeHealthChecksDisabled } from "apis/nodeHealthCheckApis";
+import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
+import { withFallback } from "components/copiedFromConsole/error/error-boundary";
+import { useTranslation } from "react-i18next";
+import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 
 type ListPageProps = {
   selector?: Selector;
+};
+
+const DisabledAlert: React.FC = () => {
+  const { t } = useTranslation();
+  const navigation = useNodeHealthCheckNavigation();
+  return (
+    <Alert variant="info" isInline title={"NodeHealthChecks is disabled"}>
+      {t(
+        "NodeHealthChecks is not available because MachineHealthChecks is already enabled. To make edits, go to"
+      )}{" "}
+      <Button
+        variant="link"
+        isInline
+        onClick={() => navigation.gotoMachineHealthChecks()}
+      >
+        MachineHealthChecks page.
+      </Button>
+    </Alert>
+  );
+};
+
+const NodeHealthCheckCreate: React.FC<{ isDisabled: boolean }> = ({
+  isDisabled,
+}) => {
+  const { t } = useNodeHealthCheckTranslation();
+  const label = t("Create NodeHealthCheck");
+  return isDisabled ? (
+    <div className="co-m-primary-action">
+      <Button variant="primary" isDisabled>
+        {label}
+      </Button>
+    </div>
+  ) : (
+    <ListPageCreate groupVersionKind={nodeHealthCheckStringKind}>
+      {label}
+    </ListPageCreate>
+  );
 };
 
 const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
@@ -166,19 +76,26 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
     namespaced: false,
     selector,
   });
+  const [isDisabled, disabledLoaded, disabledError] =
+    useNodeHealthChecksDisabled();
+
   const [data, filteredData, onFilterChange] =
     useListPageFilter(nodeHealthchecks);
   const { t } = useNodeHealthCheckTranslation();
-
+  if (!disabledLoaded) {
+    return <LoadingBox />;
+  }
+  if (disabledError) {
+    return <ErrorState />;
+  }
   return (
     <>
       <ModalsContextProvider>
         <ListPageHeader title={t("NodeHealthChecks")}>
-          <ListPageCreate groupVersionKind={nodeHealthCheckStringKind}>
-            {t("Create NodeHealthCheck")}
-          </ListPageCreate>
+          <NodeHealthCheckCreate isDisabled={isDisabled} />
         </ListPageHeader>
         <ListPageBody>
+          {isDisabled && <DisabledAlert />}
           <ListPageFilter
             data={data}
             loaded={loaded}

@@ -1,5 +1,5 @@
 import * as _ from "lodash-es";
-import { createEquals } from "@openshift-console/dynamic-plugin-sdk";
+import { createEquals } from "./selector";
 export const requirementFromString = (string) => {
   string = string.trim();
 

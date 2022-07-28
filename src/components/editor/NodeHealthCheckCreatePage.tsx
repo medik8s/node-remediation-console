@@ -1,10 +1,10 @@
 import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import * as React from "react";
-import NodeHealthCheckPage from "./NodeHealthCheckForm";
+import NodeHealthCheckForm from "./NodeHealthCheckForm";
 
 const NodeHealthCheckCreatePage = () => {
   return (
-    <NodeHealthCheckPage
+    <NodeHealthCheckForm
       name=""
       nodeHealthCheck={initialNodeHealthCheckData}
       title={"Create NodeHealthCheck"}
