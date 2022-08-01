@@ -16,15 +16,14 @@ import "./list.css";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import Modals from "components/modals/Modals";
 import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
-import { LoadingBox } from "components/copiedFromConsole/status-box";
 import { ModalsContextProvider } from "components/modals/ModalsContext";
-import ErrorState from "components/shared/ErrorState";
 import { Alert, Button } from "@patternfly/react-core";
 import { useNodeHealthChecksDisabled } from "apis/nodeHealthCheckApis";
 import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
-import { withFallback } from "components/copiedFromConsole/error/error-boundary";
 import { useTranslation } from "react-i18next";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
+import { withFallback } from "components/copiedFromConsole/error";
+import { StatusBox } from "components/copiedFromConsole/utils/status-box";
 
 type ListPageProps = {
   selector?: Selector;
@@ -82,14 +81,13 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
   const [data, filteredData, onFilterChange] =
     useListPageFilter(nodeHealthchecks);
   const { t } = useNodeHealthCheckTranslation();
-  if (!disabledLoaded) {
-    return <LoadingBox />;
-  }
-  if (disabledError) {
-    return <ErrorState />;
-  }
+
   return (
-    <>
+    <StatusBox
+      loaded={disabledLoaded}
+      loadError={disabledError}
+      data={{ isDisabled: isDisabled }}
+    >
       <ModalsContextProvider>
         <ListPageHeader title={t("NodeHealthChecks")}>
           <NodeHealthCheckCreate isDisabled={isDisabled} />
@@ -110,7 +108,7 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
         </ListPageBody>
         <Modals />
       </ModalsContextProvider>
-    </>
+    </StatusBox>
   );
 };
 

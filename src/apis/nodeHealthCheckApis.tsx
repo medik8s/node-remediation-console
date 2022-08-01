@@ -72,6 +72,7 @@ export const updateNodeHealthCheckAnnotations = (
   const newNodeHealthCheck: NodeHealthCheck = {
     ...nodeHealthCheck,
     metadata: {
+      ...nodeHealthCheck.metadata,
       annotations,
     },
   };

@@ -11,11 +11,11 @@ import { fromNodeHealthCheck } from "data/fromNodeHealthCheck";
 import { toNodeHealthCheck } from "data/toNodeHealthCheck";
 import { NodeHealthCheckModel } from "data/model";
 import { validationSchema } from "data/validationSchema";
-import { withFallback } from "components/copiedFromConsole/error/error-boundary";
 import { PageHeading } from "components/copiedFromConsole/utils/headings";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
+import { withFallback } from "components/copiedFromConsole/error";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
@@ -76,7 +76,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     }
     return resourceCall
       .then(() => {
-        navigation.gotoDetails(nodeHealthCheck?.metadata?.name);
+        navigation.gotoDetails(updatedNodeHealthCheck?.metadata?.name);
         return true;
       })
       .catch((e) => {
@@ -92,13 +92,16 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
+        validateOnMount={true}
       >
         {(formikProps) => (
-          <NodeHealthCheckSyncedEditor
-            originalNodeHealthCheck={nodeHealthCheck}
-            handleCancel={navigation.goBack}
-            {...formikProps}
-          />
+          <>
+            <NodeHealthCheckSyncedEditor
+              originalNodeHealthCheck={nodeHealthCheck}
+              handleCancel={navigation.goBack}
+              {...formikProps}
+            />
+          </>
         )}
       </Formik>
     </>

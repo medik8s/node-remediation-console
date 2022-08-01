@@ -2,8 +2,6 @@ import * as React from "react";
 
 import { K8sResourceCommon } from "@openshift-console/dynamic-plugin-sdk";
 import {
-  ActionList,
-  ActionListItem,
   Alert,
   AlertVariant,
   Button,
@@ -88,53 +86,43 @@ const TabModal: TabModalFC = React.memo(
         onClose={closeModal}
         title={headerText}
         titleIconVariant={titleIconVariant}
-        footer={
-          <Stack hasGutter>
-            {error && (
-              <StackItem>
-                <Alert
-                  isInline
-                  variant={AlertVariant.danger}
-                  title={t("An error occurred")}
-                >
-                  <Stack hasGutter>
-                    <StackItem>{error.message}</StackItem>
-                    {error?.href && (
-                      <StackItem>
-                        <a href={error.href} target="_blank" rel="noreferrer">
-                          {error.href}
-                        </a>
-                      </StackItem>
-                    )}
-                  </Stack>
-                </Alert>
-              </StackItem>
-            )}
-            <StackItem>
-              <ActionList>
-                <ActionListItem>
-                  <Button
-                    onClick={handleSubmit}
-                    isDisabled={isDisabled || isSubmitting}
-                    isLoading={isSubmitting}
-                    variant={submitBtnVariant ?? "primary"}
-                  >
-                    {submitBtnText || t("Save")}
-                  </Button>
-                </ActionListItem>
-                <ActionListItem>
-                  <Button onClick={closeModal} variant="link">
-                    {t("Cancel")}
-                  </Button>
-                </ActionListItem>
-              </ActionList>
-            </StackItem>
-          </Stack>
-        }
+        actions={[
+          <Button
+            onClick={handleSubmit}
+            isDisabled={isDisabled || isSubmitting}
+            isLoading={isSubmitting}
+            variant={submitBtnVariant ?? "primary"}
+          >
+            {submitBtnText || t("Save")}
+          </Button>,
+          <Button onClick={closeModal} variant="link">
+            {t("Cancel")}
+          </Button>,
+        ]}
         isOpen={isOpen}
         id="tab-modal"
       >
         {children}
+        {error && (
+          <StackItem>
+            <Alert
+              isInline
+              variant={AlertVariant.danger}
+              title={t("An error occurred")}
+            >
+              <Stack hasGutter>
+                <StackItem>{error.message}</StackItem>
+                {error?.href && (
+                  <StackItem>
+                    <a href={error.href} target="_blank" rel="noreferrer">
+                      {error.href}
+                    </a>
+                  </StackItem>
+                )}
+              </Stack>
+            </Alert>
+          </StackItem>
+        )}
       </Modal>
     );
   }

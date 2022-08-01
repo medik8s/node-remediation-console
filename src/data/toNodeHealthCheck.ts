@@ -66,10 +66,6 @@ export const yamlTextToNodeHealthCheck = (
   yamlText: string
 ): NodeHealthCheck => {
   const nodeHealthCheck = load(yamlText) as NodeHealthCheck;
-  nodeHealthCheck.metadata = {
-    ...existingNodeHealthCheck.metadata,
-    ...nodeHealthCheck.metadata,
-  };
   return nodeHealthCheck;
 };
 
@@ -85,5 +81,5 @@ export const toNodeHealthCheck = (
     return nodeHealthCheckYaml;
   }
 
-  return formDataToNodeHealthCheck(values.formData, existingNodeHealthCheck);
+  return formDataToNodeHealthCheck(values.formData, nodeHealthCheckYaml);
 };

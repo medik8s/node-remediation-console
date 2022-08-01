@@ -50,6 +50,7 @@ export const DetailsRightPane: React.FC<{
         label={t("Status")}
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
+        path="status.phase"
       >
         <NodeHealthCheckStatus
           nodeHealthCheck={nodeHealthCheck}

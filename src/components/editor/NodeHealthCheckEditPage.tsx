@@ -1,6 +1,5 @@
 import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
-import { LoadingBox } from "components/copiedFromConsole/status-box";
-import ErrorState from "components/shared/ErrorState";
+import { StatusBox } from "components/copiedFromConsole/utils/status-box";
 import { nodeHealthCheckKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import * as React from "react";
@@ -22,12 +21,6 @@ const NodeHealthCheckEditPage: React.FC<NodeHealthCheckEditPageProps> = ({
       name,
     });
   const title = "Edit NodeHealthCheck";
-  if (!loaded) {
-    return <LoadingBox />;
-  }
-  if (loadError) {
-    return <ErrorState />;
-  }
   const nodeHealthCheckForm = (
     <NodeHealthCheckForm
       name={name}
@@ -37,14 +30,13 @@ const NodeHealthCheckEditPage: React.FC<NodeHealthCheckEditPageProps> = ({
     />
   );
 
-  //TODO: use status box
   return (
-    <>
+    <StatusBox loaded={loaded} loadError={loadError} data={nodeHealthCheck}>
       <Helmet>
         <title>{title}</title>
       </Helmet>
       {nodeHealthCheckForm}
-    </>
+    </StatusBox>
   );
 };
 

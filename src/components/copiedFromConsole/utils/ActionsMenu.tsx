@@ -50,6 +50,7 @@ const ActionsMenu: React.FC<ActionsMenuProps> = ({
           onClick={() => handleClick(action)}
           isDisabled={action?.disabled}
           description={action?.description}
+          component="button"
         >
           {action?.label}
         </DropdownItem>

@@ -20,6 +20,9 @@ export const getRemediatorTemplateFieldName = (formViewFieldName: string) => {
   ]);
 };
 
+export const getRemediatorFieldName = (formViewFieldName: string) =>
+  getObjectItemFieldName([formViewFieldName, REMEDIATOR_FIELD_NAME]);
+
 export const useIsSNR = (formViewFieldName): boolean => {
   const [{ value: remediatorKind }] = useField<RemediatorKind>(
     getRemediatorKindFieldName(formViewFieldName)

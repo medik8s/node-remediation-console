@@ -8,7 +8,6 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
-import { LoadingInline } from "components/copiedFromConsole/status-box";
 import AddMoreButton from "components/shared/AddMoreButton";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import * as React from "react";
@@ -146,6 +145,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
           variant="primary"
           onClick={onConfirm}
           isDisabled={hasEmptyValue() || isSubmitting}
+          isLoading={isSubmitting}
         >
           {confirmButtonText}
         </Button>,
@@ -155,7 +155,6 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
       ]}
     >
       <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
-      {isSubmitting && <LoadingInline />}
       {error && <Alert variant="danger" title={failureErrorMessage} />}
     </Modal>
   );

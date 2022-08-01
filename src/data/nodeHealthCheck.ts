@@ -1,6 +1,11 @@
 import { K8sResourceCommon } from "@openshift-console/dynamic-plugin-sdk";
 import * as _ from "lodash";
-import { NodeHealthCheck, NodeSelector, UnhealthyCondition } from "./types";
+import {
+  NodeHealthCheck,
+  NodeSelector,
+  StatusPhase,
+  UnhealthyCondition,
+} from "./types";
 
 export const getName = <A extends K8sResourceCommon = K8sResourceCommon>(
   value: A
@@ -17,4 +22,8 @@ export const getUnhealthyConditions = (
 
 export const getSelector = (nhc: NodeHealthCheck): NodeSelector => {
   return nhc.spec?.selector || {};
+};
+
+export const isDisabled = (nhc: NodeHealthCheck) => {
+  return getPhase(nhc) === StatusPhase.DISABLED;
 };

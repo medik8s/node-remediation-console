@@ -27,7 +27,7 @@ export const AnnotationsModal: React.FC<{
 
   const [annotations, setAnnotations] = React.useState<{
     [id: number]: { [key: string]: string };
-  }>();
+  }>({});
 
   const onAnnotationAdd = () => {
     const keys = new Set([...Object.keys(annotations)]);

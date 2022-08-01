@@ -2,11 +2,8 @@ import {
   HorizontalNav,
   useK8sWatchResource,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { withFallback } from "components/copiedFromConsole/error/error-boundary";
-import { LoadingBox } from "components/copiedFromConsole/status-box";
 import Modals from "components/modals/Modals";
 import { ModalsContextProvider } from "components/modals/ModalsContext";
-import ErrorState from "components/shared/ErrorState";
 import { nodeHealthCheckKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -15,6 +12,8 @@ import NodeHealthCheckDetailsHeading from "./NodeHealthCheckDetailsHeading";
 import NodeHealthCheckDetailsTab from "./detailsTab/NodeHealthCheckDetailsTab";
 import NodeHealthCheckYAMLTab from "./NodeHealthCheckYamlTab";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
+import { withFallback } from "components/copiedFromConsole/error";
+import { StatusBox } from "components/copiedFromConsole/utils/status-box";
 
 export const useNodeHealthCheckTabs = () => {
   const { t } = useNodeHealthCheckTranslation();
@@ -47,18 +46,14 @@ const NodeHealthCheckDetailsPage_: React.FC = ({ match }: any) => {
       name,
     });
   const tabs = useNodeHealthCheckTabs();
-  if (!loaded) {
-    return <LoadingBox />;
-  }
-  if (loadError) {
-    return <ErrorState />;
-  }
   return (
-    <ModalsContextProvider>
-      <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
-      <HorizontalNav pages={tabs} resource={nodeHealthCheck} />
-      <Modals onDelete={navigation.gotoList} />
-    </ModalsContextProvider>
+    <StatusBox loadError={loadError} data={nodeHealthCheck} loaded={loaded}>
+      <ModalsContextProvider>
+        <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
+        <HorizontalNav pages={tabs} resource={nodeHealthCheck} />
+        <Modals onDelete={navigation.gotoList} />
+      </ModalsContextProvider>
+    </StatusBox>
   );
 };
 

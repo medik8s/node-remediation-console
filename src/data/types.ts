@@ -145,4 +145,5 @@ export type NodeHealthCheckFormValues = {
   yamlData: string;
   formData: NodeHealthCheckFormData | null;
   formParsingError: string | null;
+  resourceVersion: string;
 };

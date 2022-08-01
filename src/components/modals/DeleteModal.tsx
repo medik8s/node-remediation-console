@@ -48,7 +48,7 @@ const DeleteModal: React.FC<
           key="confirm"
           variant={ButtonVariant.danger}
           onClick={onClickDelete}
-          isDisabled={isDeleting}
+          isLoading={isDeleting}
         >
           {t("Delete")}
         </Button>,

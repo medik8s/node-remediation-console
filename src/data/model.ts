@@ -4,6 +4,12 @@ import {
   K8sModel,
 } from "@openshift-console/dynamic-plugin-sdk";
 
+const getStringKind = (groupVersionKind: ExtensionK8sModel) =>
+  `${groupVersionKind.group}~${groupVersionKind.version}~${groupVersionKind.kind}`;
+
+const getApiVersion = (groupVersionKind: ExtensionK8sModel) =>
+  `${groupVersionKind.group}/${groupVersionKind.version}`;
+
 export const nodeKind: ExtensionK8sKindVersionModel = {
   kind: "Node",
   version: "v1",
@@ -15,7 +21,7 @@ export const nodeHealthCheckKind: ExtensionK8sModel = {
   version: "v1alpha1",
 };
 
-export const nodeHealthCheckStringKind = `${nodeHealthCheckKind.group}~${nodeHealthCheckKind.version}~${nodeHealthCheckKind.kind}`;
+export const nodeHealthCheckStringKind = getStringKind(nodeHealthCheckKind);
 
 export const NodeHealthCheckModel: K8sModel = {
   apiVersion: nodeHealthCheckKind.version,
@@ -31,8 +37,8 @@ export const NodeHealthCheckModel: K8sModel = {
   labelPluralKey: "NodeHealthChecks",
 };
 
-export const getVersion = () => {
-  return `${nodeHealthCheckKind.group}/${nodeHealthCheckKind.version}`;
+export const getNodeHealthCheckApiVersion = () => {
+  return getApiVersion(nodeHealthCheckKind);
 };
 
 export const machineHealthCheckKind: ExtensionK8sModel = {
@@ -45,3 +51,13 @@ export const namespaceKind: ExtensionK8sKindVersionModel = {
   kind: "Namespace",
   version: "v1",
 };
+
+export const snrTemplateKind: ExtensionK8sModel = {
+  kind: "SelfNodeRemediationTemplate",
+  group: "self-node-remediation.medik8s.io",
+  version: "v1alpha1",
+};
+
+export const snrTemplateStringKind = getStringKind(snrTemplateKind);
+
+export const getSnrTemplateApiVersion = () => getApiVersion(snrTemplateKind);

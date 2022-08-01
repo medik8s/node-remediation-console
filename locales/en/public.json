@@ -1,9 +1,5 @@
 {
-  "Just now": "Just now",
-  "{{count}} day_one": "{{count}} day",
-  "{{count}} day_other": "{{count}} day",
-  "{{count}} hour_one": "{{count}} hour",
-  "{{count}} hour_other": "{{count}} hour",
-  "{{count}} minute_one": "{{count}} minute",
-  "{{count}} minute_other": "{{count}} minute"
+  "Copied": "Copied",
+  "Copy to clipboard": "Copy to clipboard",
+  "Please <2>try again</2>.": "Please <2>try again</2>."
 }

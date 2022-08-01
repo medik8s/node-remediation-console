@@ -35,5 +35,6 @@ export const fromNodeHealthCheck = (
     yamlData,
     formData,
     formParsingError,
+    resourceVersion: existingNodeHealthCheck?.metadata?.resourceVersion,
   };
 };

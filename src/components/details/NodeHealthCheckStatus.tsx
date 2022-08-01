@@ -11,7 +11,7 @@ import {
   PauseCircleIcon,
 } from "@patternfly/react-icons";
 import { ModalId } from "components/modals/Modals";
-import { getPauseRequests, getPhase } from "data/nodeHealthCheck";
+import { getPauseRequests, getPhase, isDisabled } from "data/nodeHealthCheck";
 import {
   NodeHealthCheck,
   StatusPhase,
@@ -88,7 +88,8 @@ const PopoverContent: React.FC<{
   reason: string;
 }> = ({ nodeHealthCheck, phase, reason }) => {
   const pauseReasons = getPauseRequests(nodeHealthCheck);
-  const showPausePopover = pauseReasons.length > 0;
+  const showPausePopover =
+    pauseReasons.length > 0 && !isDisabled(nodeHealthCheck);
   const { getLabel } = usePhaseLabels();
   return (
     <TextContent>

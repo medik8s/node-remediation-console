@@ -7,8 +7,6 @@ import {
 import BaseInputField from "./BaseInputField";
 import { BaseInputFieldProps } from "./field-types";
 
-import "./InputField.scss";
-
 const InputField = (
   { type = TextInputTypes.text, ...baseProps }: BaseInputFieldProps,
   ref

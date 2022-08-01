@@ -1,6 +1,6 @@
 import { NodeHealthCheck } from "data/types";
 import { ModalId } from "components/modals/Modals";
-import { getName, getPauseRequests } from "data/nodeHealthCheck";
+import { getName, getPauseRequests, isDisabled } from "data/nodeHealthCheck";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { Action } from "@openshift-console/dynamic-plugin-sdk";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -22,7 +22,11 @@ const useNodeHealthCheckActions = (
 
   const getModalIds = (): ModalId[] => {
     let res: ModalId[] = [];
+    const disabled = isDisabled(nodeHealthCheck);
     let pauseRequests = getPauseRequests(nodeHealthCheck);
+    if (disabled) {
+      return [ModalId.DELETE];
+    }
     if (pauseRequests && pauseRequests.length > 0) {
       res = [ModalId.EDIT_PAUSE, ModalId.UNPAUSE];
     } else {

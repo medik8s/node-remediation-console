@@ -4,7 +4,7 @@ import { FormikProps, useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { EditorType } from "../copiedFromConsole/synced-editor/editor-toggle";
-import { FormFooter } from "../copiedFromConsole/form-utils";
+import { FlexForm, FormFooter } from "../copiedFromConsole/form-utils";
 import { getFormData } from "data/formData";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "components/copiedFromConsole/formik-fields/SyncedEditorField";
@@ -35,6 +35,10 @@ export const NodeHealthCheckSyncedEditor: React.FC<
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   const { setFieldValue } = useFormikContext<NodeHealthCheckFormValues>();
+  const isStale =
+    !!originalNodeHealthCheck &&
+    originalNodeHealthCheck?.metadata?.resourceVersion !==
+      values.resourceVersion;
 
   const disableSubmit = !dirty || !_.isEmpty(errors) || isSubmitting;
 
@@ -59,6 +63,11 @@ export const NodeHealthCheckSyncedEditor: React.FC<
       );
     }
     setFieldValue("yamlData", originalNodeHealthCheck, false);
+    setFieldValue(
+      "resourceVersion",
+      originalNodeHealthCheck?.metadata?.resourceVersion,
+      true
+    );
   }, [setErrors, setFieldValue, setStatus, values, originalNodeHealthCheck]);
 
   React.useEffect(() => {
@@ -66,46 +75,49 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   }, [setStatus, values.editorType]);
   return (
     <>
-      <SyncedEditorField
-        name="editorType"
-        formContext={{
-          name: "formData",
-          editor: formEditor,
-          sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
-            return getFormData(yamlNodeHealthCheck, false);
-          },
-        }}
-        yamlContext={{
-          name: "yamlData",
-          editor: yamlEditor,
-          sanitizeTo: () =>
-            toYamlText(
-              values.formData,
-              originalNodeHealthCheck,
-              values.yamlData
-            ),
-        }}
-        lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-        noMargin
-        formErrorCallback={() => {
-          return getFormData(originalNodeHealthCheck, true);
-        }}
-        formParsingError={values.formParsingError}
-      />
+      <FlexForm>
+        <SyncedEditorField
+          name="editorType"
+          formContext={{
+            name: "formData",
+            editor: formEditor,
+            sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
+              return getFormData(yamlNodeHealthCheck, false);
+            },
+          }}
+          yamlContext={{
+            name: "yamlData",
+            editor: yamlEditor,
+            sanitizeTo: () =>
+              toYamlText(
+                values.formData,
+                originalNodeHealthCheck,
+                values.yamlData
+              ),
+          }}
+          lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
+          noMargin
+          formErrorCallback={() => {
+            return getFormData(originalNodeHealthCheck, true);
+          }}
+          formParsingError={values.formParsingError}
+        />
 
-      <FormFooter
-        handleSubmit={handleSubmit}
-        handleReset={values.isCreateFlow ? null : onReload}
-        errorMessage={status?.submitError}
-        successMessage={status?.submitSuccess}
-        infoTitle={t("This object has been updated.")}
-        infoMessage={t("Click reload to see the new version.")}
-        isSubmitting={isSubmitting}
-        submitLabel={values.isCreateFlow ? t("Create") : t("Save")}
-        disableSubmit={disableSubmit}
-        handleCancel={handleCancel}
-        sticky
-      />
+        <FormFooter
+          handleSubmit={handleSubmit}
+          handleReset={values.isCreateFlow ? null : onReload}
+          errorMessage={status?.submitError}
+          successMessage={status?.submitSuccess}
+          infoTitle={t("This object has been updated.")}
+          infoMessage={t("Click reload to see the new version.")}
+          isSubmitting={isSubmitting}
+          submitLabel={values.isCreateFlow ? t("Create") : t("Save")}
+          disableSubmit={disableSubmit}
+          handleCancel={handleCancel}
+          showAlert={isStale}
+          sticky
+        />
+      </FlexForm>
     </>
   );
 };

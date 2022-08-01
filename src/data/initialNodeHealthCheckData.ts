@@ -5,9 +5,15 @@ import {
   UnhealthyConditions,
   UnhealthyConditionStatus,
 } from "./types";
-import { getVersion, nodeHealthCheckKind } from "./model";
+import {
+  getNodeHealthCheckApiVersion,
+  getSnrTemplateApiVersion,
+  nodeHealthCheckKind,
+  snrTemplateKind,
+} from "./model";
 
 export const DEFAULT_MIN_HEALTHY = "51%";
+export const OPERATORS_NAMESPACE = "openshift-operators";
 
 const initialUnhealthyConditions: UnhealthyConditions = [
   {
@@ -27,8 +33,8 @@ export const initialSpec = {
     ],
   },
   remediationTemplate: {
-    apiVersion: "self-node-remediation.medik8s.io/v1alpha1",
-    kind: "SelfNodeRemediationTemplate",
+    apiVersion: getSnrTemplateApiVersion(),
+    kind: snrTemplateKind.kind,
     name: BuiltInRemediationTemplate.ResourceDeletion,
     namespace: "openshift-operators",
   },
@@ -37,7 +43,7 @@ export const initialSpec = {
 };
 
 export const initialNodeHealthCheckData: InitialNodeHealthCheck = {
-  apiVersion: getVersion(),
+  apiVersion: getNodeHealthCheckApiVersion(),
   kind: nodeHealthCheckKind.kind,
   metadata: {
     name: "",

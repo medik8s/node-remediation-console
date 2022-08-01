@@ -9,6 +9,9 @@ import {
   NodeHealthCheck,
 } from "./types";
 
+export const SNR_LABEL = "Self node remediation";
+export const OTHER_LABEL = "Other";
+
 const getBuiltInRemediatorTemplate = (
   initialRemediationTemplate: RemediationTemplate,
   remediationTemplate: RemediationTemplate
@@ -55,7 +58,7 @@ export const getRemediator = (
 };
 
 export const getRemediatorLabel = (kind: RemediatorKind) =>
-  kind === RemediatorKind.SNR ? "Self node remediation" : "Other";
+  kind === RemediatorKind.SNR ? SNR_LABEL : OTHER_LABEL;
 
 export const getRemediatorKind = (
   nodeHealthCheck: NodeHealthCheck

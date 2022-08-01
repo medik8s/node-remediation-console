@@ -53,6 +53,9 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         path="metadata.annotations"
         resourceKind={nodeHealthCheckKind.kind}
         description={descriptions.annotations}
+        onEdit={(e) =>
+          modalsContext.openModal(ModalId.EDIT_ANNOTATIONS, resource)
+        }
       >
         {t("{{count}} annotation", {
           count: _.size(metadata.annotations),

@@ -10,7 +10,6 @@ import {
   TextContent,
 } from "@patternfly/react-core";
 import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
-import { LoadingInline } from "components/copiedFromConsole/status-box";
 import * as React from "react";
 import * as _ from "lodash";
 import { getPauseRequests } from "data/nodeHealthCheck";
@@ -69,7 +68,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           key="confirm"
           variant="primary"
           onClick={onSubmit}
-          isDisabled={isSubmitting}
+          isLoading={isSubmitting}
         >
           {t("Unpause")}
         </Button>,
@@ -97,7 +96,6 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           </Text>
         </StackItem>
       </Stack>
-      {isSubmitting && <LoadingInline />}
       {error && <Alert variant="danger" title={t("Failed to unpause")} />}
     </Modal>
   );
