@@ -1,7 +1,7 @@
 import { FormGroup, Tooltip } from "@patternfly/react-core";
-import { withFallback } from "components/copiedFromConsole/error";
-import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
-import RadioButtonField from "components/copiedFromConsole/formik-fields/RadioButtonField";
+import { withFallback } from "copiedFromConsole/error";
+import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
+import RadioButtonField from "copiedFromConsole/formik-fields/RadioButtonField";
 import { OTHER_LABEL, SNR_LABEL } from "data/remediatorFormData";
 import {
   FormDataRemediator,

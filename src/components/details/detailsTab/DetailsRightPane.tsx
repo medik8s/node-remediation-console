@@ -1,4 +1,4 @@
-import { DetailsItem } from "components/copiedFromConsole/utils/details-item";
+import { DetailsItem } from "copiedFromConsole/utils/details-item";
 import { nodeHealthCheckKind } from "data/model";
 import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
 import { NodeHealthCheck } from "data/types";

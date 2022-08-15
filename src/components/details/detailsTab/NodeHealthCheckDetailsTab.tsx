@@ -3,8 +3,8 @@ import {
   useAccessReview,
 } from "@openshift-console/dynamic-plugin-sdk";
 import { Grid, GridItem } from "@patternfly/react-core";
-import { Loading } from "components/copiedFromConsole/status-box";
-import { SectionHeading } from "components/copiedFromConsole/utils/headings";
+import { Loading } from "copiedFromConsole/status-box";
+import { SectionHeading } from "copiedFromConsole/utils/headings";
 import { NodeHealthCheckModel } from "data/model";
 import { getName } from "data/nodeHealthCheck";
 import { NodeHealthCheck } from "data/types";

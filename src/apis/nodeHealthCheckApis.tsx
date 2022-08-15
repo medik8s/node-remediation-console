@@ -1,10 +1,10 @@
 import { k8sDelete, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
-import { K8sResourceKind } from "components/copiedFromConsole/k8s/types";
+import { K8sResourceKind } from "copiedFromConsole/k8s/types";
 import { NodeHealthCheckModel } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import * as _ from "lodash";
 import * as React from "react";
-import { useAllMachineHealthChecks } from "./useMachineHealthCheckApi";
+import { useAllMachineHealthChecks } from "./machineHealthCheckApi";
 
 export const updateNodeHealthCheck = (
   nodeHealthCheck: NodeHealthCheck

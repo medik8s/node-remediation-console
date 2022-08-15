@@ -13,7 +13,7 @@ import {
 import DropdownField from "components/shared/DropdownField";
 import RemediatorKindField from "./RemediatorKindField";
 import { useField } from "formik";
-import { useFormikValidationFix } from "components/copiedFromConsole/hooks/formik-validation-fix";
+import { useFormikValidationFix } from "copiedFromConsole/hooks/formik-validation-fix";
 
 const SNRStrategyOptions = [
   {

@@ -1,5 +1,5 @@
 import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
-import { StatusBox } from "components/copiedFromConsole/utils/status-box";
+import { StatusBox } from "copiedFromConsole/utils/status-box";
 import { nodeHealthCheckKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import * as React from "react";

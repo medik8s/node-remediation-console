@@ -1,4 +1,4 @@
-import { CopyToClipboard } from "components/copiedFromConsole/utils/copy-to-clipboard";
+import { CopyToClipboard } from "copiedFromConsole/utils/copy-to-clipboard";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundaryFallbackProps } from "../types";

@@ -2,7 +2,7 @@ import {
   MatchLabels,
   ObjectMetadata,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { EditorType } from "../components/copiedFromConsole/synced-editor/editor-toggle";
+import { EditorType } from "../copiedFromConsole/synced-editor/editor-toggle";
 
 export enum UnhealthyConditionStatus {
   False = "False",

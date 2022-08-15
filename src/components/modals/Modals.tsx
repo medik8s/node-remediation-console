@@ -5,12 +5,12 @@ import { useModals } from "./ModalsContext";
 import PauseModal from "./PauseModal";
 import { UnpauseModal } from "./UnpauseModal";
 import "./modals.css";
-import { LabelsModal } from "components/copiedFromConsole/LabelsModal/LabelsModal";
+import { LabelsModal } from "copiedFromConsole/LabelsModal/LabelsModal";
 import {
   updateNodeHealthCheckAnnotations,
   updateNodeHealthCheckLabels,
 } from "apis/nodeHealthCheckApis";
-import { AnnotationsModal } from "components/copiedFromConsole/AnnotationsModal/AnnotationsModal";
+import { AnnotationsModal } from "copiedFromConsole/AnnotationsModal/AnnotationsModal";
 
 export enum ModalId {
   PAUSE = "pause",

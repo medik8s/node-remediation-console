@@ -5,7 +5,7 @@ import {
   ResourceYAMLEditor,
 } from "@openshift-console/dynamic-plugin-sdk";
 import { Bullseye } from "@patternfly/react-core";
-import { Loading } from "components/copiedFromConsole/status-box";
+import { Loading } from "copiedFromConsole/status-box";
 import { NodeHealthCheck } from "data/types";
 
 const NodeHealthCheckYAMLTab: React.FC<PageComponentProps<NodeHealthCheck>> = ({

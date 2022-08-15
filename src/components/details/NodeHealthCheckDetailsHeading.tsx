@@ -1,5 +1,5 @@
 import useNodeHealthCheckActions from "components/actions/useNodeHealthCheckActions";
-import { PageHeading } from "components/copiedFromConsole/utils/headings";
+import { PageHeading } from "copiedFromConsole/utils/headings";
 import { NodeHealthCheckModel } from "data/model";
 import { getName, getPhase } from "data/nodeHealthCheck";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";

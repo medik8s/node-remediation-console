@@ -1,7 +1,7 @@
 import * as React from "react";
 import { load } from "js-yaml";
 import { ResourceYAMLEditor } from "@openshift-console/dynamic-plugin-sdk";
-import { LoadingBox } from "components/copiedFromConsole/status-box";
+import { LoadingBox } from "copiedFromConsole/status-box";
 import { NodeHealthCheck } from "data/types";
 import { useField } from "formik";
 const YamlEditorField: React.FC<{

@@ -5,13 +5,13 @@ import {
   TableData,
   VirtualizedTable,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { getNodeRolesText } from "components/copiedFromConsole/selectors/node";
-import { NodeKind } from "components/copiedFromConsole/types/node";
+import { getNodeRolesText } from "copiedFromConsole/selectors/node";
+import { NodeKind } from "copiedFromConsole/types/node";
 import { nodeKind } from "data/model";
 import * as React from "react";
-import NodeStatus from "components/copiedFromConsole/nodes/NodeStatus";
+import NodeStatus from "copiedFromConsole/nodes/NodeStatus";
 import { sortable, SortByDirection } from "@patternfly/react-table";
-import { nodeStatus } from "components/copiedFromConsole/nodes/node";
+import { nodeStatus } from "copiedFromConsole/nodes/node";
 
 const sortByStatus = (nodes: NodeKind[], sortDirection: SortByDirection) => {
   return nodes.sort((node1: NodeKind, node2: NodeKind) => {

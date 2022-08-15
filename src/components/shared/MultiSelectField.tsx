@@ -9,7 +9,7 @@ import {
   SelectOptionProps,
   SelectVariant,
 } from "@patternfly/react-core";
-import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
+import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import { MultiSelectFieldProps, MultiSelectOption } from "./field-types";
 
 // Field value is a string[]

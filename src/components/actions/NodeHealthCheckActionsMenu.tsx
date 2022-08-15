@@ -1,4 +1,4 @@
-import ActionsMenu from "components/copiedFromConsole/utils/ActionsMenu";
+import ActionsMenu from "copiedFromConsole/utils/ActionsMenu";
 import { NodeHealthCheck } from "data/types";
 import * as React from "react";
 import useNodeHealthCheckActions from "./useNodeHealthCheckActions";

@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { EditorType } from "components/copiedFromConsole/synced-editor/editor-toggle";
+import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
 import { RemediatorKind } from "./types";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;

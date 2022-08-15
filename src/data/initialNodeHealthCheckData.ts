@@ -17,7 +17,7 @@ export const OPERATORS_NAMESPACE = "openshift-operators";
 
 const initialUnhealthyConditions: UnhealthyConditions = [
   {
-    duration: "300ms",
+    duration: "300s",
     status: UnhealthyConditionStatus.False,
     type: "Ready",
   },

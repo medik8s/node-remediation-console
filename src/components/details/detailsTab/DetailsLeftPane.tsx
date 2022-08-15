@@ -1,8 +1,8 @@
-import { DetailsItem } from "components/copiedFromConsole/utils/details-item";
-import { LabelList } from "components/copiedFromConsole/utils/label-list";
-import OwnerReferences from "components/copiedFromConsole/utils/OwnerReferences";
-import { Selector } from "components/copiedFromConsole/utils/selector";
-import { Timestamp } from "components/copiedFromConsole/utils/timestamp";
+import { DetailsItem } from "copiedFromConsole/utils/details-item";
+import { LabelList } from "copiedFromConsole/utils/label-list";
+import OwnerReferences from "copiedFromConsole/utils/OwnerReferences";
+import { Selector } from "copiedFromConsole/utils/selector";
+import { Timestamp } from "copiedFromConsole/utils/timestamp";
 import { ModalId } from "components/modals/Modals";
 import { useModals } from "components/modals/ModalsContext";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";

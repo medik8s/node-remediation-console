@@ -6,7 +6,7 @@ import {
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
-import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
+import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import * as React from "react";
 import * as _ from "lodash";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";

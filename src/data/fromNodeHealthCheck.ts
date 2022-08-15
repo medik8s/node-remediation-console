@@ -1,4 +1,4 @@
-import { EditorType } from "components/copiedFromConsole/synced-editor/editor-toggle";
+import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
 import { getFormData } from "./formData";
 import { initialNodeHealthCheckData } from "./initialNodeHealthCheckData";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "./types";

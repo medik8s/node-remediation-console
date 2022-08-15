@@ -1,6 +1,6 @@
 import { Chip, ChipGroup, SelectProps } from "@patternfly/react-core";
-import { getNodeWorkerLabel } from "components/copiedFromConsole/selectors/node";
-import { NodeKind } from "components/copiedFromConsole/types/node";
+import { getNodeWorkerLabel } from "copiedFromConsole/selectors/node";
+import { NodeKind } from "copiedFromConsole/types/node";
 import { MultiSelectOption } from "components/shared/field-types";
 import { getObjectLabelDisplayNames } from "data/nodeSelectorData";
 import { useField } from "formik";

@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import * as React from "react";
 import * as _ from "lodash";
-import { NodeKind } from "components/copiedFromConsole/types/node";
+import { NodeKind } from "copiedFromConsole/types/node";
 import NodeList from "./NodeList";
 import LabelsSelector from "./LabelsSelector";
 

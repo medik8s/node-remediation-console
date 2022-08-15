@@ -12,8 +12,8 @@ import NodeHealthCheckDetailsHeading from "./NodeHealthCheckDetailsHeading";
 import NodeHealthCheckDetailsTab from "./detailsTab/NodeHealthCheckDetailsTab";
 import NodeHealthCheckYAMLTab from "./NodeHealthCheckYamlTab";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
-import { withFallback } from "components/copiedFromConsole/error";
-import { StatusBox } from "components/copiedFromConsole/utils/status-box";
+import { withFallback } from "copiedFromConsole/error";
+import { StatusBox } from "copiedFromConsole/utils/status-box";
 
 export const useNodeHealthCheckTabs = () => {
   const { t } = useNodeHealthCheckTranslation();

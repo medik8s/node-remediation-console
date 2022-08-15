@@ -6,7 +6,7 @@ import {
   FormGroup,
 } from "@patternfly/react-core";
 import { useField } from "formik";
-import { getFieldId } from "../copiedFromConsole/formik-fields/field-utils";
+import { getFieldId } from "../../copiedFromConsole/formik-fields/field-utils";
 
 import "./DropdownField.css";
 

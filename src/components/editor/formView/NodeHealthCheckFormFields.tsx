@@ -11,12 +11,12 @@ import UnhealthyConditionsField from "./unhealthyConditionsField/UnhealthyCondit
 import { NodeHealthCheckFormValues } from "data/types";
 import { nodeKind } from "data/model";
 import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
-import { NodeKind } from "components/copiedFromConsole/types/node";
-import { FormBody } from "components/copiedFromConsole/form-utils";
+import { NodeKind } from "copiedFromConsole/types/node";
+import { FormBody } from "copiedFromConsole/form-utils";
 import { useSnrTemplatesExist } from "apis/useSNRTemplatesExist";
-import { withFallback } from "components/copiedFromConsole/error";
+import { withFallback } from "copiedFromConsole/error";
 import RemediatorField from "./remediatorField/RemediatorField";
-import { StatusBox } from "components/copiedFromConsole/utils/status-box";
+import { StatusBox } from "copiedFromConsole/utils/status-box";
 
 const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();

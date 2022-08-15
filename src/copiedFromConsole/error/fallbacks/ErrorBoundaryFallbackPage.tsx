@@ -3,7 +3,7 @@ import { Text, TextVariants } from "@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundaryFallbackProps } from "../types";
 import ErrorDetailsBlock from "./ErrorDetailsBlock";
-import { ExpandCollapse } from "components/copiedFromConsole/utils/expand-collapse";
+import { ExpandCollapse } from "copiedFromConsole/utils/expand-collapse";
 
 /**
  * Standard fallback catch -- expected to take up the whole page.

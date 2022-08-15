@@ -7,7 +7,7 @@ import {
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
-import { getFieldId } from "components/copiedFromConsole/formik-fields/field-utils";
+import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import AddMoreButton from "components/shared/AddMoreButton";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import * as React from "react";

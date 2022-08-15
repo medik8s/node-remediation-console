@@ -22,8 +22,8 @@ import { useNodeHealthChecksDisabled } from "apis/nodeHealthCheckApis";
 import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
 import { useTranslation } from "react-i18next";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
-import { withFallback } from "components/copiedFromConsole/error";
-import { StatusBox } from "components/copiedFromConsole/utils/status-box";
+import { withFallback } from "copiedFromConsole/error";
+import { StatusBox } from "copiedFromConsole/utils/status-box";
 
 type ListPageProps = {
   selector?: Selector;

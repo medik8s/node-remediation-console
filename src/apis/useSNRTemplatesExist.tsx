@@ -3,7 +3,7 @@ import {
   useK8sWatchResources,
   WatchK8sResources,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { K8sResourceKind } from "components/copiedFromConsole/k8s/types";
+import { K8sResourceKind } from "copiedFromConsole/k8s/types";
 import { OPERATORS_NAMESPACE } from "data/initialNodeHealthCheckData";
 import { snrTemplateKind } from "data/model";
 import { BuiltInRemediationTemplate } from "data/types";

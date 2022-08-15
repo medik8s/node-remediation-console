@@ -11,11 +11,11 @@ import { fromNodeHealthCheck } from "data/fromNodeHealthCheck";
 import { toNodeHealthCheck } from "data/toNodeHealthCheck";
 import { NodeHealthCheckModel } from "data/model";
 import { validationSchema } from "data/validationSchema";
-import { PageHeading } from "components/copiedFromConsole/utils/headings";
+import { PageHeading } from "copiedFromConsole/utils/headings";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
-import { withFallback } from "components/copiedFromConsole/error";
+import { withFallback } from "copiedFromConsole/error";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
