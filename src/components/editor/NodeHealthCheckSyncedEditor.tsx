@@ -5,12 +5,32 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
 import { FlexForm, FormFooter } from "../../copiedFromConsole/form-utils";
-import { getFormData } from "data/formData";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
 import "./editor.css";
 import YamlEditorField from "./YamlEditorField";
-import { toYamlText } from "data/toYamlText";
+import { getFormValues } from "data/formValues";
+import * as formViewValues from "data/formViewValues";
+import * as yamlText from "data/yamlText";
+import { dump } from "js-yaml";
+import { Alert } from "@patternfly/react-core";
+
+const sanitizeToYaml = (
+  values: NodeHealthCheckFormValues,
+  originalNodeHealthCheck: NodeHealthCheck
+): string => {
+  let yaml: NodeHealthCheck = originalNodeHealthCheck;
+  if (values.formData) {
+    yaml = formViewValues.getNodeHealthCheck(
+      values.formData,
+      yamlText.getNodeHealthCheck(originalNodeHealthCheck, values.yamlData)
+    );
+  }
+  return dump(yaml, "", {
+    skipInvalid: true,
+  });
+};
+
 const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
   "console.createNodeHealthCheck.editor.lastView";
 
@@ -40,7 +60,11 @@ export const NodeHealthCheckSyncedEditor: React.FC<
     originalNodeHealthCheck?.metadata?.resourceVersion !==
       values.resourceVersion;
 
-  const disableSubmit = !dirty || !_.isEmpty(errors) || isSubmitting;
+  const disableSubmit =
+    !dirty ||
+    !_.isEmpty(errors) ||
+    (isSubmitting &&
+      (values.editorType === EditorType.YAML || !!values.formData));
 
   const yamlEditor = React.useMemo(
     () => <YamlEditorField fieldName="yamlData" />,
@@ -48,7 +72,14 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   );
 
   const formEditor = React.useMemo(
-    () => (values.formParsingError ? null : <NodeHealthCheckFormFields />),
+    () =>
+      values.formParsingError ? (
+        <Alert variant="danger" title="Error parsing NodeHealthCheck">
+          {values.formParsingError}
+        </Alert>
+      ) : (
+        <NodeHealthCheckFormFields />
+      ),
     []
   );
 
@@ -58,7 +89,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
     if (values.editorType === EditorType.Form) {
       setFieldValue(
         "formData",
-        getFormData(originalNodeHealthCheck, false),
+        getFormValues(originalNodeHealthCheck, false),
         false
       );
     }
@@ -82,25 +113,22 @@ export const NodeHealthCheckSyncedEditor: React.FC<
             name: "formData",
             editor: formEditor,
             sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
-              return getFormData(yamlNodeHealthCheck, false);
+              try {
+                return formViewValues.getFormViewValues(yamlNodeHealthCheck);
+              } catch (err) {
+                //return a function so SyncedEditorField will handle the error properly
+                return () =>
+                  formViewValues.getFormViewValues(originalNodeHealthCheck);
+              }
             },
           }}
           yamlContext={{
             name: "yamlData",
             editor: yamlEditor,
-            sanitizeTo: () =>
-              toYamlText(
-                values.formData,
-                originalNodeHealthCheck,
-                values.yamlData
-              ),
+            sanitizeTo: () => sanitizeToYaml(values, originalNodeHealthCheck),
           }}
           lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
           noMargin
-          formErrorCallback={() => {
-            return getFormData(originalNodeHealthCheck, true);
-          }}
-          formParsingError={values.formParsingError}
         />
 
         <FormFooter

@@ -1,6 +1,6 @@
 import { DetailsItem } from "copiedFromConsole/utils/details-item";
 import { nodeHealthCheckKind } from "data/model";
-import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
+import { getRemediatorLabel } from "data/remediator";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
@@ -20,7 +20,7 @@ export const DetailsRightPane: React.FC<{
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
       >
-        {getNodeHealthCheckRemediatorLabel(nodeHealthCheck)}
+        {getRemediatorLabel(nodeHealthCheck)}
       </DetailsItem>
       <DetailsItem
         label={t("Min Healthy")}

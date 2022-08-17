@@ -1,20 +1,21 @@
 import * as React from "react";
-import { Alert, Button } from "@patternfly/react-core";
+import { Alert, Button, AlertActionCloseButton } from "@patternfly/react-core";
+import cx from "classnames";
 import { useField, useFormikContext, FormikValues } from "formik";
 import * as _ from "lodash";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-
-import { EditorToggle, EditorType } from "../synced-editor/editor-toggle";
-
-import "./SyncedEditorField.scss";
-import { load, dump } from "js-yaml";
+import { useTranslation } from "react-i18next";
+import { EditorType } from "../synced-editor/editor-toggle";
 import { useEditorType } from "../synced-editor/useEditorType";
-import { LoadingBox } from "../status-box";
-type FormErrorCallback = () => void;
+import RadioGroupField from "./RadioGroupField";
+import { load, dump } from "js-yaml";
+import "./SyncedEditorField.scss";
+import { LoadingBox } from "copiedFromConsole/status-box";
+
+type FormErrorCallback<ReturnValue = {}> = () => ReturnValue;
 type WithOrWithoutPromise<Type> = Promise<Type> | Type;
 export type SanitizeToForm<YAMLStruct = {}, FormOutput = {}> = (
   preFormData: YAMLStruct
-) => WithOrWithoutPromise<FormOutput>;
+) => WithOrWithoutPromise<FormOutput | FormErrorCallback<FormOutput>>;
 export type SanitizeToYAML = (preFormData: string) => string;
 
 type EditorContext<SanitizeTo> = {
@@ -32,8 +33,6 @@ type SyncedEditorFieldProps = {
   lastViewUserSettingKey: string;
   prune?: (data: any) => any;
   noMargin?: boolean;
-  formErrorCallback: FormErrorCallback;
-  formParsingError?: string;
 };
 
 const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
@@ -41,42 +40,40 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
   formContext,
   yamlContext,
   prune,
-  formErrorCallback,
-  formParsingError,
+  noMargin = false,
   lastViewUserSettingKey,
 }) => {
-  const { t } = useNodeHealthCheckTranslation();
-  const [field, , { setValue }] = useField(name);
+  const { t } = useTranslation();
+  const [field] = useField(name);
+
   const { values, setFieldValue } = useFormikContext<FormikValues>();
+
   const formData = _.get(values, formContext.name);
   const yamlData: string = _.get(values, yamlContext.name);
 
-  const [yamlWarning, setYAMLWarning] = React.useState<boolean>(
-    !!formParsingError
+  const [yamlWarning, setYAMLWarning] = React.useState<boolean>(false);
+  const [sanitizeToCallback, setSanitizeToCallback] =
+    React.useState<FormErrorCallback>(undefined);
+  const [disabledFormAlert, setDisabledFormAlert] = React.useState<boolean>(
+    formContext.isDisabled
   );
+
+  const isEditorTypeEnabled = (type: EditorType): boolean =>
+    !(type === EditorType.Form
+      ? formContext?.isDisabled
+      : yamlContext?.isDisabled);
 
   const [editorType, setEditorType, resourceLoaded] = useEditorType(
     lastViewUserSettingKey,
     field.value as EditorType,
-    () => true
+    isEditorTypeEnabled
   );
 
-  React.useEffect(() => {
-    if (resourceLoaded && field.value !== editorType) {
-      setFieldValue(name, editorType);
-    }
-  }, [
-    editorType,
-    field.value,
-    formContext.isDisabled,
-    name,
-    resourceLoaded,
-    setFieldValue,
-  ]);
   const loaded = resourceLoaded && field.value === editorType;
+
   const changeEditorType = (newType: EditorType) => {
-    setValue(newType);
     setEditorType(newType);
+    setFieldValue(name, newType);
   };
 
   const handleToggleToForm = async () => {
@@ -90,15 +87,19 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
           content = await formContext.sanitizeTo(content);
         } catch (e) {
           // Failed to sanitize, discard invalid data
-          console.error(e);
           content = null;
+          console.error(e);
         }
       }
+
       // Handle sanitized result
       if (typeof content === "object" && !_.isEmpty(content)) {
         setFieldValue(formContext.name, content);
         changeEditorType(EditorType.Form);
         return;
+      }
+      if (typeof content === "function") {
+        setSanitizeToCallback(() => content);
       }
     }
 
@@ -109,7 +110,6 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
     const newYAML = dump(prune?.(formData) ?? formData, yamlData, {
       skipInvalid: true,
     });
-    console.log({ newYAML });
     setFieldValue(
       yamlContext.name,
       yamlContext.sanitizeTo ? yamlContext.sanitizeTo(newYAML) : newYAML
@@ -119,9 +119,9 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
 
   const onClickYAMLWarningConfirm = async () => {
     setYAMLWarning(false);
-
-    setFieldValue(formContext.name, formErrorCallback());
-
+    if (sanitizeToCallback) {
+      setFieldValue(formContext.name, sanitizeToCallback());
+    }
     changeEditorType(EditorType.Form);
   };
 
@@ -142,32 +142,83 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
     }
   };
 
+  React.useEffect(() => {
+    setDisabledFormAlert(formContext.isDisabled);
+    if (resourceLoaded && field.value !== editorType) {
+      setFieldValue(name, editorType);
+    }
+  }, [
+    editorType,
+    field.value,
+    formContext.isDisabled,
+    name,
+    resourceLoaded,
+    setFieldValue,
+  ]);
+
   return loaded ? (
     <>
-      <EditorToggle value={field.value} onChange={onChangeType} />
+      <div
+        className={cx("ocs-synced-editor-field__editor-toggle", {
+          margin: !noMargin,
+        })}
+        data-test="synced-editor-field"
+      >
+        <RadioGroupField
+          label={t("console-shared~Configure via:")}
+          name={name}
+          options={[
+            {
+              label: formContext.label || t("console-shared~Form view"),
+              value: EditorType.Form,
+              isDisabled: formContext.isDisabled,
+            },
+            {
+              label: yamlContext.label || t("console-shared~YAML view"),
+              value: EditorType.YAML,
+              isDisabled: yamlContext.isDisabled,
+            },
+          ]}
+          onChange={(val: string) => onChangeType(val as EditorType)}
+          isInline
+        />
+      </div>
       {yamlWarning && (
         <Alert
           className="co-synced-editor__yaml-warning"
           variant="danger"
           isInline
-          title={
-            formParsingError
-              ? t("Failed to load form view")
-              : t("Invalid YAML cannot be persisted")
-          }
+          title={t("console-shared~Invalid YAML cannot be persisted")}
         >
-          {formParsingError && <p>{formParsingError}</p>}
-          <p>{t("Switching to form view will delete any invalid YAML.")}</p>
+          <p>
+            {t(
+              "console-shared~Switching to form view will delete any invalid YAML."
+            )}
+          </p>
           <Button variant="danger" onClick={onClickYAMLWarningConfirm}>
-            {t("Switch and delete")}
+            {t("console-shared~Switch and delete")}
           </Button>
           &nbsp;
           <Button variant="secondary" onClick={onClickYAMLWarningCancel}>
-            {t("Cancel")}
+            {t("console-shared~Cancel")}
           </Button>
         </Alert>
       )}
-      {field.value === EditorType.Form
+      {disabledFormAlert && (
+        <Alert
+          variant="default"
+          title={t(
+            "console-shared~Form view is disabled for this chart because the schema is not available"
+          )}
+          actionClose={
+            <AlertActionCloseButton
+              onClose={() => setDisabledFormAlert(false)}
+            />
+          }
+          isInline
+        />
+      )}
+      {editorType === EditorType.Form && !disabledFormAlert
         ? formContext.editor
         : yamlContext.editor}
     </>

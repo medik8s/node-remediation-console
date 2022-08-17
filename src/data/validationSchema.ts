@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
-import { RemediatorKind } from "./types";
+import { RemediatorLabel } from "./types";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
 const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
@@ -34,7 +34,7 @@ const formDataSchema = yup.object({
   ),
   remediator: yup.object({
     template: yup.mixed().when("kind", {
-      is: RemediatorKind.CUSTOM,
+      is: RemediatorLabel.CUSTOM,
       then: customRemediatorSchema,
       otherwise: yup.string(),
     }),

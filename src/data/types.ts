@@ -1,6 +1,6 @@
 import {
-  MatchLabels,
   ObjectMetadata,
+  Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
 import { EditorType } from "../copiedFromConsole/synced-editor/editor-toggle";
 
@@ -33,28 +33,8 @@ export type RemediationTemplate = {
 
 export type UnhealthyConditions = UnhealthyCondition[];
 
-export type PauseRequest = {};
-
-export enum MatchExpressionOperator {
-  In = "In",
-  NotIn = "NotIn",
-  Exists = "Exists",
-  DoesNotExist = "DoesNotExist",
-}
-
-export type MatchExpression = {
-  key: string;
-  operator: MatchExpressionOperator;
-  values?: string[];
-};
-
-export type NodeSelector = {
-  matchLabels?: MatchLabels;
-  matchExpressions?: MatchExpression[];
-};
-
 export type NodeHealthCheckSpec = {
-  selector?: NodeSelector;
+  selector?: Selector;
   remediationTemplate: RemediationTemplate;
   minHealthy?: string;
   unhealthyConditions?: UnhealthyConditions;
@@ -98,8 +78,8 @@ export enum TimeUnit {
   MilliSecond = "ms",
 }
 
-export enum RemediatorKind {
-  SNR = "SNR",
+export enum RemediatorLabel {
+  SNR = "Self node remediation",
   CUSTOM = "Other",
 }
 
@@ -108,13 +88,9 @@ export enum BuiltInRemediationTemplate {
   ResourceDeletion = "self-node-remediation-resource-deletion-template",
 }
 
-export type FormDataRemediatorTemplate =
-  | BuiltInRemediationTemplate
-  | RemediationTemplate;
-
-export type FormDataRemediator = {
-  kind: RemediatorKind;
-  template: FormDataRemediatorTemplate;
+export type Remediator = {
+  label: RemediatorLabel;
+  template: BuiltInRemediationTemplate | RemediationTemplate;
 };
 
 export const isBuiltInRemediationTemplate = (
@@ -129,21 +105,19 @@ export const isBuiltInRemediationTemplate = (
   );
 };
 
-export type FormDataUnhealthyCondition = UnhealthyCondition;
-
-export type NodeHealthCheckFormData = {
+export type FormViewValues = {
   name: string;
-  labelDisplayNames: string[];
+  nodeSelectorLabels: string[];
   minHealthy: string;
-  unhealthyConditions: FormDataUnhealthyCondition[];
-  remediator: FormDataRemediator;
+  unhealthyConditions: UnhealthyCondition[];
+  remediator: Remediator;
 };
 
 export type NodeHealthCheckFormValues = {
   isCreateFlow: boolean;
   editorType: EditorType;
   yamlData: string;
-  formData: NodeHealthCheckFormData | null;
+  formData: FormViewValues | null;
   formParsingError: string | null;
   resourceVersion: string;
 };

@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as _ from "lodash";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
-import { BuiltInRemediationTemplate, FormDataRemediator } from "data/types";
+import { BuiltInRemediationTemplate, Remediator } from "data/types";
 import { FormViewFieldProps } from "../propTypes";
 import InputField from "components/shared/InputField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -62,7 +62,7 @@ export const RemediatorField_: React.FC<{
   formViewFieldName: string;
   snrTemplatesExist: boolean;
 }> = ({ formViewFieldName, snrTemplatesExist }) => {
-  const [value] = useField<FormDataRemediator>(
+  const [value] = useField<Remediator>(
     getRemediatorFieldName(formViewFieldName)
   );
   useFormikValidationFix(value);

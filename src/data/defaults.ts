@@ -1,7 +1,7 @@
 import {
   BuiltInRemediationTemplate,
   InitialNodeHealthCheck,
-  MatchExpressionOperator,
+  NodeHealthCheck,
   UnhealthyConditions,
   UnhealthyConditionStatus,
 } from "./types";
@@ -11,6 +11,7 @@ import {
   nodeHealthCheckKind,
   snrTemplateKind,
 } from "./model";
+import { Operator } from "@openshift-console/dynamic-plugin-sdk";
 
 export const DEFAULT_MIN_HEALTHY = "51%";
 export const OPERATORS_NAMESPACE = "openshift-operators";
@@ -23,12 +24,12 @@ const initialUnhealthyConditions: UnhealthyConditions = [
   },
 ];
 
-export const initialSpec = {
+export const defaultSpec = {
   selector: {
     matchExpressions: [
       {
         key: "node-role.kubernetes.io/worker",
-        operator: MatchExpressionOperator.Exists,
+        operator: Operator.Exists,
       },
     ],
   },
@@ -42,11 +43,15 @@ export const initialSpec = {
   unhealthyConditions: initialUnhealthyConditions,
 };
 
-export const initialNodeHealthCheckData: InitialNodeHealthCheck = {
+export const initialNodeHealthCheck: NodeHealthCheck = {
   apiVersion: getNodeHealthCheckApiVersion(),
   kind: nodeHealthCheckKind.kind,
   metadata: {
     name: "",
   },
-  spec: initialSpec,
+};
+
+export const defaultNodeHealthCheck: InitialNodeHealthCheck = {
+  ...initialNodeHealthCheck,
+  spec: defaultSpec,
 };

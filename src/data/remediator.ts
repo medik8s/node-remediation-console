@@ -1,16 +1,13 @@
 import * as _ from "lodash";
-import { initialNodeHealthCheckData } from "./initialNodeHealthCheckData";
+import { defaultSpec } from "./defaults";
 import {
   RemediationTemplate,
-  FormDataRemediator,
-  RemediatorKind,
+  Remediator,
+  RemediatorLabel,
   isBuiltInRemediationTemplate,
   BuiltInRemediationTemplate,
   NodeHealthCheck,
 } from "./types";
-
-export const SNR_LABEL = "Self node remediation";
-export const OTHER_LABEL = "Other";
 
 const getBuiltInRemediatorTemplate = (
   initialRemediationTemplate: RemediationTemplate,
@@ -34,10 +31,10 @@ const getBuiltInRemediatorTemplate = (
 export const getRemediator = (
   initialRemediationTemplate: RemediationTemplate,
   remediationTemplate: RemediationTemplate | undefined
-): FormDataRemediator => {
+): Remediator => {
   if (!remediationTemplate) {
     return {
-      kind: RemediatorKind.SNR,
+      label: RemediatorLabel.SNR,
       template: BuiltInRemediationTemplate.ResourceDeletion,
     };
   }
@@ -47,33 +44,24 @@ export const getRemediator = (
   );
   if (builtInTemplate) {
     return {
-      kind: RemediatorKind.SNR,
+      label: RemediatorLabel.SNR,
       template: builtInTemplate,
     };
   }
   return {
-    kind: RemediatorKind.CUSTOM,
+    label: RemediatorLabel.CUSTOM,
     template: remediationTemplate,
   };
 };
 
-export const getRemediatorLabel = (kind: RemediatorKind) =>
-  kind === RemediatorKind.SNR ? SNR_LABEL : OTHER_LABEL;
-
-export const getRemediatorKind = (
+export const getRemediatorLabel = (
   nodeHealthCheck: NodeHealthCheck
-): RemediatorKind | null => {
+): RemediatorLabel | null => {
   if (!nodeHealthCheck.spec || !nodeHealthCheck.spec.remediationTemplate) {
     return undefined;
   }
   return getRemediator(
-    initialNodeHealthCheckData.spec.remediationTemplate,
+    defaultSpec.remediationTemplate,
     nodeHealthCheck.spec.remediationTemplate
-  ).kind;
-};
-
-export const getNodeHealthCheckRemediatorLabel = (
-  nodeHealthCheck: NodeHealthCheck
-): string | null => {
-  return getRemediatorLabel(getRemediatorKind(nodeHealthCheck));
+  ).label;
 };

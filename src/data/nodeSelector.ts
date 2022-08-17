@@ -1,14 +1,12 @@
 import {
   K8sResourceCommon,
+  MatchExpression,
   MatchLabels,
+  Operator,
+  Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
 import * as _ from "lodash";
 import { isParseError, ParseErrorCode, throwParseError } from "./parseErrors";
-import {
-  MatchExpression,
-  MatchExpressionOperator,
-  NodeSelector,
-} from "./types";
 
 const LABEL_DISPLAY_NAME_SEPARATOR = "=";
 
@@ -27,7 +25,7 @@ const getMatchExpressionLabelDisplayNames = (
   }
   const ret: string[] = [];
   for (const expression of matchExpressions) {
-    if (expression.operator === MatchExpressionOperator.Exists) {
+    if (expression.operator === Operator.Exists) {
       ret.push(expression.key);
     } else {
       continue;
@@ -46,8 +44,7 @@ const getMatchLabelsDisplayNames = (matchLabels: MatchLabels | undefined) => {
 };
 
 export const getNodeSelectorLabelDisplayNames = (
-  selector: NodeSelector,
-  deleteInvalid: boolean
+  selector: Selector
 ): string[] => {
   try {
     return [
@@ -55,9 +52,6 @@ export const getNodeSelectorLabelDisplayNames = (
       ...getMatchExpressionLabelDisplayNames(selector.matchExpressions),
     ];
   } catch (err) {
-    if (deleteInvalid) {
-      return [];
-    }
     if (isParseError(err)) {
       throw err;
     }
@@ -70,7 +64,7 @@ export const getNodeSelectorLabelDisplayNames = (
 
 export const getNodeSelector = (
   labelDisplayNames: string[]
-): NodeSelector | undefined => {
+): Selector | undefined => {
   if (labelDisplayNames.length === 0) {
     return undefined;
   }
@@ -80,7 +74,7 @@ export const getNodeSelector = (
     const [key, value] = labelDisplayName.split(LABEL_DISPLAY_NAME_SEPARATOR);
     if (!value) {
       matchExpressions.push({
-        operator: MatchExpressionOperator.Exists,
+        operator: Operator.Exists,
         key,
       });
     } else {

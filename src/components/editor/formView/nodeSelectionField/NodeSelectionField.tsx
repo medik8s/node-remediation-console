@@ -5,11 +5,11 @@ import { NodeKind } from "copiedFromConsole/types/node";
 import NodeList from "./NodeList";
 import LabelsSelector from "./LabelsSelector";
 
-import { getObjectLabelDisplayNames } from "data/nodeSelectorData";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { Alert } from "@patternfly/react-core";
 import { useIsSNR } from "../remediatorFieldUtils";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
+import { getObjectLabelDisplayNames } from "data/nodeSelector";
 
 const SNRWorkerNodesWarning: React.FC<{ formViewFieldName: string }> = ({
   formViewFieldName,
@@ -36,7 +36,7 @@ const NodeSelectionField: React.FC<{
 }> = ({ allNodes, formViewFieldName }) => {
   const fieldName = getObjectItemFieldName([
     formViewFieldName,
-    "labelDisplayNames",
+    "nodeSelectorLabels",
   ]);
   const [{ value: labels }] = useField<string[]>(fieldName);
   const [selectedNodes, setSelectedNodes] =

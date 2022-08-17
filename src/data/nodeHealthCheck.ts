@@ -1,29 +1,24 @@
-import { K8sResourceCommon } from "@openshift-console/dynamic-plugin-sdk";
+import { Selector } from "@openshift-console/dynamic-plugin-sdk";
 import * as _ from "lodash";
-import {
-  NodeHealthCheck,
-  NodeSelector,
-  StatusPhase,
-  UnhealthyCondition,
-} from "./types";
+import { NodeHealthCheck, StatusPhase, UnhealthyCondition } from "./types";
 
-export const getName = <A extends K8sResourceCommon = K8sResourceCommon>(
-  value: A
-) => _.get(value, "metadata.name") as K8sResourceCommon["metadata"]["name"];
+export const getName = (nodeHealthCheck: NodeHealthCheck) =>
+  nodeHealthCheck?.metadata.name;
 
-export const getPauseRequests = (nhc: NodeHealthCheck): string[] =>
-  nhc.spec?.pauseRequests || [];
+export const getPauseRequests = (nodeHealthCheck: NodeHealthCheck): string[] =>
+  nodeHealthCheck.spec?.pauseRequests || [];
 
-export const getPhase = (nhc: NodeHealthCheck) => nhc.status?.phase;
+export const getPhase = (nodeHealthCheck: NodeHealthCheck) =>
+  nodeHealthCheck.status?.phase;
 
 export const getUnhealthyConditions = (
-  nhc: NodeHealthCheck
-): UnhealthyCondition[] => nhc.spec?.unhealthyConditions || [];
+  nodeHealthCheck: NodeHealthCheck
+): UnhealthyCondition[] => nodeHealthCheck.spec?.unhealthyConditions || [];
 
-export const getSelector = (nhc: NodeHealthCheck): NodeSelector => {
-  return nhc.spec?.selector || {};
+export const getSelector = (nodeHealthCheck: NodeHealthCheck): Selector => {
+  return nodeHealthCheck.spec?.selector || {};
 };
 
-export const isDisabled = (nhc: NodeHealthCheck) => {
-  return getPhase(nhc) === StatusPhase.DISABLED;
+export const isDisabled = (nodeHealthCheck: NodeHealthCheck) => {
+  return getPhase(nodeHealthCheck) === StatusPhase.DISABLED;
 };

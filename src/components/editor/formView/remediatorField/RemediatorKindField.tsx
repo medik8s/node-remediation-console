@@ -2,10 +2,9 @@ import { FormGroup, Tooltip } from "@patternfly/react-core";
 import { withFallback } from "copiedFromConsole/error";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import RadioButtonField from "copiedFromConsole/formik-fields/RadioButtonField";
-import { OTHER_LABEL, SNR_LABEL } from "data/remediatorFormData";
 import {
-  FormDataRemediator,
-  RemediatorKind,
+  Remediator,
+  RemediatorLabel,
   BuiltInRemediationTemplate,
   RemediationTemplate,
 } from "data/types";
@@ -19,7 +18,7 @@ import {
 const RemediatorKindRadioGroup: React.FC<{
   snrTemplatesExist: boolean;
   fieldName: string;
-  onChange: (kind: RemediatorKind) => void;
+  onChange: (kind: RemediatorLabel) => void;
 }> = ({ snrTemplatesExist, fieldName, onChange }) => {
   const fieldId = getFieldId(fieldName, "radiogroup");
   return (
@@ -31,8 +30,8 @@ const RemediatorKindRadioGroup: React.FC<{
         hidden={snrTemplatesExist}
       >
         <RadioButtonField
-          value={RemediatorKind.SNR}
-          label={SNR_LABEL}
+          value={RemediatorLabel.SNR}
+          label={RemediatorLabel.SNR}
           isDisabled={!snrTemplatesExist}
           aria-describedby={"SNR remediator kind"}
           name={fieldName}
@@ -40,8 +39,8 @@ const RemediatorKindRadioGroup: React.FC<{
         />
       </Tooltip>
       <RadioButtonField
-        value={RemediatorKind.CUSTOM}
-        label={OTHER_LABEL}
+        value={RemediatorLabel.CUSTOM}
+        label={RemediatorLabel.CUSTOM}
         aria-describedby={"CUSTOM remediator kind"}
         name={fieldName}
         onChange={onChange}
@@ -64,13 +63,13 @@ const RemediatorKindField_ = ({
   formViewFieldName: string;
   snrTemplatesExist: boolean;
 }) => {
-  const [, , { setValue: setRemediator }] = useField<FormDataRemediator>(
+  const [, , { setValue: setRemediator }] = useField<Remediator>(
     getRemediatorFieldName(formViewFieldName)
   );
 
   const setCustomRemediator = () => {
     setRemediator({
-      kind: RemediatorKind.CUSTOM,
+      label: RemediatorLabel.CUSTOM,
       template: getEmptyRemediationTemplate(),
     });
   };
@@ -81,12 +80,12 @@ const RemediatorKindField_ = ({
     }
   }, []);
 
-  const onChange = (kind: RemediatorKind) => {
-    if (kind === RemediatorKind.CUSTOM) {
+  const onChange = (kind: RemediatorLabel) => {
+    if (kind === RemediatorLabel.CUSTOM) {
       setCustomRemediator();
     } else {
       setRemediator({
-        kind: kind,
+        label: kind,
         template: BuiltInRemediationTemplate.NodeDeletion,
       });
     }

@@ -13,7 +13,7 @@ import {
 } from "components/shared/formik-utils";
 import { FormViewFieldProps } from "../propTypes";
 import {
-  FormDataUnhealthyCondition,
+  UnhealthyCondition,
   UnhealthyConditionStatus,
   UnhealtyConditionType,
 } from "data/types";
@@ -66,7 +66,7 @@ const UnhealthyCondition: React.FC<{
 export const UnhealthyConditionArray: React.FC<{
   fieldName: string;
 }> = ({ fieldName }) => {
-  const [{ value }] = useField<FormDataUnhealthyCondition[]>(fieldName);
+  const [{ value }] = useField<UnhealthyCondition[]>(fieldName);
   useFormikValidationFix(value ? value.length : value);
   if (!value) {
     return null;

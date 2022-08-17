@@ -7,8 +7,6 @@ import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { Formik, FormikHelpers } from "formik";
 
 import { k8sCreate, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
-import { fromNodeHealthCheck } from "data/fromNodeHealthCheck";
-import { toNodeHealthCheck } from "data/toNodeHealthCheck";
 import { NodeHealthCheckModel } from "data/model";
 import { validationSchema } from "data/validationSchema";
 import { PageHeading } from "copiedFromConsole/utils/headings";
@@ -16,6 +14,7 @@ import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavig
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { withFallback } from "copiedFromConsole/error";
+import { getFormValues, getNodeHealthCheck } from "data/formValues";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
@@ -48,7 +47,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   isCreateFlow,
 }) => {
   const [initialValues] = React.useState(
-    fromNodeHealthCheck(nodeHealthCheck, isCreateFlow)
+    getFormValues(nodeHealthCheck, isCreateFlow)
   );
 
   const navigation = useNodeHealthCheckNavigation();
@@ -58,7 +57,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     actions: FormikHelpers<NodeHealthCheckFormValues>
   ) => {
     let resourceCall;
-    const updatedNodeHealthCheck: NodeHealthCheck = toNodeHealthCheck(
+    const updatedNodeHealthCheck: NodeHealthCheck = getNodeHealthCheck(
       nodeHealthCheck,
       values
     );

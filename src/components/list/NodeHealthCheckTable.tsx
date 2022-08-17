@@ -10,7 +10,6 @@ import {
 
 import { nodeHealthCheckKind, NodeHealthCheckModel } from "data/model";
 import { NodeHealthCheck } from "data/types";
-import { getNodeHealthCheckRemediatorLabel } from "data/remediatorFormData";
 import "./list.css";
 import NodeHealthCheckStatus from "../details/NodeHealthCheckStatus";
 import NotAvailable from "./NotAvailable";
@@ -19,6 +18,7 @@ import NodeHealthCheckActionsMenu from "components/actions/NodeHealthCheckAction
 import { sortable, SortByDirection } from "@patternfly/react-table";
 import { EmptyBox } from "copiedFromConsole/status-box";
 import { Timestamp } from "copiedFromConsole/utils/timestamp";
+import { getRemediatorLabel } from "data/remediator";
 
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],
@@ -26,8 +26,8 @@ const sortByRemediator = (
 ) => {
   return nodeHealthChecks.sort(
     (nodeHealthCheck1: NodeHealthCheck, nodeHealthCheck2: NodeHealthCheck) => {
-      const remediator1 = getNodeHealthCheckRemediatorLabel(nodeHealthCheck1);
-      const remediator2 = getNodeHealthCheckRemediatorLabel(nodeHealthCheck2);
+      const remediator1 = getRemediatorLabel(nodeHealthCheck1);
+      const remediator2 = getRemediatorLabel(nodeHealthCheck2);
       if (remediator1 === remediator2) {
         return 0;
       }
@@ -68,7 +68,7 @@ const columns: TableColumn<NodeHealthCheck>[] = [
 ];
 
 const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
-  const remediatorLabel = getNodeHealthCheckRemediatorLabel(obj);
+  const remediatorLabel = getRemediatorLabel(obj);
   if (!remediatorLabel) {
     return <NotAvailable />;
   }
