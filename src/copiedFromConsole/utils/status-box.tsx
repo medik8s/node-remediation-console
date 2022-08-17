@@ -35,7 +35,7 @@ export const LoadError: React.FC<LoadErrorProps> = ({
       </div>
       {canRetry && (
         <div className="pf-u-text-align-center">
-          <Trans ns="public">
+          <Trans ns="plugin__node-remediation-console-plugin">
             Please{" "}
             <Button
               type="button"
