@@ -19,3 +19,13 @@
 #info-inline-alert {
   margin-bottom: unset;
 }
+
+.synced-editor .ocs-synced-editor-field__editor-toggle {
+  padding-left: 1.5rem;
+  border-top: none;
+  padding-bottom: var(--pf-global--spacer--sm);
+}
+
+.synced-editor .ocs-synced-editor-field__editor-toggle .pf-c-radio {
+  margin-right: var(--pf-global--spacer--lg);
+}

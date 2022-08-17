@@ -106,7 +106,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   }, [setStatus, values.editorType]);
   return (
     <>
-      <FlexForm>
+      <FlexForm className="synced-editor">
         <SyncedEditorField
           name="editorType"
           formContext={{

@@ -5,6 +5,7 @@ import { RadioGroupFieldProps } from "../../components/shared/field-types";
 import { getFieldId } from "./field-utils";
 import RadioButtonField from "./RadioButtonField";
 import "./RadioGroupField.scss";
+import * as classNames from "classnames";
 
 const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
   label,
@@ -28,6 +29,9 @@ const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
       isRequired={required}
       label={label}
       isInline={isInline}
+      className={classNames("ocs-radio-group-field", {
+        "ocs-radio-group-field--inline": isInline,
+      })}
     >
       {options.map((option) => {
         const activeChild =
