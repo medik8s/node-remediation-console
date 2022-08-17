@@ -4,7 +4,11 @@ import { FormikProps, useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
-import { FlexForm, FormFooter } from "../../copiedFromConsole/form-utils";
+import {
+  FlexForm,
+  FormBody,
+  FormFooter,
+} from "../../copiedFromConsole/form-utils";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
 import "./editor.css";
@@ -13,7 +17,8 @@ import { getFormValues } from "data/formValues";
 import * as formViewValues from "data/formViewValues";
 import * as yamlText from "data/yamlText";
 import { dump } from "js-yaml";
-import { Alert } from "@patternfly/react-core";
+import { Alert, FormSection } from "@patternfly/react-core";
+import { NodeKind } from "copiedFromConsole/types/node";
 
 const sanitizeToYaml = (
   values: NodeHealthCheckFormValues,
@@ -34,13 +39,15 @@ const sanitizeToYaml = (
 const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
   "console.createNodeHealthCheck.editor.lastView";
 
-type NodeHealthCheckFormEditorProps = {
+type NodeHealthCheckFormSyncedEditorProps = {
   handleCancel: () => void;
   originalNodeHealthCheck: NodeHealthCheck;
+  allNodes: NodeKind[];
+  snrTemplatesExist: boolean;
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
-  FormikProps<NodeHealthCheckFormValues> & NodeHealthCheckFormEditorProps
+  FormikProps<NodeHealthCheckFormValues> & NodeHealthCheckFormSyncedEditorProps
 > = ({
   originalNodeHealthCheck,
   values,
@@ -52,6 +59,8 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   setStatus,
   setErrors,
   errors,
+  allNodes,
+  snrTemplatesExist,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   const { setFieldValue } = useFormikContext<NodeHealthCheckFormValues>();
@@ -72,14 +81,26 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   );
 
   const formEditor = React.useMemo(
-    () =>
-      values.formParsingError ? (
-        <Alert variant="danger" title="Error parsing NodeHealthCheck">
-          {values.formParsingError}
-        </Alert>
-      ) : (
-        <NodeHealthCheckFormFields />
-      ),
+    () => (
+      <FormBody className="co-m-pane__form">
+        <FormSection>
+          {values.formParsingError ? (
+            <Alert
+              variant="danger"
+              title="Error parsing NodeHealthCheck"
+              isInline
+            >
+              {values.formParsingError}
+            </Alert>
+          ) : (
+            <NodeHealthCheckFormFields
+              allNodes={allNodes}
+              snrTemplatesExist={snrTemplatesExist}
+            />
+          )}
+        </FormSection>
+      </FormBody>
+    ),
     []
   );
 
