@@ -72,8 +72,8 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   const disableSubmit =
     !dirty ||
     !_.isEmpty(errors) ||
-    (isSubmitting &&
-      (values.editorType === EditorType.YAML || !!values.formData));
+    isSubmitting ||
+    (values.editorType === EditorType.Form && !!values.formParsingError);
 
   const yamlEditor = React.useMemo(
     () => <YamlEditorField fieldName="yamlData" />,
