@@ -7,7 +7,6 @@ import { EditorType } from "../synced-editor/editor-toggle";
 import { useEditorType } from "../synced-editor/useEditorType";
 import RadioGroupField from "./RadioGroupField";
 import { load, dump } from "js-yaml";
-import "./SyncedEditorField.scss";
 import { LoadingBox } from "copiedFromConsole/status-box";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 

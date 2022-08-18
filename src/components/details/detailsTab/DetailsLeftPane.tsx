@@ -2,7 +2,6 @@ import { DetailsItem } from "copiedFromConsole/utils/details-item";
 import { LabelList } from "copiedFromConsole/utils/label-list";
 import OwnerReferences from "copiedFromConsole/utils/OwnerReferences";
 import { Selector } from "copiedFromConsole/utils/selector";
-import { Timestamp } from "copiedFromConsole/utils/timestamp";
 import { ModalId } from "components/modals/Modals";
 import { useModals } from "components/modals/ModalsContext";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
@@ -11,6 +10,7 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import * as _ from "lodash";
 import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
+import { Timestamp } from "@openshift-console/dynamic-plugin-sdk";
 
 export type ResourceSummaryProps = {
   resource: NodeHealthCheck;

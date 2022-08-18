@@ -2,7 +2,7 @@ import * as _ from "lodash-es";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { SearchIcon } from "@patternfly/react-icons";
-import { Selector as SelectorKind } from "../api/common-types";
+import { Selector as SelectorKind } from "@openshift-console/dynamic-plugin-sdk";
 import { selectorToString } from "../module/selector";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 

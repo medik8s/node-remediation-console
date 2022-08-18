@@ -5,6 +5,7 @@ import {
   RowProps,
   ResourceLink,
   TableColumn,
+  Timestamp,
   //Timestamp,
 } from "@openshift-console/dynamic-plugin-sdk";
 
@@ -17,7 +18,6 @@ import NotAvailable from "./NotAvailable";
 import NodeHealthCheckActionsMenu from "components/actions/NodeHealthCheckActionsMenu";
 import { sortable, SortByDirection } from "@patternfly/react-table";
 import { EmptyBox } from "copiedFromConsole/status-box";
-import { Timestamp } from "copiedFromConsole/utils/timestamp";
 import { getRemediatorLabel } from "data/remediator";
 
 const sortByRemediator = (
@@ -96,7 +96,6 @@ const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
       </TableData>
       <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
         <Timestamp timestamp={obj.metadata.creationTimestamp} />
-        {/* {obj.metadata.creationTimestamp} */}
       </TableData>
       <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
         <NodeHealthCheckActionsMenu
