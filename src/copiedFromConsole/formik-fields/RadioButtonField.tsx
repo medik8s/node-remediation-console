@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Radio } from "@patternfly/react-core";
 import { useField, useFormikContext, FormikValues } from "formik";
-import { RadioButtonFieldProps } from "../../components/shared/field-types";
+import { RadioButtonFieldProps } from "./field-types";
 import { getFieldId } from "./field-utils";
 
 const RadioButtonField: React.FC<RadioButtonFieldProps> = ({

@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
 import { BuiltInRemediationTemplate, Remediator } from "data/types";
 import { FormViewFieldProps } from "../propTypes";
-import InputField from "components/shared/InputField";
+import InputField from "copiedFromConsole/formik-fields/InputField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import {
   getRemediatorFieldName,

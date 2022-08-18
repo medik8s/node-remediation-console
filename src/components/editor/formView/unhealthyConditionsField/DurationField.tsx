@@ -1,4 +1,4 @@
-import InputField from "components/shared/InputField";
+import InputField from "copiedFromConsole/formik-fields/InputField";
 import HelpIcon from "components/shared/HelpIcon";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";

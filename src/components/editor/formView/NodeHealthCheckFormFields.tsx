@@ -2,7 +2,7 @@ import * as React from "react";
 import { useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { Alert, TextInputTypes } from "@patternfly/react-core";
-import InputField from "../../shared/InputField";
+import InputField from "../../../copiedFromConsole/formik-fields/InputField";
 import NodeSelectionField from "./nodeSelectionField/NodeSelectionField";
 import HelpIcon from "components/shared/HelpIcon";
 import { FormViewFieldProps } from "./propTypes";

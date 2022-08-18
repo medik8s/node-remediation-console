@@ -1,7 +1,7 @@
 import { Chip, ChipGroup, SelectProps } from "@patternfly/react-core";
 import { getNodeWorkerLabel } from "copiedFromConsole/selectors/node";
 import { NodeKind } from "copiedFromConsole/types/node";
-import { MultiSelectOption } from "components/shared/field-types";
+import { MultiSelectOption } from "copiedFromConsole/formik-fields/field-types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";

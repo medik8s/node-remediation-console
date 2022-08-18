@@ -7,10 +7,27 @@ import {
   SelectOption,
   SelectOptionObject,
   SelectOptionProps,
+  SelectProps,
   SelectVariant,
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
-import { MultiSelectFieldProps, MultiSelectOption } from "./field-types";
+import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
+
+export type MultiSelectOption = SelectOptionProps & {
+  id: string;
+  displayName: string;
+  isDisabled?: boolean;
+};
+
+export interface MultiSelectFieldProps extends FieldProps {
+  options: MultiSelectOption[];
+  placeholderText?: string;
+  onChange?: (val: string[]) => void;
+  getHelperText?: (value: string) => React.ReactNode | undefined;
+  chipGroupComponent?: React.ReactNode;
+  onSelect: SelectProps["onSelect"];
+  enableClear: boolean;
+}
 
 // Field value is a string[]
 const MultiSelectField: React.FC<MultiSelectFieldProps> = ({

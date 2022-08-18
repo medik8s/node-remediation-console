@@ -17,8 +17,8 @@ import NotAvailable from "./NotAvailable";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import NodeHealthCheckActionsMenu from "components/actions/NodeHealthCheckActionsMenu";
 import { sortable, SortByDirection } from "@patternfly/react-table";
-import { EmptyBox } from "copiedFromConsole/status-box";
 import { getRemediatorLabel } from "data/remediator";
+import { EmptyBox } from "copiedFromConsole/utils/status-box";
 
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],
