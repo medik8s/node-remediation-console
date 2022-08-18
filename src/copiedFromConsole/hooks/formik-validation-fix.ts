@@ -7,9 +7,6 @@ export const useFormikValidationFix = (value: any) => {
   const memoizedValue = useDeepCompareMemoize(value);
 
   React.useEffect(() => {
-    console.log({ value });
-    validateForm().then((errors) => {
-      console.log(errors);
-    });
+    validateForm();
   }, [memoizedValue, validateForm]);
 };
