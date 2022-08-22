@@ -7,7 +7,7 @@ if [ $# -eq 0 ]
 fi
 IMAGE=$1
 PLUGIN_NAME="node-remediation-console-plugin"
-BASEDIR=$( dirname $0 )
+BASEDIR=$(dirname $0 )
 docker build -t $IMAGE .
 docker push $IMAGE
 oc process -f ${BASEDIR}/template.yaml  -p PLUGIN_NAME=node-remediation-console-plugin -p NAMESPACE=node-remediation-console-plugin -p IMAGE=$IMAGE | oc create -f -
