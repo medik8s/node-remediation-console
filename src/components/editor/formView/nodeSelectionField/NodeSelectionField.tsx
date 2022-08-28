@@ -61,7 +61,7 @@ const NodeSelectionField: React.FC<{
         fieldName={fieldName}
       ></LabelsSelector>
       <SNRWorkerNodesWarning formViewFieldName={formViewFieldName} />
-      <div className="node-selector-list">
+      <div className="node-selector-list" data-test="node-selector-list">
         <NodeList
           nodes={selectedNodes}
           filteredNodes={selectedNodes}

@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 import * as PropTypes from "prop-types";
 import { Alert, AlertGroup } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-
+import { LoadingInline } from "./utils/status-box";
 const injectDisabled = (children, disabled) => {
   return React.Children.map(children, (c) => {
     if (!_.isObject(c) || c.type !== "button") {

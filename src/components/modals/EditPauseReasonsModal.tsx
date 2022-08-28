@@ -42,16 +42,21 @@ const PauseReasonsField: React.FC<PauseReasonFieldProps> = ({
             helperText={t(
               "Describe the reason for pausing this NodeHealthCheck remediation."
             )}
+            data-index={idx}
+            data-test="pause-reason-field"
           >
             <WithRemoveButton
               onClick={() => onRemove(idx)}
               isDisabled={pauseReasons.length === 1 && !pauseReasons[0]}
               key={idx}
+              dataTest="remove-pause-reason"
             >
               <TextInput
                 name={`pause-reason-${idx}`}
                 value={pauseReasons[idx]}
                 onChange={(value) => onEdit(idx, value)}
+                data-test="pause-reason-input"
+                data-index={idx}
               />
             </WithRemoveButton>
           </FormGroup>
@@ -62,6 +67,7 @@ const PauseReasonsField: React.FC<PauseReasonFieldProps> = ({
         onClick={() => {
           onAdd();
         }}
+        dataTest="add-pause-reason"
       />
     </Form>
   );
@@ -146,10 +152,16 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
           onClick={onConfirm}
           isDisabled={hasEmptyValue() || isSubmitting}
           isLoading={isSubmitting}
+          data-test="confirm"
         >
           {confirmButtonText}
         </Button>,
-        <Button key="cancel" variant="link" onClick={onClose}>
+        <Button
+          key="cancel"
+          variant="link"
+          onClick={onClose}
+          data-test="cancel"
+        >
           {t("Cancel")}
         </Button>,
       ]}

@@ -49,6 +49,7 @@ const DeleteModal: React.FC<
           variant={ButtonVariant.danger}
           onClick={onClickDelete}
           isLoading={isDeleting}
+          data-test="confirm"
         >
           {t("Delete")}
         </Button>,

@@ -4,9 +4,16 @@ import * as React from "react";
 
 const AddMoreButton: React.FC<{
   onClick: () => void;
-}> = ({ onClick }) => {
+  dataTest: string;
+}> = ({ onClick, dataTest }) => {
   return (
-    <Button icon={<PlusCircleIcon />} isInline onClick={onClick} variant="link">
+    <Button
+      icon={<PlusCircleIcon />}
+      isInline
+      onClick={onClick}
+      variant="link"
+      data-test={dataTest}
+    >
       Add more
     </Button>
   );

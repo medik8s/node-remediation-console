@@ -103,8 +103,5 @@ export const useNodeHealthChecksDisabled = () => {
     }
     return false;
   }, [machineHealthChecks, loaded, error]);
-  React.useEffect(() => {
-    console.log(machineHealthChecks);
-  }, [machineHealthChecks]);
   return [isDisabled, loaded, error];
 };

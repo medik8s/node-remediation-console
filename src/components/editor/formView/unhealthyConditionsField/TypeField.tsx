@@ -1,11 +1,12 @@
 import * as React from "react";
 import CustomTypeModal from "./CustomTypeModal";
-import DropdownField from "components/shared/DropdownField";
+import DropdownField, {
+  DropdownFieldProps,
+} from "components/shared/DropdownField";
 import { UnhealthyConditionFieldProps } from "./propTypes";
-import { useField } from "formik";
 import { DropdownItem, DropdownSeparator } from "@patternfly/react-core";
 
-const TypeOptions = [
+const getOptions = () => [
   {
     label: "Ready",
     value: "Ready",
@@ -32,20 +33,14 @@ const TypeSelectField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
   const [customTypeModalOpen, setCustomTypeModalOpen] =
     React.useState<boolean>(false);
 
-  const [, , { setValue }] = useField(name);
-  const dropdownItems = TypeOptions.map((option, idx) => (
-    <DropdownItem key={idx} onClick={() => setValue(option.value)}>
-      {option.label}
-    </DropdownItem>
-  ));
-
+  const dropdownItems: DropdownFieldProps["items"] = getOptions();
   dropdownItems.push(<DropdownSeparator key="type-field-separator" />);
   dropdownItems.push(
     <DropdownItem
       key="use-custom-type"
       onClick={() => setCustomTypeModalOpen(true)}
     >
-      Use Custom Type
+      Use custom type
     </DropdownItem>
   );
   return (

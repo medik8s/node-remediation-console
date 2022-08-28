@@ -13,7 +13,7 @@ import {
 } from "components/shared/formik-utils";
 import { FormViewFieldProps } from "../propTypes";
 import {
-  UnhealthyCondition,
+  UnhealthyCondition as UnhealthyConditionItem,
   UnhealthyConditionStatus,
   UnhealtyConditionType,
 } from "data/types";
@@ -38,11 +38,12 @@ const AddUnhealthyCondition: React.FC<{
           type: "Ready",
         })
       }
+      dataTest="add-unhealthy-condition"
     />
   );
 };
 
-const UnhealthyCondition: React.FC<{
+const UnhealthyConditionItem: React.FC<{
   fieldName: string;
   onRemove: () => void;
   idx: number;
@@ -50,7 +51,7 @@ const UnhealthyCondition: React.FC<{
   const typeFieldName = getObjectItemFieldName([fieldName, "type"]);
   const [{ value: type }] = useField<UnhealtyConditionType>(typeFieldName);
   return (
-    <Form>
+    <Form data-test="unhealthy-condition" data-index={idx}>
       <TypeSelectField name={typeFieldName}></TypeSelectField>
       <StatusField
         name={getObjectItemFieldName([fieldName, "status"])}
@@ -66,7 +67,7 @@ const UnhealthyCondition: React.FC<{
 export const UnhealthyConditionArray: React.FC<{
   fieldName: string;
 }> = ({ fieldName }) => {
-  const [{ value }] = useField<UnhealthyCondition[]>(fieldName);
+  const [{ value }] = useField<UnhealthyConditionItem[]>(fieldName);
   useFormikValidationFix(value ? value.length : value);
   if (!value) {
     return null;
@@ -84,10 +85,11 @@ export const UnhealthyConditionArray: React.FC<{
                   onClick={() => remove(idx)}
                   isDisabled={value.length === 1}
                   key={idx}
+                  dataTest="remove-unhealthy-condition"
                 >
                   {null}
                 </WithRemoveButton>
-                <UnhealthyCondition
+                <UnhealthyConditionItem
                   key={getArrayItemName(fieldName, idx)}
                   fieldName={getArrayItemName(fieldName, idx)}
                   onRemove={() => remove(idx)}

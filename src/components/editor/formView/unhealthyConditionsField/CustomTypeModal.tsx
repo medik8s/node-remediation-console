@@ -37,6 +37,7 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
       onClose={onClose}
       variant={ModalVariant.small}
       title={t("Use custom type")}
+      data-test="use-custom-type-modal"
       actions={[
         <Button
           key="confirm"
@@ -46,10 +47,16 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
             onClose();
           }}
           isDisabled={!customType}
+          data-test="confirm-custom-type"
         >
           Create
         </Button>,
-        <Button key="cancel" variant="link" onClick={onClose}>
+        <Button
+          key="cancel"
+          variant="link"
+          onClick={onClose}
+          data-test="cancel-custom-type"
+        >
           {t("Cancel")}
         </Button>,
       ]}
@@ -65,6 +72,7 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
             name={fieldName}
             value={customType}
             onChange={(value) => setCustomType(value)}
+            data-test="custom-type-input"
           />
         </FormGroup>
       </Form>

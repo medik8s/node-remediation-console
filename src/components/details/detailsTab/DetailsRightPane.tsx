@@ -23,7 +23,7 @@ export const DetailsRightPane: React.FC<{
         {getRemediatorLabel(nodeHealthCheck)}
       </DetailsItem>
       <DetailsItem
-        label={t("Min Healthy")}
+        label={t("Min healthy")}
         obj={nodeHealthCheck}
         path="spec.minHealthy"
         description={descriptions.minHealthy}

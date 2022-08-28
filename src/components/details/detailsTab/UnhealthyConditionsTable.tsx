@@ -38,7 +38,12 @@ export const UnhealthyConditionsTable: React.FC<{
         {_.map(
           getUnhealthyConditions(nodeHealthCheck),
           (condition: UnhealthyCondition, idx) => (
-            <Tr key={idx} translate={undefined}>
+            <Tr
+              key={idx}
+              translate={undefined}
+              data-index={idx}
+              data-test="unhealthy-condition-row"
+            >
               <Td dataLabel={columnNames.type} translate={undefined}>
                 {condition.type}
               </Td>

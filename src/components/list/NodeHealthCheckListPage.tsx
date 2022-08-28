@@ -67,7 +67,7 @@ const NodeHealthCheckCreate: React.FC<{ isDisabled: boolean }> = ({
 };
 
 const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
-  const [nodeHealthchecks, loaded, loadError] = useK8sWatchResource<
+  const [nodeHealthChecks, loaded, loadError] = useK8sWatchResource<
     NodeHealthCheck[]
   >({
     groupVersionKind: nodeHealthCheckKind,
@@ -75,11 +75,17 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
     namespaced: false,
     selector,
   });
+  React.useEffect(() => {
+    if (loaded) {
+      console.log("node health checks");
+      console.log(nodeHealthChecks);
+    }
+  }, [nodeHealthChecks]);
   const [isDisabled, disabledLoaded, disabledError] =
     useNodeHealthChecksDisabled();
 
   const [data, filteredData, onFilterChange] =
-    useListPageFilter(nodeHealthchecks);
+    useListPageFilter(nodeHealthChecks);
   const { t } = useNodeHealthCheckTranslation();
 
   return (
@@ -101,7 +107,7 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
           />
           <NodeHealthchecksTable
             data={filteredData}
-            unfilteredData={nodeHealthchecks}
+            unfilteredData={nodeHealthChecks}
             loaded={loaded}
             loadError={loadError}
           />

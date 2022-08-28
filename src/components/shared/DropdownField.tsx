@@ -54,7 +54,11 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
         return item;
       }
       return (
-        <DropdownItem key={idx} onClick={() => setValue(item.value)}>
+        <DropdownItem
+          key={idx}
+          onClick={() => setValue(item.value)}
+          data-test={`select-${item.label}`}
+        >
           {item.label}
         </DropdownItem>
       );
@@ -80,7 +84,11 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
     >
       <Dropdown
         toggle={
-          <DropdownToggle onToggle={onToggle} isDisabled={isDisabled}>
+          <DropdownToggle
+            onToggle={onToggle}
+            isDisabled={isDisabled}
+            data-test={`toggle-${label}-dropdown`}
+          >
             {getToggleLabel()}
           </DropdownToggle>
         }

@@ -29,7 +29,7 @@ export const getIcon = (phase: StatusPhase) => {
     }
     case StatusPhase.DISABLED: {
       return (
-        <ExclamationCircleIcon color="var(--pf-global--danger-color--100" />
+        <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
       );
     }
     case StatusPhase.REMEDIATING: {
@@ -56,7 +56,7 @@ const usePhaseLabels = (): { getLabel(phase: StatusPhase): string } => {
         case StatusPhase.PAUSED:
           return t("Paused");
         case StatusPhase.REMEDIATING:
-          return t("Remeditating");
+          return t("Remediating");
         default:
           return phase;
       }
@@ -72,9 +72,12 @@ const PausePopoverContent: React.FC<{
   const modalsApi = useModals();
   return (
     <>
-      <Text>{`${pauseReasons.length} ${t("pause reasons found")}`}</Text>
+      <Text data-test="status-reason">{`${pauseReasons.length} ${t(
+        "pause reasons found"
+      )}`}</Text>
       <a
         onClick={() => modalsApi.openModal(ModalId.EDIT_PAUSE, nodeHealthCheck)}
+        data-test="edit-pause-reasons"
       >
         {t("Edit pause reasons")}
       </a>
@@ -100,7 +103,11 @@ const PopoverContent: React.FC<{
           pauseReasons={pauseReasons}
         />
       )}
-      {!showPausePopover && <Text id="status-reason">{reason}</Text>}
+      {!showPausePopover && (
+        <Text id="status-reason" data-test="status-reason">
+          {reason}
+        </Text>
+      )}
     </TextContent>
   );
 };
@@ -121,7 +128,10 @@ const NodeHealthCheckStatus: React.FC<{
   }
   const content = (
     <span id="nhc-status">
-      {icon} <a id="nhc-status-text">{getLabel(phase)}</a>
+      {icon}{" "}
+      <a id="nhc-status-text" data-test="nhc-status-label">
+        {getLabel(phase)}
+      </a>
     </span>
   );
   return nodeHealthCheck.status?.reason && withPopover ? (

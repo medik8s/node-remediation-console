@@ -18,7 +18,7 @@ const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   return (
     <InputField
       required
-      label={t("Min Healthy")}
+      label={t("Min healthy")}
       labelIcon={
         <HelpIcon
           helpText={t(
@@ -27,6 +27,7 @@ const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
         />
       }
       name={fieldName}
+      data-test="min-healthy"
     />
   );
 };

@@ -1,0 +1,48 @@
+{
+  "apiVersion": "remediation.medik8s.io/v1alpha1",
+  "items": [
+    {
+      "apiVersion": "remediation.medik8s.io/v1alpha1",
+      "kind": "NodeHealthCheck",
+      "metadata": {
+        "name": "test-details"
+      },
+      "spec": {
+        "minHealthy": "2",
+        "remediationTemplate": {
+          "apiVersion": "self-node-remediation.medik8s.io/v1alpha1",
+          "kind": "SelfNodeRemediationTemplate",
+          "name": "self-node-remediation-resource-deletion-template",
+          "namespace": "openshift-operators"
+        },
+        "selector": {
+          "matchExpressions": [
+            {
+              "key": "node-role.kubernetes.io/worker",
+              "operator": "Exists"
+            }
+          ],
+          "matchLabels": {}
+        },
+        "unhealthyConditions": [
+          {
+            "duration": "100ms",
+            "status": "False",
+            "type": "Ready"
+          },
+          {
+            "duration": "1s",
+            "status": "Unknown",
+            "type": "aaa"
+          },
+          {
+            "duration": "1s",
+            "status": "True",
+            "type": "bbb"
+          }
+        ]
+      }
+    }
+  ],
+  "kind": "NodeHealthCheckList"
+}

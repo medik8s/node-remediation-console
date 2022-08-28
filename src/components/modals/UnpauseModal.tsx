@@ -26,7 +26,9 @@ const PauseReasons: React.FC<PauseReasonFieldProps> = ({ pauseReasons }) => {
   return (
     <TextContent>
       {pauseReasons.map((value, idx) => (
-        <Text>{value}</Text>
+        <Text data-test="pause-reason" data-index={idx}>
+          {value}
+        </Text>
       ))}
     </TextContent>
   );
@@ -69,10 +71,16 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           variant="primary"
           onClick={onSubmit}
           isLoading={isSubmitting}
+          data-test="confirm"
         >
           {t("Unpause")}
         </Button>,
-        <Button key="cancel" variant="link" onClick={onClose}>
+        <Button
+          key="cancel"
+          variant="link"
+          onClick={onClose}
+          data-test="cancel"
+        >
           {t("Cancel")}
         </Button>,
       ]}

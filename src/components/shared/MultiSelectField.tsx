@@ -101,6 +101,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       validated={isValid ? "default" : "error"}
       isRequired={required}
       labelIcon={labelIcon}
+      data-test={`multi-select-${label}`}
     >
       <Select
         {...field}

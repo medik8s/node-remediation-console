@@ -72,7 +72,7 @@ const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
   if (!remediatorLabel) {
     return <NotAvailable />;
   }
-  return <>{remediatorLabel}</>;
+  return <span data-test="remediator-label">{remediatorLabel}</span>;
 };
 
 const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
@@ -88,13 +88,13 @@ const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
           namespace={obj.metadata.namespace}
         />
       </TableData>
-      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
+      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
         <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
       </TableData>
       <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
         <Remediator obj={obj} />
       </TableData>
-      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
+      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
         <Timestamp timestamp={obj.metadata.creationTimestamp} />
       </TableData>
       <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>

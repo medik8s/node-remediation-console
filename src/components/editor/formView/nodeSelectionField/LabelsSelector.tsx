@@ -98,6 +98,7 @@ const LabelsSelector: React.FC<{
   );
   return (
     <MultiSelectField
+      data-test="label-selector"
       name={fieldName}
       label={t("Nodes selection")}
       helpText={t(

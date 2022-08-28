@@ -12,7 +12,6 @@ import { withTranslation, WithTranslation } from "react-i18next";
 /* eslint-enable import/named */
 
 export const Label: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
-  console.log({ name, value });
   const href = `/search?kind=${kind}&q=${
     value ? encodeURIComponent(`${name}=${value}`) : name
   }`;

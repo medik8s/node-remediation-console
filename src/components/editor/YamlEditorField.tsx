@@ -4,6 +4,7 @@ import { ResourceYAMLEditor } from "@openshift-console/dynamic-plugin-sdk";
 import { NodeHealthCheck } from "data/types";
 import { useField } from "formik";
 import { LoadingBox } from "copiedFromConsole/utils/status-box";
+
 const YamlEditorField: React.FC<{
   fieldName: string;
 }> = ({ fieldName }) => {
@@ -35,7 +36,6 @@ const YamlEditorField: React.FC<{
   }, []);
   React.useEffect(() => {
     if (value && !initialObj) {
-      console.debug("setinitial obj");
       setInitialObj(load(value));
     }
   }, [value, initialObj]);

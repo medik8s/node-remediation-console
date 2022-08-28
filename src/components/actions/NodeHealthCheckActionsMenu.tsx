@@ -9,7 +9,13 @@ const NodeHealthCheckActionsMenu: React.FC<{
 }> = ({ nodeHealthCheck, isKababToggle }) => {
   const actions = useNodeHealthCheckActions(nodeHealthCheck);
 
-  return <ActionsMenu actions={actions} isKababToggle={isKababToggle} />;
+  return (
+    <ActionsMenu
+      actions={actions}
+      isKababToggle={isKababToggle}
+      data-test="toggle-menu"
+    />
+  );
 };
 
 export default NodeHealthCheckActionsMenu;

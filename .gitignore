@@ -1,6 +1,5 @@
 node_modules
 dist
 cypress/videos
-cypress/fixtures
 cypress/screenshots
 cypress/support

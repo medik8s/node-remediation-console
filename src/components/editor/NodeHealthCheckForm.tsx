@@ -61,7 +61,6 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     isList: true,
     namespaced: false,
   });
-
   const [snrTemplatesLoading, snrTemplatesExist] = useSnrTemplatesExist();
 
   const navigation = useNodeHealthCheckNavigation();

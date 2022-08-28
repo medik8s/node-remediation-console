@@ -121,6 +121,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
         className={classnames("details-item__value", valueClassName, {
           "details-item__value--group": editable && editAsGroup,
         })}
+        data-test-selector={`details-item-value__${label}`}
       >
         {editable && !editAsGroup ? (
           <EditButton testId={label} onClick={onEdit}>
