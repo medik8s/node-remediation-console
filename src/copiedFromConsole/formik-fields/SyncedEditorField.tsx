@@ -77,7 +77,12 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
 
   const handleToggleToForm = async () => {
     // Convert from YAML
-    let content = load(yamlData);
+    let content = {};
+    try {
+      content = load(yamlData);
+    } catch (err) {
+      content = {};
+    }
 
     // Sanitize the YAML structure if possible
     if (!_.isEmpty(content)) {
@@ -106,7 +111,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
   };
 
   const handleToggleToYAML = () => {
-    const newYAML = dump(prune?.(formData) ?? formData, yamlData, {
+    const newYAML = dump(prune?.(formData) ?? formData, {
       skipInvalid: true,
     });
     setFieldValue(

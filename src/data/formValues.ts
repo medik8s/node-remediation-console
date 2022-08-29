@@ -11,7 +11,7 @@ export const getFormValues = (
   nodeHealthCheck: NodeHealthCheck,
   isCreateFlow: boolean
 ): NodeHealthCheckFormValues => {
-  const yamlData = dump(nodeHealthCheck, "", {
+  const yamlData = dump(nodeHealthCheck, {
     skipInvalid: true,
   });
   let formParsingError = null;

@@ -10,7 +10,6 @@ import {
 import { NodeHealthCheck, UnhealthyCondition } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
-import { getUnhealthyConditions } from "data/nodeHealthCheck";
 
 export const UnhealthyConditionsTable: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
@@ -36,7 +35,7 @@ export const UnhealthyConditionsTable: React.FC<{
       </Thead>
       <Tbody translate={undefined}>
         {_.map(
-          getUnhealthyConditions(nodeHealthCheck),
+          nodeHealthCheck.spec?.unhealthyConditions,
           (condition: UnhealthyCondition, idx) => (
             <Tr
               key={idx}

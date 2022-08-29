@@ -15,7 +15,7 @@ const getStatusElement = (rowSelector: string) =>
   cy.get(`${rowSelector} [data-test="nhc-status-label"]`);
 
 const _validateStatus = (rowSelector: string, status: string) => {
-  getStatusElement(rowSelector).contains(status).should("exist");
+  getStatusElement(rowSelector).should("contain", status);
 };
 
 const validateName = (rowSelector: string, name: string) => {
@@ -29,13 +29,12 @@ const validateTimestamp = (rowSelector: string) => {
 const validateRemediator = (rowSelector: string, remediator: string) => {
   return cy
     .get(`${rowSelector} [data-test=remediator-label]`)
-    .contains(remediator)
-    .should("exist");
+    .should("contain", remediator);
 };
 
 const validateStatusReason = (rowSelector: string, statusReason: string) => {
   getStatusElement(rowSelector).click();
-  cy.get("[data-test=status-reason]").contains(statusReason).should("exist");
+  cy.get("[data-test=status-reason]").should("contain", statusReason);
   closePopover();
 };
 

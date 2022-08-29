@@ -7,6 +7,7 @@ import {
 } from "@openshift-console/dynamic-plugin-sdk";
 import * as _ from "lodash";
 import { isParseError, ParseErrorCode, throwParseError } from "./parseErrors";
+import { NodeHealthCheck } from "./types";
 
 const LABEL_DISPLAY_NAME_SEPARATOR = "=";
 
@@ -44,12 +45,16 @@ const getMatchLabelsDisplayNames = (matchLabels: MatchLabels | undefined) => {
 };
 
 export const getNodeSelectorLabelDisplayNames = (
-  selector: Selector
+  nodeHealthCheck: NodeHealthCheck
 ): string[] => {
   try {
     return [
-      ...getMatchLabelsDisplayNames(selector.matchLabels),
-      ...getMatchExpressionLabelDisplayNames(selector.matchExpressions),
+      ...getMatchLabelsDisplayNames(
+        nodeHealthCheck.spec?.selector?.matchLabels
+      ),
+      ...getMatchExpressionLabelDisplayNames(
+        nodeHealthCheck.spec?.selector?.matchExpressions
+      ),
     ];
   } catch (err) {
     if (isParseError(err)) {

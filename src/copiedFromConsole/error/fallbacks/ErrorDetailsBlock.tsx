@@ -14,22 +14,26 @@ const ErrorDetailsBlock: React.FC<ErrorBoundaryFallbackProps> = (props) => {
         </label>
         <p>{props.errorMessage}</p>
       </div>
-      <div className="form-group">
-        <label htmlFor="componentTrace">
-          {t("plugin__node-remediation-console-plugin~Component trace:")}
-        </label>
-        <div className="co-copy-to-clipboard__stacktrace-width-height">
-          <CopyToClipboard value={props.componentStack.trim()} />
+      {props.componentStack && (
+        <div className="form-group">
+          <label htmlFor="componentTrace">
+            {t("plugin__node-remediation-console-plugin~Component trace:")}
+          </label>
+          <div className="co-copy-to-clipboard__stacktrace-width-height">
+            <CopyToClipboard value={props.componentStack.trim()} />
+          </div>
         </div>
-      </div>
-      <div className="form-group">
-        <label htmlFor="stackTrace">
-          {t("plugin__node-remediation-console-plugin~Stack trace:")}
-        </label>
-        <div className="co-copy-to-clipboard__stacktrace-width-height">
-          <CopyToClipboard value={props.stack.trim()} />
+      )}
+      {props.stack && (
+        <div className="form-group">
+          <label htmlFor="stackTrace">
+            {t("plugin__node-remediation-console-plugin~Stack trace:")}
+          </label>
+          <div className="co-copy-to-clipboard__stacktrace-width-height">
+            <CopyToClipboard value={props.stack.trim()} />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

@@ -8,13 +8,13 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
-import AddMoreButton from "components/shared/AddMoreButton";
-import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import * as React from "react";
 import * as _ from "lodash";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck } from "data/types";
 import { editNodeHealthCheckPauseReasons } from "apis/nodeHealthCheckApis";
+import { WithRemoveButton } from "components/shared/WithRemoveButton";
+import AddMoreButton from "components/shared/AddMoreButton";
 
 type PauseReasonFieldProps = {
   onRemove(idx: number): void;
@@ -145,6 +145,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
       onClose={onClose}
       variant={ModalVariant.small}
       title={title}
+      className="nhc-modal"
       actions={[
         <Button
           key="confirm"

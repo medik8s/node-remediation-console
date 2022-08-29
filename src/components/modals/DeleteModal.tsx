@@ -6,7 +6,6 @@ import {
   ModalVariant,
 } from "@patternfly/react-core";
 import { deleteNodeHealthCheck } from "apis/nodeHealthCheckApis";
-import { getName } from "data/nodeHealthCheck";
 import * as React from "react";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheckModalProps } from "./propTypes";
@@ -34,9 +33,10 @@ const DeleteModal: React.FC<
       return;
     }
   };
-  const name = getName(nodeHealthCheck);
+  const name = nodeHealthCheck.metadata?.name;
   return (
     <Modal
+      className="nhc-modal"
       title={t("Delete NodeHealthCheck")}
       titleIconVariant="warning"
       isOpen={isOpen}

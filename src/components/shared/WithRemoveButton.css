@@ -1,7 +1,7 @@
-#remove-button {
+.nhc-remove-item {
   align-self: flex-end;
 }
 
-#remove-button button {
+.nhc_remove-item__button {
   padding-left: unset;
 }

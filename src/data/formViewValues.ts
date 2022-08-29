@@ -6,7 +6,6 @@ import {
 } from "./nodeSelector";
 import { ParseErrorCode, throwParseError } from "./parseErrors";
 import { getRemediator } from "./remediator";
-import { getSelector, getUnhealthyConditions } from "./nodeHealthCheck";
 import {
   UnhealthyCondition,
   NodeHealthCheck,
@@ -32,11 +31,12 @@ const getRemediationTemplate = (
 };
 
 const getUnhealthyConditionsValue = (
-  unhealthyConditions: UnhealthyCondition[]
+  nodeHealthCheck: NodeHealthCheck
 ): UnhealthyCondition[] => {
   try {
-    return unhealthyConditions.length > 1
-      ? unhealthyConditions
+    return nodeHealthCheck.spec?.unhealthyConditions &&
+      nodeHealthCheck.spec.unhealthyConditions.length > 0
+      ? nodeHealthCheck.spec?.unhealthyConditions
       : defaultSpec.unhealthyConditions;
   } catch (err) {
     throwParseError(
@@ -44,26 +44,16 @@ const getUnhealthyConditionsValue = (
       "Unhealthy conditions field isn't an array"
     );
   }
-  return unhealthyConditions;
 };
 
 export const getFormViewValues = (
   nodeHealthCheck: NodeHealthCheck
 ): FormViewValues => {
-  const unhealthyConditions = getUnhealthyConditionsValue(
-    getUnhealthyConditions(nodeHealthCheck)
-  );
   return {
     name: nodeHealthCheck.metadata?.name,
-    nodeSelectorLabels: getNodeSelectorLabelDisplayNames(
-      getSelector(nodeHealthCheck)
-    ),
+    nodeSelectorLabels: getNodeSelectorLabelDisplayNames(nodeHealthCheck),
     minHealthy: nodeHealthCheck.spec?.minHealthy || defaultSpec.minHealthy,
-    unhealthyConditions: getUnhealthyConditionsValue(
-      unhealthyConditions.length > 1
-        ? unhealthyConditions
-        : defaultSpec.unhealthyConditions
-    ),
+    unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
     remediator: getRemediator(
       defaultSpec.remediationTemplate,
       nodeHealthCheck.spec?.remediationTemplate

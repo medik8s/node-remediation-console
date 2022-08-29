@@ -22,17 +22,11 @@ export const LoadError: React.FC<LoadErrorProps> = ({
     <Box className={className}>
       <div className="pf-u-text-align-center cos-error-title">
         {_.isString(message)
-          ? t(
-              "plugin__node-remediation-console-plugin~Error Loading {{label}}: {{message}}",
-              {
-                label,
-                message,
-              }
-            )
-          : t(
-              "plugin__node-remediation-console-plugin~Error Loading {{label}}",
-              { label }
-            )}
+          ? t("Error Loading {{label}}: {{message}}", {
+              label,
+              message,
+            })
+          : t("Error Loading {{label}}", { label })}
       </div>
       {canRetry && (
         <div className="pf-u-text-align-center">
@@ -91,10 +85,10 @@ export const EmptyBox: React.FC<EmptyBoxProps> = ({ label }) => {
     <Box>
       <div data-test="empty-message" className="pf-u-text-align-center">
         {label
-          ? t("plugin__node-remediation-console-plugin~No {{label}} found", {
+          ? t("No {{label}} found", {
               label,
             })
-          : t("plugin__node-remediation-console-plugin~Not found")}
+          : t("Not found")}
       </div>
     </Box>
   );
@@ -131,9 +125,9 @@ export const AccessDenied: React.FC<AccessDeniedProps> = ({ message }) => {
       <Box className="pf-u-text-align-center">
         <img className="cos-status-box__access-denied-icon" />
         <MsgBox
-          title={t("plugin__node-remediation-console-plugin~Restricted Access")}
+          title={t("Restricted Access")}
           detail={t(
-            "plugin__node-remediation-console-plugin~You don't have access to this section due to cluster policy."
+            "You don't have access to this section due to cluster policy."
           )}
         />
       </Box>
@@ -142,7 +136,7 @@ export const AccessDenied: React.FC<AccessDeniedProps> = ({ message }) => {
           isInline
           className="co-alert"
           variant="danger"
-          title={t("plugin__node-remediation-console-plugin~Error details")}
+          title={t("Error details")}
         >
           {message}
         </Alert>
@@ -189,7 +183,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
       return (
         <div className="co-m-pane__body">
           <h1 className="co-m-pane__heading co-m-pane__heading--center">
-            {t("plugin__node-remediation-console-plugin~404: Not Found")}
+            {t("404: Not Found")}
           </h1>
         </div>
       );
@@ -205,7 +199,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
             variant="info"
             isInline
             title={t(
-              "plugin__node-remediation-console-plugin~{{labels}} content is not available in the catalog at this time due to loading failures.",
+              "{{labels}} content is not available in the catalog at this time due to loading failures.",
               {
                 labels: loadError.labels.join(","),
               }
@@ -220,9 +214,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
       return (
         <Data data={data} {...dataProps}>
           <div className="co-m-timeout-error text-muted">
-            {t(
-              "plugin__node-remediation-console-plugin~Timed out fetching new data. The data below is stale."
-            )}
+            {t("Timed out fetching new data. The data below is stale.")}
           </div>
           {props.children}
         </Data>

@@ -11,7 +11,6 @@ import {
 
 import { nodeHealthCheckKind, NodeHealthCheckModel } from "data/model";
 import { NodeHealthCheck } from "data/types";
-import "./list.css";
 import NodeHealthCheckStatus from "../details/NodeHealthCheckStatus";
 import NotAvailable from "./NotAvailable";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
@@ -22,6 +21,7 @@ import { EmptyBox } from "copiedFromConsole/utils/status-box";
 import { TFunction } from "i18next";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
+import "./nhc-list.css";
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],
   sortDirection: SortByDirection
@@ -101,7 +101,11 @@ const getNodeHealthCheckRowComponent = (
         <TableData id={ids[3]} activeColumnIDs={activeColumnIDs}>
           <Timestamp timestamp={obj.metadata.creationTimestamp} />
         </TableData>
-        <TableData id={ids[4]} activeColumnIDs={activeColumnIDs}>
+        <TableData
+          id={ids[4]}
+          activeColumnIDs={activeColumnIDs}
+          className="nhc-list__kabab-menu"
+        >
           <NodeHealthCheckActionsMenu
             nodeHealthCheck={obj}
             isKababToggle={true}

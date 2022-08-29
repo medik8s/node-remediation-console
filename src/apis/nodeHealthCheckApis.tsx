@@ -2,7 +2,7 @@ import { k8sDelete, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
 import { NodeHealthCheckModel } from "data/model";
 import { MachineHealthCheckKind, NodeHealthCheck } from "data/types";
 import * as _ from "lodash";
-import { useAllMachineHealthChecks } from "./useAllMachineHealthChecks";
+import { useAllMachineHealthChecks } from "./machineHealthCheckApi";
 
 export const updateNodeHealthCheck = (
   nodeHealthCheck: NodeHealthCheck
@@ -78,13 +78,10 @@ export const updateNodeHealthCheckAnnotations = (
 };
 
 // returns true if machine health checks will clash with node health checks
-// in case of a class all generated NodeHealthChecks become disabled,
-// so it's more user friendly to warn the user ahead
+// in case of a class all generated NodeHealthChecks become disabled, so it's more user friendly to warn the user ahead
 // The clashing occurs if one of the following options is met
 // 1. Multiple MachineHealthCheck exist
-// 2. There's one Machine Health Check and it has more
-//    than one unhealthy condition, or one unhealthy condition
-//    with a type different than "Terminating"
+// 2. There's one Machine Health Check and it has more than one unhealthy condition, or one unhealthy condition with a type different than "Terminating"
 const isTerminatingMachineHealthCheck = (
   machineHealthCheck: MachineHealthCheckKind
 ) => {

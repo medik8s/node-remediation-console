@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useField } from "formik";
-import Fuse from "fuse.js";
 import {
   FormGroup,
   Select,
@@ -12,6 +11,7 @@ import {
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
+import * as fuzzy from "fuzzysearch";
 
 export type MultiSelectOption = SelectOptionProps & {
   id: string;
@@ -87,11 +87,6 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       </SelectOption>
     ));
 
-  const fuse = new Fuse(options, {
-    ignoreLocation: true,
-    keys: ["displayName"],
-  });
-
   return (
     <FormGroup
       fieldId={fieldId}
@@ -122,9 +117,9 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
           if (!val || val === "") {
             return children;
           }
-          const results = fuse
-            .search<MultiSelectOption>(val)
-            .map((result) => result.item.id);
+          const results = options
+            .filter((option) => fuzzy(val, option.displayName))
+            .map((option) => option.id);
           return (
             React.Children.toArray(
               children

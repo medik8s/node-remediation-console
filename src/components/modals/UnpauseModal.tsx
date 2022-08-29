@@ -12,10 +12,10 @@ import {
 import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
 import * as React from "react";
 import * as _ from "lodash";
-import { getPauseRequests } from "data/nodeHealthCheck";
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";
+import { global_palette_blue_100 as infoColor } from "@patternfly/react-tokens";
 
 type PauseReasonFieldProps = {
   pauseReasons: string[];
@@ -41,7 +41,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
   const { t } = useNodeHealthCheckTranslation();
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>();
   const [error, setError] = React.useState<boolean>();
-  const pauseRequests = getPauseRequests(nodeHealthCheck);
+  const pauseRequests = nodeHealthCheck.spec?.pauseRequests || [];
   const onSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -55,6 +55,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
   const infoMessage = t("All the pause reasons will be removed");
   return (
     <Modal
+      className="nhc-modal"
       isOpen={isOpen}
       onClose={onClose}
       variant={ModalVariant.small}
@@ -84,15 +85,12 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
         <StackItem>
           <TextContent id="#pause-reason">
             <Text component={TextVariants.h4}>{t(`Pause reasons`)}</Text>
-            {pauseRequests && <PauseReasons pauseReasons={pauseRequests} />}
+            <PauseReasons pauseReasons={pauseRequests} />
           </TextContent>
         </StackItem>
         <StackItem>
           <Text>
-            <InfoCircleIcon
-              size="sm"
-              color="var(--pf-global--info-color--100)"
-            />
+            <InfoCircleIcon size="sm" color={infoColor.value} />
             &nbsp;{`${infoMessage}`}
           </Text>
         </StackItem>

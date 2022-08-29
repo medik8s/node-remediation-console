@@ -11,7 +11,6 @@ import {
   PauseCircleIcon,
 } from "@patternfly/react-icons";
 import { ModalId } from "components/modals/Modals";
-import { getPauseRequests, getPhase, isDisabled } from "data/nodeHealthCheck";
 import {
   NodeHealthCheck,
   StatusPhase,
@@ -31,10 +30,10 @@ export const getIcon = (phase: StatusPhase) => {
       return <GreenCheckCircleIcon />;
     }
     case StatusPhase.DISABLED: {
-      return <ExclamationCircleIcon color={dangerColor.var} />;
+      return <ExclamationCircleIcon color={dangerColor.value} />;
     }
     case StatusPhase.REMEDIATING: {
-      return <WrenchIcon color={okColor.var} />;
+      return <WrenchIcon color={okColor.value} />;
     }
     case StatusPhase.PAUSED: {
       return <PauseCircleIcon />;
@@ -68,7 +67,7 @@ const PausePopoverContent: React.FC<{
   const modalsApi = useModals();
   return (
     <>
-      <Text>
+      <Text data-test="status-reason">
         {t("{{count}} pause reason found", { count: pauseReasons.length })}
       </Text>
       <a
@@ -87,9 +86,10 @@ const PopoverContent: React.FC<{
   reason: string;
 }> = ({ nodeHealthCheck, phase, reason }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const pauseReasons = getPauseRequests(nodeHealthCheck);
+  const pauseReasons = nodeHealthCheck.spec?.pauseRequests || [];
   const showPausePopover =
-    pauseReasons.length > 0 && !isDisabled(nodeHealthCheck);
+    pauseReasons.length > 0 &&
+    nodeHealthCheck.status?.phase !== StatusPhase.DISABLED;
   return (
     <TextContent>
       <Text component={TextVariants.h4}>{getPhaseLabel(t, phase)}</Text>
@@ -115,15 +115,15 @@ const NodeHealthCheckStatus: React.FC<{
   if (!nodeHealthCheck.status?.phase) {
     return <NotAvailable />;
   }
-  const phase = getPhase(nodeHealthCheck);
-  let icon = getIcon(getPhase(nodeHealthCheck));
+  const phase = nodeHealthCheck.status?.phase;
+  let icon = getIcon(phase);
   if (!icon) {
     return <span>{getPhaseLabel(t, phase)}</span>;
   }
   const content = (
-    <span id="nhc-status">
+    <span className="nhc-status" data-test="nhc-status">
       {icon}{" "}
-      <a id="nhc-status-text" data-test="nhc-status-label">
+      <a className="nhc-status__label" data-test="nhc-status-label">
         {getPhaseLabel(t, phase)}
       </a>
     </span>

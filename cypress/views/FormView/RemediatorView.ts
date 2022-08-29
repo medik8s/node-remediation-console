@@ -48,7 +48,7 @@ const selectSNRStrategy = (strategy: SNRRemediatorStrategy) => {
 };
 
 const validateSNRStrategy = (strategy: SNRRemediatorStrategy) => {
-  getSnrStrategyDropdownElement().contains(strategy).should("exist");
+  getSnrStrategyDropdownElement().should("contain", strategy);
 };
 
 export {

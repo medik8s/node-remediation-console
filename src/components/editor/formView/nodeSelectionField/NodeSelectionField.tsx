@@ -8,8 +8,8 @@ import LabelsSelector from "./LabelsSelector";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { Alert } from "@patternfly/react-core";
 import { useIsSNR } from "../remediatorFieldUtils";
-import { getObjectItemFieldName } from "components/shared/formik-utils";
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
+import { getObjectItemFieldName } from "components/shared/formik-utils";
 
 const SNRWorkerNodesWarning: React.FC<{ formViewFieldName: string }> = ({
   formViewFieldName,
@@ -60,7 +60,7 @@ const NodeSelectionField: React.FC<{
         fieldName={fieldName}
       ></LabelsSelector>
       <SNRWorkerNodesWarning formViewFieldName={formViewFieldName} />
-      <div className="node-selector-list" data-test="node-selector-list">
+      <div className="nhc-form-node-list" data-test="node-selector-list">
         <NodeList
           nodes={selectedNodes}
           filteredNodes={selectedNodes}

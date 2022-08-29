@@ -19,13 +19,13 @@ import {
   UnhealtyConditionType,
 } from "data/types";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
-import AddMoreButton from "components/shared/AddMoreButton";
 import TypeSelectField from "./TypeField";
 import "./unhealthyConditions.css";
 import DurationField from "./DurationField";
 import StatusField from "./StatusField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { useFormikValidationFix } from "copiedFromConsole/hooks/formik-validation-fix";
+import AddMoreButton from "components/shared/AddMoreButton";
 
 const AddUnhealthyCondition: React.FC<{
   onPush: ArrayHelpers["push"];

@@ -16,7 +16,7 @@ export const AnnotationsModalRow: React.FC<{
         <TextInput
           autoFocus
           maxLength={255}
-          className="annotation-form-input"
+          className="nhc-annotation-form__input"
           size={1}
           placeholder={t("annotation key")}
           isRequired
@@ -29,7 +29,7 @@ export const AnnotationsModalRow: React.FC<{
       <GridItem span={5}>
         <TextInput
           maxLength={255}
-          className="annotation-form-input"
+          className="nhc-annotation-form__input"
           placeholder={t("annotation value")}
           isRequired
           type="text"

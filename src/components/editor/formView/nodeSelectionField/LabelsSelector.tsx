@@ -6,10 +6,10 @@ import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
 import * as React from "react";
-import MultiSelectField from "../../../shared/MultiSelectField";
 import { useIsSNR } from "../remediatorFieldUtils";
 import "./labelSelector.css";
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
+import MultiSelectField from "components/shared/MultiSelectField";
 
 const LabelsSelector: React.FC<{
   nodes: NodeKind[];
@@ -82,7 +82,9 @@ const LabelsSelector: React.FC<{
       {" "}
       {(value || []).map((currentChip, index) => {
         const isReadOnly = disableLabel(value[index]);
-        const className = isReadOnly ? "label-selector-chip-disabled" : null;
+        const className = isReadOnly
+          ? "nhc-form-label-selector-chip--disabled"
+          : null;
         return (
           <Chip
             isReadOnly={isReadOnly}

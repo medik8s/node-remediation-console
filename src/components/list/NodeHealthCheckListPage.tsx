@@ -12,7 +12,6 @@ import {
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
-import "./list.css";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import Modals from "components/modals/Modals";
 import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
@@ -23,6 +22,7 @@ import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { withFallback } from "copiedFromConsole/error";
 import { StatusBox } from "copiedFromConsole/utils/status-box";
+import "./nhc-list.css";
 
 type ListPageProps = {
   selector?: Selector;
@@ -74,12 +74,6 @@ const NodeHealthCheckListPage_: React.FC<ListPageProps> = ({ selector }) => {
     namespaced: false,
     selector,
   });
-  React.useEffect(() => {
-    if (loaded) {
-      console.log("node health checks");
-      console.log(nodeHealthChecks);
-    }
-  }, [nodeHealthChecks]);
   const [isDisabled, disabledLoaded, disabledError] =
     useNodeHealthChecksDisabled();
 

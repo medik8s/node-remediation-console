@@ -8,9 +8,9 @@ const addLabelToNodeSelector = (labelKey: string, labelValue: string) => {
 
 const validateNodeSelectorLabel = (labelKey: string, labelValue?: string) => {
   if (labelValue) {
-    cy.get(labelSelector).contains(`${labelKey}=${labelValue}`).should("exist");
+    cy.get(labelSelector).should("contain", `${labelKey}=${labelValue}`);
   } else {
-    cy.get(labelSelector).contains(labelKey).should("exist");
+    cy.get(labelSelector).should("contain", labelKey);
   }
 };
 

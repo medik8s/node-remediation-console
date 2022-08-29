@@ -11,7 +11,6 @@ import {
 } from "../../copiedFromConsole/form-utils";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
-import "./editor.css";
 import YamlEditorField from "./YamlEditorField";
 import { getFormValues } from "data/formValues";
 import * as formViewValues from "data/formViewValues";
@@ -31,7 +30,7 @@ const sanitizeToYaml = (
       yamlText.getNodeHealthCheck(originalNodeHealthCheck, values.yamlData)
     );
   }
-  return dump(yaml, "", {
+  return dump(yaml, {
     skipInvalid: true,
   });
 };
@@ -124,7 +123,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   }, [setStatus, values.editorType]);
   return (
     <>
-      <FlexForm className="synced-editor">
+      <FlexForm className="nhc-form">
         <SyncedEditorField
           name="editorType"
           formContext={{

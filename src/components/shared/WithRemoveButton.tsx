@@ -1,7 +1,6 @@
 import { Button, Flex, FlexItem } from "@patternfly/react-core";
 import { MinusCircleIcon } from "@patternfly/react-icons";
 import * as React from "react";
-import "./WithRemoveButton.css";
 
 export const WithRemoveButton = ({
   children,

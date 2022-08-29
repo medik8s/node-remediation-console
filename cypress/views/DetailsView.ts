@@ -6,19 +6,22 @@ const validateName = (name: string) => {
 };
 
 const validateNodeSelector = (selector: string) => {
-  cy.get('[data-test-selector="details-item-value__Node selector"]').contains(
+  cy.get('[data-test-selector="details-item-value__Node selector"]').should(
+    "contain",
     selector
   );
 };
 
 const validateRemediator = (remediator: string) => {
-  cy.get('[data-test-selector="details-item-value__Remediator"]').contains(
+  cy.get('[data-test-selector="details-item-value__Remediator"]').should(
+    "contain",
     remediator
   );
 };
 
 const validateMinHealthy = (minHealthy: string) => {
-  cy.get('[data-test-selector="details-item-value__Min healthy"]').contains(
+  cy.get('[data-test-selector="details-item-value__Min healthy"]').should(
+    "contain",
     minHealthy
   );
 };
@@ -51,7 +54,10 @@ const validateUnhealthyConditions = (
 };
 
 const validateStatus = (status) => {
-  cy.get('[data-test-selector="details-item-value__Status"]').contains(status);
+  cy.get('[data-test-selector="details-item-value__Status"]').should(
+    "contain",
+    status
+  );
 };
 
 const validateNodes = (type: string) => {

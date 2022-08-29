@@ -1,4 +1,5 @@
 import { nodeHealthCheckStringKind } from "data/model";
+import * as React from "react";
 import { useHistory } from "react-router";
 
 const MACHINE_HEALTHCHECKS_URL =
@@ -23,13 +24,16 @@ const getNodeHealthCheckUrl = (name?: string) => {
 
 export const useNodeHealthCheckNavigation = (): NavigationApi => {
   const history = useHistory();
-  return {
-    getNodeHealthCheckUrl,
-    gotoList: () => history.push(getNodeHealthCheckUrl()),
-    gotoDetails: (name: string) => history.push(getNodeHealthCheckUrl(name)),
-    gotoEditor: (name: string) =>
-      history.push(`${getNodeHealthCheckUrl(name)}/edit`),
-    goBack: history.goBack,
-    gotoMachineHealthChecks: () => history.push(MACHINE_HEALTHCHECKS_URL),
-  };
+  return React.useMemo(
+    () => ({
+      getNodeHealthCheckUrl,
+      gotoList: () => history.push(getNodeHealthCheckUrl()),
+      gotoDetails: (name: string) => history.push(getNodeHealthCheckUrl(name)),
+      gotoEditor: (name: string) =>
+        history.push(`${getNodeHealthCheckUrl(name)}/edit`),
+      goBack: history.goBack,
+      gotoMachineHealthChecks: () => history.push(MACHINE_HEALTHCHECKS_URL),
+    }),
+    [history]
+  );
 };

@@ -1,0 +1,43 @@
+.nhc-form .co-file-dropzone .co-m-nav-title--detail.co-m-nav-title {
+  display: none;
+}
+
+.nhc-form-node-list {
+  max-height: 17rem;
+  overflow: auto;
+}
+
+.nhc-form-yaml-view {
+  display: flex;
+  flex-grow: 1;
+}
+
+.nhc-form-yaml-view .yaml-editor__buttons {
+  display: none;
+}
+
+.nhc-form .ocs-synced-editor-field__editor-toggle {
+  border-top: none;
+  padding-bottom: var(--pf-global--spacer--sm);
+}
+
+.nhc-form .ocs-synced-editor-field__editor-toggle .pf-c-form__group-label {
+  padding-left: 1.5rem;
+}
+
+.nhc-form .ocs-synced-editor-field__editor-toggle .pf-c-radio {
+  margin-right: var(--pf-global--spacer--lg);
+}
+
+.nhc-form__help-icon {
+  padding-left: var(--pf-global--spacer--xs);
+  vertical-align: bottom;
+}
+
+.nhc-form-dropdown .pf-c-dropdown {
+  width: 100%;
+}
+
+.nhc-form-dropdown .pf-c-dropdown .pf-c-dropdown__toggle {
+  width: 100%;
+}

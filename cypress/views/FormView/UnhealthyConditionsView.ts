@@ -35,9 +35,9 @@ const validateUnhealthyCondition = (
   idx: number,
   condition: UnhealthyCondition
 ) => {
-  cy.get(getTypeSelector(idx)).contains(condition.type).should("exist");
+  cy.get(getTypeSelector(idx)).should("contain", condition.type);
   if (condition.status) {
-    cy.get(getStatusSelector(idx)).contains(condition.status).should("exist");
+    cy.get(getStatusSelector(idx)).should("contain", condition.status);
   }
   cy.get(getDurationSelector(idx)).should("have.value", condition.duration);
 };

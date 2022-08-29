@@ -4,7 +4,6 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { Alert, TextInputTypes } from "@patternfly/react-core";
 import InputField from "../../../copiedFromConsole/formik-fields/InputField";
 import NodeSelectionField from "./nodeSelectionField/NodeSelectionField";
-import HelpIcon from "components/shared/HelpIcon";
 import { FormViewFieldProps } from "./propTypes";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
 import UnhealthyConditionsField from "./unhealthyConditionsField/UnhealthyConditionsField";
@@ -12,6 +11,7 @@ import { NodeHealthCheckFormValues } from "data/types";
 import { NodeKind } from "copiedFromConsole/types/node";
 import { withFallback } from "copiedFromConsole/error";
 import RemediatorField from "./remediatorField/RemediatorField";
+import HelpIcon from "components/shared/HelpIcon";
 
 const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();
