@@ -66,7 +66,7 @@ const useNodeHealthCheckActions = (
     return actions;
   };
 
-  const actions = React.useMemo<Action[]>(getActions, [nodeHealthCheck]);
+  const actions = React.useMemo(getActions, [nodeHealthCheck]);
   return actions;
 };
 

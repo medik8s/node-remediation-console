@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as _ from "lodash";
-import { FormikProps, useFormikContext } from "formik";
+import { useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
@@ -47,21 +47,24 @@ type NodeHealthCheckFormSyncedEditorProps = {
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
-  FormikProps<NodeHealthCheckFormValues> & NodeHealthCheckFormSyncedEditorProps
+  NodeHealthCheckFormSyncedEditorProps
 > = ({
   originalNodeHealthCheck,
-  values,
-  status,
-  handleSubmit,
-  isSubmitting,
-  dirty,
   handleCancel,
-  setStatus,
-  setErrors,
-  errors,
   allNodes,
   snrTemplatesExist,
 }) => {
+  const {
+    values,
+    status,
+    handleSubmit,
+    isSubmitting,
+    dirty,
+
+    setStatus,
+    setErrors,
+    errors,
+  } = useFormikContext<NodeHealthCheckFormValues>();
   const { t } = useNodeHealthCheckTranslation();
   const { setFieldValue } = useFormikContext<NodeHealthCheckFormValues>();
   const isStale =
@@ -75,33 +78,27 @@ export const NodeHealthCheckSyncedEditor: React.FC<
     isSubmitting ||
     (values.editorType === EditorType.Form && !!values.formParsingError);
 
-  const yamlEditor = React.useMemo(
-    () => <YamlEditorField fieldName="yamlData" />,
-    []
-  );
+  const yamlEditor = <YamlEditorField fieldName="yamlData" />;
 
-  const formEditor = React.useMemo(
-    () => (
-      <FormBody className="co-m-pane__form">
-        <FormSection>
-          {values.formParsingError ? (
-            <Alert
-              variant="danger"
-              title="Error parsing NodeHealthCheck"
-              isInline
-            >
-              {values.formParsingError}
-            </Alert>
-          ) : (
-            <NodeHealthCheckFormFields
-              allNodes={allNodes}
-              snrTemplatesExist={snrTemplatesExist}
-            />
-          )}
-        </FormSection>
-      </FormBody>
-    ),
-    []
+  const formEditor = (
+    <FormBody className="co-m-pane__form">
+      <FormSection>
+        {values.formParsingError ? (
+          <Alert
+            variant="danger"
+            title="Error parsing NodeHealthCheck"
+            isInline
+          >
+            {values.formParsingError}
+          </Alert>
+        ) : (
+          <NodeHealthCheckFormFields
+            allNodes={allNodes}
+            snrTemplatesExist={snrTemplatesExist}
+          />
+        )}
+      </FormSection>
+    </FormBody>
   );
 
   const onReload = React.useCallback(() => {

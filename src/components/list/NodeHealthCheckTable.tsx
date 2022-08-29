@@ -19,6 +19,8 @@ import NodeHealthCheckActionsMenu from "components/actions/NodeHealthCheckAction
 import { sortable, SortByDirection } from "@patternfly/react-table";
 import { getRemediatorLabel } from "data/remediator";
 import { EmptyBox } from "copiedFromConsole/utils/status-box";
+import { TFunction } from "i18next";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
 const sortByRemediator = (
   nodeHealthChecks: NodeHealthCheck[],
@@ -39,34 +41,33 @@ const sortByRemediator = (
   );
 };
 
-const columns: TableColumn<NodeHealthCheck>[] = [
+const getTableColumns = (t: TFunction): TableColumn<NodeHealthCheck>[] => [
   {
-    title: "Name",
+    title: t("Name"),
     id: "name",
     sort: "metadata.name",
     transforms: [sortable],
   },
   {
-    title: "Status",
+    title: t("Status"),
     id: "status",
     sort: "status.phase",
     transforms: [sortable],
   },
   {
-    title: "Remediator",
+    title: t("Remediator"),
     id: "remediator",
     sort: sortByRemediator,
     transforms: [sortable],
   },
   {
-    title: "Created",
+    title: t("Created"),
     id: "created",
     sort: "metadata.creationTimestamp",
     transforms: [sortable],
   },
   { title: "", id: "kabab-menu" },
 ];
-
 const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
   const remediatorLabel = getRemediatorLabel(obj);
   if (!remediatorLabel) {
@@ -75,36 +76,41 @@ const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
   return <span data-test="remediator-label">{remediatorLabel}</span>;
 };
 
-const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
-  obj,
-  activeColumnIDs,
-}) => {
-  return (
-    <>
-      <TableData id={columns[0].id} activeColumnIDs={activeColumnIDs}>
-        <ResourceLink
-          groupVersionKind={nodeHealthCheckKind}
-          name={obj.metadata.name}
-          namespace={obj.metadata.namespace}
-        />
-      </TableData>
-      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
-        <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
-      </TableData>
-      <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
-        <Remediator obj={obj} />
-      </TableData>
-      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
-        <Timestamp timestamp={obj.metadata.creationTimestamp} />
-      </TableData>
-      <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
-        <NodeHealthCheckActionsMenu
-          nodeHealthCheck={obj}
-          isKababToggle={true}
-        ></NodeHealthCheckActionsMenu>
-      </TableData>
-    </>
-  );
+const getNodeHealthCheckRowComponent = (
+  ids: string[]
+): React.FC<RowProps<NodeHealthCheck>> => {
+  const NodeHealthcheckRow: React.FC<RowProps<NodeHealthCheck>> = ({
+    obj,
+    activeColumnIDs,
+  }) => {
+    return (
+      <>
+        <TableData id={ids[0]} activeColumnIDs={activeColumnIDs}>
+          <ResourceLink
+            groupVersionKind={nodeHealthCheckKind}
+            name={obj.metadata.name}
+            namespace={obj.metadata.namespace}
+          />
+        </TableData>
+        <TableData id={ids[1]} activeColumnIDs={activeColumnIDs}>
+          <NodeHealthCheckStatus nodeHealthCheck={obj} withPopover={true} />
+        </TableData>
+        <TableData id={ids[2]} activeColumnIDs={activeColumnIDs}>
+          <Remediator obj={obj} />
+        </TableData>
+        <TableData id={ids[3]} activeColumnIDs={activeColumnIDs}>
+          <Timestamp timestamp={obj.metadata.creationTimestamp} />
+        </TableData>
+        <TableData id={ids[4]} activeColumnIDs={activeColumnIDs}>
+          <NodeHealthCheckActionsMenu
+            nodeHealthCheck={obj}
+            isKababToggle={true}
+          ></NodeHealthCheckActionsMenu>
+        </TableData>
+      </>
+    );
+  };
+  return NodeHealthcheckRow;
 };
 
 type NodeHealthchecksTableProps = {
@@ -124,6 +130,8 @@ export const NodeHealthchecksTable: React.FC<NodeHealthchecksTableProps> = ({
   loaded,
   loadError,
 }) => {
+  const { t } = useNodeHealthCheckTranslation();
+  const columns = getTableColumns(t);
   return (
     <VirtualizedTable<NodeHealthCheck>
       data={data}
@@ -131,7 +139,7 @@ export const NodeHealthchecksTable: React.FC<NodeHealthchecksTableProps> = ({
       loaded={loaded}
       loadError={loadError}
       columns={columns}
-      Row={NodeHealthcheckRow}
+      Row={getNodeHealthCheckRowComponent(columns.map((column) => column.id))}
       EmptyMsg={EmptyNodeHealthChecks}
     />
   );

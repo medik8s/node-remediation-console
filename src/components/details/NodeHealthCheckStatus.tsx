@@ -21,6 +21,9 @@ import * as React from "react";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import NotAvailable from "../list/NotAvailable";
 import { useModals } from "components/modals/ModalsContext";
+import { TFunction } from "i18next";
+import { global_palette_green_500 as okColor } from "@patternfly/react-tokens";
+import { chart_global_danger_Color_100 as dangerColor } from "@patternfly/react-tokens";
 
 export const getIcon = (phase: StatusPhase) => {
   switch (phase) {
@@ -28,12 +31,10 @@ export const getIcon = (phase: StatusPhase) => {
       return <GreenCheckCircleIcon />;
     }
     case StatusPhase.DISABLED: {
-      return (
-        <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
-      );
+      return <ExclamationCircleIcon color={dangerColor.var} />;
     }
     case StatusPhase.REMEDIATING: {
-      return <WrenchIcon color="var(--pf-global--link--Color)" />;
+      return <WrenchIcon color={okColor.var} />;
     }
     case StatusPhase.PAUSED: {
       return <PauseCircleIcon />;
@@ -44,24 +45,19 @@ export const getIcon = (phase: StatusPhase) => {
   }
 };
 
-const usePhaseLabels = (): { getLabel(phase: StatusPhase): string } => {
-  const { t } = useNodeHealthCheckTranslation();
-  return {
-    getLabel: (phase: StatusPhase) => {
-      switch (phase) {
-        case StatusPhase.DISABLED:
-          return t("Disabled");
-        case StatusPhase.ENABLED:
-          return t("Enabled");
-        case StatusPhase.PAUSED:
-          return t("Paused");
-        case StatusPhase.REMEDIATING:
-          return t("Remediating");
-        default:
-          return phase;
-      }
-    },
-  };
+const getPhaseLabel = (t: TFunction, phase: string): string => {
+  switch (phase) {
+    case StatusPhase.DISABLED:
+      return t("Disabled");
+    case StatusPhase.ENABLED:
+      return t("Enabled");
+    case StatusPhase.PAUSED:
+      return t("Paused");
+    case StatusPhase.REMEDIATING:
+      return t("Remediating");
+    default:
+      return phase;
+  }
 };
 
 const PausePopoverContent: React.FC<{
@@ -72,9 +68,9 @@ const PausePopoverContent: React.FC<{
   const modalsApi = useModals();
   return (
     <>
-      <Text data-test="status-reason">{`${pauseReasons.length} ${t(
-        "pause reasons found"
-      )}`}</Text>
+      <Text>
+        {t("{{count}} pause reason found", { count: pauseReasons.length })}
+      </Text>
       <a
         onClick={() => modalsApi.openModal(ModalId.EDIT_PAUSE, nodeHealthCheck)}
         data-test="edit-pause-reasons"
@@ -90,20 +86,19 @@ const PopoverContent: React.FC<{
   phase: StatusPhase;
   reason: string;
 }> = ({ nodeHealthCheck, phase, reason }) => {
+  const { t } = useNodeHealthCheckTranslation();
   const pauseReasons = getPauseRequests(nodeHealthCheck);
   const showPausePopover =
     pauseReasons.length > 0 && !isDisabled(nodeHealthCheck);
-  const { getLabel } = usePhaseLabels();
   return (
     <TextContent>
-      <Text component={TextVariants.h4}>{getLabel(phase)}</Text>
-      {showPausePopover && (
+      <Text component={TextVariants.h4}>{getPhaseLabel(t, phase)}</Text>
+      {showPausePopover ? (
         <PausePopoverContent
           nodeHealthCheck={nodeHealthCheck}
           pauseReasons={pauseReasons}
         />
-      )}
-      {!showPausePopover && (
+      ) : (
         <Text id="status-reason" data-test="status-reason">
           {reason}
         </Text>
@@ -116,21 +111,20 @@ const NodeHealthCheckStatus: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
   withPopover: boolean;
 }> = ({ nodeHealthCheck, withPopover }) => {
-  const { getLabel } = usePhaseLabels();
-
-  if (!nodeHealthCheck.status || !nodeHealthCheck.status?.phase) {
+  const { t } = useNodeHealthCheckTranslation();
+  if (!nodeHealthCheck.status?.phase) {
     return <NotAvailable />;
   }
   const phase = getPhase(nodeHealthCheck);
   let icon = getIcon(getPhase(nodeHealthCheck));
   if (!icon) {
-    return <span>{getLabel(phase)}</span>;
+    return <span>{getPhaseLabel(t, phase)}</span>;
   }
   const content = (
     <span id="nhc-status">
       {icon}{" "}
       <a id="nhc-status-text" data-test="nhc-status-label">
-        {getLabel(phase)}
+        {getPhaseLabel(t, phase)}
       </a>
     </span>
   );

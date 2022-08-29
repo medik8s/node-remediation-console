@@ -5,35 +5,38 @@ import DropdownField, {
 } from "components/shared/DropdownField";
 import { UnhealthyConditionFieldProps } from "./propTypes";
 import { DropdownItem, DropdownSeparator } from "@patternfly/react-core";
+import { TFunction } from "i18next";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
-const getOptions = () => [
+const getOptions = (t: TFunction) => [
   {
-    label: "Ready",
+    label: t("Ready"),
     value: "Ready",
   },
   {
-    label: "Disk pressure",
+    label: t("Disk pressure"),
     value: "DiskPressure",
   },
   {
-    label: "Memory pressure",
+    label: t("Memory pressure"),
     value: "MemoryPressure",
   },
   {
-    label: "PID pressure",
+    label: t("PID pressure"),
     value: "PIDPressure",
   },
   {
-    label: "Network unavailable",
+    label: t("Network unavailable"),
     value: "NetworkUnavailable",
   },
 ];
 
 const TypeSelectField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
+  const { t } = useNodeHealthCheckTranslation();
   const [customTypeModalOpen, setCustomTypeModalOpen] =
     React.useState<boolean>(false);
 
-  const dropdownItems: DropdownFieldProps["items"] = getOptions();
+  const dropdownItems: DropdownFieldProps["items"] = getOptions(t);
   dropdownItems.push(<DropdownSeparator key="type-field-separator" />);
   dropdownItems.push(
     <DropdownItem

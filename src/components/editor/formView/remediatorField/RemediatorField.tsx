@@ -14,14 +14,15 @@ import DropdownField from "components/shared/DropdownField";
 import RemediatorKindField from "./RemediatorKindField";
 import { useField } from "formik";
 import { useFormikValidationFix } from "copiedFromConsole/hooks/formik-validation-fix";
+import { TFunction } from "i18next";
 
-const SNRStrategyOptions = [
+const getSNRStrategyOptions = (t: TFunction) => [
   {
-    label: "Resource deletion",
+    label: t("Resource deletion"),
     value: BuiltInRemediationTemplate.ResourceDeletion,
   },
   {
-    label: "Node deletion",
+    label: t("Node deletion"),
     value: BuiltInRemediationTemplate.NodeDeletion,
   },
 ];
@@ -37,7 +38,7 @@ const SNRStrategyField = ({ fieldName }: FormViewFieldProps) => {
       name={fieldName}
       label={t("Remediation Strategy")}
       isRequired
-      items={SNRStrategyOptions}
+      items={getSNRStrategyOptions(t)}
     ></DropdownField>
   );
 };

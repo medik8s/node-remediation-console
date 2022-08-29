@@ -20,7 +20,6 @@ import { ModalsContextProvider } from "components/modals/ModalsContext";
 import { Alert, Button } from "@patternfly/react-core";
 import { useNodeHealthChecksDisabled } from "apis/nodeHealthCheckApis";
 import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
-import { useTranslation } from "react-i18next";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { withFallback } from "copiedFromConsole/error";
 import { StatusBox } from "copiedFromConsole/utils/status-box";
@@ -30,10 +29,10 @@ type ListPageProps = {
 };
 
 const DisabledAlert: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useNodeHealthCheckTranslation();
   const navigation = useNodeHealthCheckNavigation();
   return (
-    <Alert variant="info" isInline title={"NodeHealthChecks is disabled"}>
+    <Alert variant="info" isInline title={t("NodeHealthChecks is disabled")}>
       {t(
         "NodeHealthChecks is not available because MachineHealthChecks is already enabled. To make edits, go to"
       )}{" "}
@@ -42,7 +41,7 @@ const DisabledAlert: React.FC = () => {
         isInline
         onClick={() => navigation.gotoMachineHealthChecks()}
       >
-        MachineHealthChecks page.
+        {t("MachineHealthChecks page.")}
       </Button>
     </Alert>
   );

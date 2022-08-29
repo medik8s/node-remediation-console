@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Text, TextVariants } from "@patternfly/react-core";
-import { useTranslation } from "react-i18next";
 import { ErrorBoundaryFallbackProps } from "../types";
 import ErrorDetailsBlock from "./ErrorDetailsBlock";
 import { ExpandCollapse } from "copiedFromConsole/utils/expand-collapse";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
 /**
  * Standard fallback catch -- expected to take up the whole page.
@@ -11,7 +11,7 @@ import { ExpandCollapse } from "copiedFromConsole/utils/expand-collapse";
 const ErrorBoundaryFallbackPage: React.FC<ErrorBoundaryFallbackProps> = (
   props
 ) => {
-  const { t } = useTranslation();
+  const { t } = useNodeHealthCheckTranslation();
   return (
     <div className="co-m-pane__body">
       <Text

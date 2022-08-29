@@ -29,11 +29,8 @@ export const useSnrTemplatesExist = (): [boolean, boolean] => {
   }, []);
   const results =
     useK8sWatchResources<SnrTemplateWatchResources>(watchResources);
-  const isLoading = React.useMemo<boolean>(() => {
-    return !!Object.values(results).find((result) => !result.loaded);
-  }, [results]);
-  const error = React.useMemo<unknown>(() => {
-    return !!Object.values(results).find((result) => result.loadError);
-  }, [results]);
+  const isLoading = !!Object.values(results).find((result) => !result.loaded);
+  const error = !!Object.values(results).find((result) => result.loadError);
+
   return [isLoading && !error, !error];
 };

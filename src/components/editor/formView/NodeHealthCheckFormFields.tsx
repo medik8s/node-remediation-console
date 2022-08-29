@@ -48,7 +48,6 @@ const NodeHealthCheckFormFields_: React.FC<{
         title={t(
           `Note: Some fields may not be represented in this form view. Please select "YAML view" for full control`
         )}
-        className="co-alert"
         id="info-inline-alert"
       ></Alert>
       <InputField

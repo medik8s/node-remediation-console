@@ -16,7 +16,6 @@ import { getPauseRequests } from "data/nodeHealthCheck";
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";
-import * as pluralize from "pluralize";
 
 type PauseReasonFieldProps = {
   pauseReasons: string[];
@@ -53,11 +52,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
     setIsSubmitting(false);
     onClose();
   };
-  const pauseReasonsTxt = pluralize("reason", pauseRequests.length);
-  const infoMessage =
-    pauseRequests.length > 1
-      ? `All the pause ${pauseReasonsTxt} will be removed`
-      : `The pause ${pauseReasonsTxt} will be removed`;
+  const infoMessage = t("All the pause reasons will be removed");
   return (
     <Modal
       isOpen={isOpen}
@@ -88,9 +83,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
       <Stack hasGutter>
         <StackItem>
           <TextContent id="#pause-reason">
-            <Text component={TextVariants.h4}>
-              {t(`Pause ${pauseReasonsTxt}`)}
-            </Text>
+            <Text component={TextVariants.h4}>{t(`Pause reasons`)}</Text>
             {pauseRequests && <PauseReasons pauseReasons={pauseRequests} />}
           </TextContent>
         </StackItem>

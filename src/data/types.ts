@@ -1,4 +1,5 @@
 import {
+  K8sResourceCommon,
   ObjectMetadata,
   Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
@@ -120,4 +121,16 @@ export type NodeHealthCheckFormValues = {
   formData: FormViewValues | null;
   formParsingError: string | null;
   resourceVersion: string;
+};
+export type MachineHealthCondition = {
+  type: string;
+  status: string;
+  timeout: string;
+};
+
+export type MachineHealthCheckKind = K8sResourceCommon & {
+  spec: {
+    selector: Selector;
+    unhealthyConditions: MachineHealthCondition[];
+  };
 };

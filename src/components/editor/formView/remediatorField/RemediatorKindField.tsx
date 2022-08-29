@@ -9,6 +9,7 @@ import {
   RemediationTemplate,
 } from "data/types";
 import { useField } from "formik";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
 import {
   getRemediatorFieldName,
@@ -20,13 +21,14 @@ const RemediatorKindRadioGroup: React.FC<{
   fieldName: string;
   onChange: (kind: RemediatorLabel) => void;
 }> = ({ snrTemplatesExist, fieldName, onChange }) => {
+  const { t } = useNodeHealthCheckTranslation();
   const fieldId = getFieldId(fieldName, "radiogroup");
   return (
     <FormGroup fieldId={fieldId} label={"Remedatior"} isInline={true}>
       <Tooltip
-        content={
+        content={t(
           "Self node remediation is disabled because it's templates can't be found. Please reinstall the Self Node Remediation Operator."
-        }
+        )}
         hidden={snrTemplatesExist}
       >
         <RadioButtonField

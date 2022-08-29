@@ -12,7 +12,7 @@ import {
   useK8sWatchResource,
 } from "@openshift-console/dynamic-plugin-sdk";
 import { NodeHealthCheckModel, nodeKind } from "data/model";
-import { validationSchema } from "data/validationSchema";
+import { getValidationSchema } from "data/validationSchema";
 import { PageHeading } from "copiedFromConsole/utils/headings";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -53,8 +53,10 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   nodeHealthCheck,
   isCreateFlow,
 }) => {
-  const [initialValues] = React.useState(
-    getFormValues(nodeHealthCheck, isCreateFlow)
+  const { t } = useNodeHealthCheckTranslation();
+  const initialValues = React.useMemo(
+    () => getFormValues(nodeHealthCheck, isCreateFlow),
+    []
   );
   const [allNodes, loaded, loadError] = useK8sWatchResource<NodeKind[]>({
     groupVersionKind: nodeKind,
@@ -65,7 +67,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
 
   const navigation = useNodeHealthCheckNavigation();
 
-  const handleSubmit = (
+  const handleSubmit = async (
     values: NodeHealthCheckFormValues,
     actions: FormikHelpers<NodeHealthCheckFormValues>
   ) => {
@@ -86,14 +88,13 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
         name,
       });
     }
-    return resourceCall
-      .then(() => {
-        navigation.gotoDetails(updatedNodeHealthCheck?.metadata?.name);
-        return true;
-      })
-      .catch((e) => {
-        actions.setStatus({ submitError: e.message });
-      });
+    try {
+      await resourceCall;
+      navigation.gotoDetails(updatedNodeHealthCheck?.metadata?.name);
+      return true;
+    } catch (e) {
+      actions.setStatus({ submitError: e.message });
+    }
   };
 
   return (
@@ -108,20 +109,15 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
           enableReinitialize
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          validationSchema={validationSchema}
+          validationSchema={getValidationSchema(t)}
           validateOnMount={true}
         >
-          {(formikProps) => (
-            <>
-              <NodeHealthCheckSyncedEditor
-                originalNodeHealthCheck={nodeHealthCheck}
-                handleCancel={navigation.goBack}
-                {...formikProps}
-                allNodes={allNodes}
-                snrTemplatesExist={snrTemplatesExist}
-              />
-            </>
-          )}
+          <NodeHealthCheckSyncedEditor
+            originalNodeHealthCheck={nodeHealthCheck}
+            handleCancel={navigation.goBack}
+            allNodes={allNodes}
+            snrTemplatesExist={snrTemplatesExist}
+          />
         </Formik>
       </StatusBox>
     </>

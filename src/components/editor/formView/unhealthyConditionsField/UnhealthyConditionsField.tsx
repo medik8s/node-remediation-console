@@ -5,6 +5,7 @@ import {
   TextContent,
   Form,
   Stack,
+  StackItem,
 } from "@patternfly/react-core";
 import { ArrayHelpers, FieldArray, useField } from "formik";
 import {
@@ -78,28 +79,30 @@ export const UnhealthyConditionArray: React.FC<{
       validateOnChange={false}
       render={({ push, remove }) => (
         <Stack hasGutter>
-          {value.map((currentValue, idx) => {
-            return (
-              <Stack>
-                <WithRemoveButton
-                  onClick={() => remove(idx)}
-                  isDisabled={value.length === 1}
-                  key={idx}
-                  dataTest="remove-unhealthy-condition"
-                >
-                  {null}
-                </WithRemoveButton>
-                <UnhealthyConditionItem
-                  key={getArrayItemName(fieldName, idx)}
-                  fieldName={getArrayItemName(fieldName, idx)}
-                  onRemove={() => remove(idx)}
-                  idx={idx}
-                />
-              </Stack>
-            );
-          })}
-
-          <AddUnhealthyCondition onPush={push} />
+          <StackItem>
+            {value.map((currentValue, idx) => {
+              return (
+                <React.Fragment key={idx}>
+                  <WithRemoveButton
+                    onClick={() => remove(idx)}
+                    isDisabled={value.length === 1}
+                    dataTest="remove-unhealthy-condition"
+                  >
+                    {null}
+                  </WithRemoveButton>
+                  <UnhealthyConditionItem
+                    key={getArrayItemName(fieldName, idx)}
+                    fieldName={getArrayItemName(fieldName, idx)}
+                    onRemove={() => remove(idx)}
+                    idx={idx}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </StackItem>
+          <StackItem>
+            <AddUnhealthyCondition onPush={push} />
+          </StackItem>
         </Stack>
       )}
     ></FieldArray>

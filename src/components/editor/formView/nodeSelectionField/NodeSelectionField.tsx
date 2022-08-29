@@ -22,7 +22,6 @@ const SNRWorkerNodesWarning: React.FC<{ formViewFieldName: string }> = ({
         variant="info"
         title={t("Note: Self node remediation supports worker nodes only.")}
         isInline
-        className="co-alert"
         id="info-inline-alert"
       />
     );

@@ -1,10 +1,10 @@
 import { CopyToClipboard } from "copiedFromConsole/utils/copy-to-clipboard";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
-import { useTranslation } from "react-i18next";
 import { ErrorBoundaryFallbackProps } from "../types";
 
 const ErrorDetailsBlock: React.FC<ErrorBoundaryFallbackProps> = (props) => {
-  const { t } = useTranslation();
+  const { t } = useNodeHealthCheckTranslation();
   return (
     <>
       <h3 className="co-section-heading-tertiary">{props.title}</h3>
