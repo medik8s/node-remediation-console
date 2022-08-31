@@ -12,8 +12,10 @@ const YamlEditorField: React.FC<{
 }> = ({ fieldName }) => {
   const { t } = useNodeHealthCheckTranslation();
   const [{ value }, , { setValue }] = useField<string>(fieldName);
+  const [{ value: reloadCount }] = useField<number>("reloadCount");
   const [initialObj, setInitialObj] = React.useState<NodeHealthCheck>();
   const [yamlError, setYamlError] = React.useState<string>();
+  const [monacoModel, setMonacoModel] = React.useState<any>();
   React.useEffect(() => {
     //workaround for ResourceYAMLEditor not exposing onChange
     let interval = setInterval(() => {
@@ -23,6 +25,7 @@ const YamlEditorField: React.FC<{
         window.monaco.editor.getModels().length > 0
       ) {
         const model = window.monaco.editor.getModels()[0];
+        setMonacoModel(model);
         model.onDidChangeContent(() => {
           setValue(model.getValue());
         });
@@ -37,20 +40,33 @@ const YamlEditorField: React.FC<{
       }
     };
   }, []);
-  React.useEffect(() => {
-    if (value && !initialObj && !yamlError) {
-      try {
-        setInitialObj(load(value) as NodeHealthCheck);
-      } catch (err) {
-        if (err instanceof YAMLException) {
-          setYamlError(err.message);
-        } else {
-          //will be handled by error boundary
-          throw err;
-        }
+
+  const reset = () => {
+    try {
+      setInitialObj(load(value) as NodeHealthCheck);
+    } catch (err) {
+      if (err instanceof YAMLException) {
+        setYamlError(err.message);
+      } else {
+        //will be handled by error boundary
+        throw err;
       }
     }
-  }, [value, initialObj, yamlError, setInitialObj]);
+  };
+  React.useEffect(() => {
+    //initialize
+    if (value && !initialObj) {
+      reset();
+    }
+  }, [value, initialObj]);
+
+  React.useEffect(() => {
+    //handle reload
+    if (monacoModel) {
+      monacoModel.setValue(value);
+    }
+  }, [reloadCount]);
+
   if (!initialObj && !yamlError) {
     return null;
   }

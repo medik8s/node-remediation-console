@@ -12,12 +12,12 @@ import {
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
 import YamlEditorField from "./YamlEditorField";
-import { getFormValues } from "data/formValues";
 import * as formViewValues from "data/formViewValues";
 import * as yamlText from "data/yamlText";
 import { dump } from "js-yaml";
 import { Alert, FormSection } from "@patternfly/react-core";
 import { NodeKind } from "copiedFromConsole/types/node";
+import { getFormValues } from "data/formValues";
 
 const sanitizeToYaml = (
   values: NodeHealthCheckFormValues,
@@ -59,13 +59,12 @@ export const NodeHealthCheckSyncedEditor: React.FC<
     handleSubmit,
     isSubmitting,
     dirty,
-
     setStatus,
-    setErrors,
     errors,
+    resetForm,
   } = useFormikContext<NodeHealthCheckFormValues>();
   const { t } = useNodeHealthCheckTranslation();
-  const { setFieldValue } = useFormikContext<NodeHealthCheckFormValues>();
+
   const isStale =
     !!originalNodeHealthCheck &&
     originalNodeHealthCheck?.metadata?.resourceVersion !==
@@ -100,23 +99,13 @@ export const NodeHealthCheckSyncedEditor: React.FC<
     </FormBody>
   );
 
-  const onReload = React.useCallback(() => {
-    setStatus({ submitSuccess: "", submitError: "" });
-    setErrors({});
-    if (values.editorType === EditorType.Form) {
-      setFieldValue(
-        "formData",
-        getFormValues(originalNodeHealthCheck, false),
-        false
-      );
-    }
-    setFieldValue("yamlData", originalNodeHealthCheck, false);
-    setFieldValue(
-      "resourceVersion",
-      originalNodeHealthCheck?.metadata?.resourceVersion,
-      true
-    );
-  }, [setErrors, setFieldValue, setStatus, values, originalNodeHealthCheck]);
+  const onReload = () => {
+    const curEditorType = values.editorType;
+    const resetValues = getFormValues(originalNodeHealthCheck, false);
+    resetValues.editorType = curEditorType;
+    resetValues.reloadCount++;
+    resetForm({ values: resetValues });
+  };
 
   React.useEffect(() => {
     setStatus({ submitError: null });

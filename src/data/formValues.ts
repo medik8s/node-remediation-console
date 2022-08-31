@@ -34,6 +34,7 @@ export const getFormValues = (
     formData,
     formParsingError,
     resourceVersion: nodeHealthCheck?.metadata?.resourceVersion,
+    reloadCount: 0,
   };
 };
 

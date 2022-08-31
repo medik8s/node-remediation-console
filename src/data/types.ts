@@ -121,6 +121,7 @@ export type NodeHealthCheckFormValues = {
   formData: FormViewValues | null;
   formParsingError: string | null;
   resourceVersion: string;
+  reloadCount: number;
 };
 export type MachineHealthCondition = {
   type: string;
