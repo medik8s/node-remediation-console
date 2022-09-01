@@ -1,10 +1,12 @@
-FROM docker.io/library/node:16 AS build
+FROM registry.access.redhat.com/ubi8/nodejs-16:latest AS builder
+USER root
+RUN corepack enable yarn
 
-ADD . /usr/src/app
-WORKDIR /usr/src/app
-RUN yarn install && yarn build
+COPY . /opt/app-root/src
+RUN yarn install --frozen-lockfile && yarn build
 
-FROM docker.io/library/nginx:stable
-
-RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+FROM registry.access.redhat.com/ubi9/nginx-120:latest
+COPY default.conf "${NGINX_CONFIGURATION_PATH}"
+COPY --from=builder /opt/app-root/src/dist .
+USER 1001
+CMD /usr/libexec/s2i/run
