@@ -1,95 +1,65 @@
-# OpenShift Node Remediation Console Plugin
-The Openshift console plugin for Node Healthcheck and Self Node Remediation
+# Node Remediation Console Plugin
+Provides a user friendly UI for the form, list and details view of the NodeHealthCheck CRD.
+The [NodeHealthCheck Operator](https://github.com/medik8s/node-healthcheck-operator) should be installed for the UI to be exposed.
 
 ## Local development
 
-1. `yarn build` to build the plugin, generating output to `dist` directory
-2. `yarn http-server` to start an HTTP server hosting the generated assets
+In one terminal window, run:
 
-```
-Starting up http-server, serving ./dist
-Available on:
-  http://127.0.0.1:9001
-  http://192.168.1.190:9001
-  http://10.40.192.80:9001
-Hit CTRL-C to stop the server
-```
+1. `yarn install`
+2. `yarn run start`
 
-The server runs on port 9001 with caching disabled and CORS enabled. Additional
-[server options](https://github.com/http-party/http-server#available-options) can be passed to
-the script, for example:
+In another terminal window, run:
 
-```sh
-yarn http-server -a 127.0.0.1
-```
+1. `oc login` (requires [oc](https://console.redhat.com/openshift/downloads) and an [OpenShift cluster](https://console.redhat.com/openshift/create))
+2. `yarn run start-console` (requires [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io))
 
-See the plugin development section in
-[Console Dynamic Plugins README](/frontend/packages/console-dynamic-plugin-sdk/README.md) for details
-on how to run Bridge using local plugins.
+This will run the OpenShift console in a container connected to the cluster
+you've logged into. The plugin HTTP server runs on port 9001 with CORS enabled.
+Navigate to <http://localhost:9000/example> to see the running plugin.
+
 
 ## Deployment on cluster
 
-Console dynamic plugins are supposed to be deployed via [OLM operators](https://github.com/operator-framework).
-In case of demo plugin, we just apply a minimal OpenShift manifest which adds the necessary resources.
-
-```sh
-oc apply -f oc-manifest.yaml
-```
-
-Note that the `Service` exposing the HTTP server is annotated to have a signed
-[service serving certificate](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.9/html/security_and_compliance/configuring-certificates#add-service-serving)
-generated and mounted into the image. This allows us to run the server with HTTP/TLS enabled, using
-a trusted CA certificate.
-
-## Enabling the plugin
-
-Once deployed on the cluster, demo plugin must be enabled before it can be loaded by Console.
-
-To enable the plugin manually, edit [Console operator](https://github.com/openshift/console-operator)
-config and make sure the plugin's name is listed in the `spec.plugins` sequence (add one if missing):
-
-```sh
-oc edit console.operator.openshift.io cluster
-```
-
-```yaml
-# ...
-spec:
-  plugins:
-    - console-node-remediation-console-plugin
-# ...
-```
-### Local development
-
-In case of local developement of the dynamic plugin, just set up your
-HTTP server locally and pass its endpoint address in form of a service proxy 
-entry to the console server in form of JSON, using the `--plugin-proxy` flag.
-
-
-Example:
-```
- ./bin/bridge --plugin-proxy='{"services":[{"consoleAPIPath":"/api/proxy/namespace/serviceNamespace/service/serviceName:9991/","endpoint":"http://localhost:8080"}]}'
-```
-
-The service proxy entry besides service `endpoint` contain also `consoleAPIPath`, so the console server knows which path is should expose and proxy to service endpoint.
-Note that the service `endpoint` needs to contain scheme and `consoleAPIPath` needs to contain trailing slash in order for request to be proxied correctly.
-
 ## Docker image
 
-Following commands should be executed in Console repository root.
+Before you can deploy your plugin on a cluster, you must build an image and
+push it to an image registry.
 
 1. Build the image:
    ```sh
-   docker build -f Dockerfile.plugins.demo -t quay.io/$USER/console-demo-plugin .
+   docker build -t quay.io/my-repositroy/node-remediation-console-plugin:latest .
    ```
 2. Run the image:
    ```sh
-   docker run -it -p 9001:9001 quay.io/$USER/console-demo-plugin
+   docker run -it --rm -d -p 9001:80 quay.io/my-repository/node-remediation-console-plugin:latest
    ```
-3. Push the image to image registry:
+3. Push the image:
    ```sh
-   docker push quay.io/$USER/console-demo-plugin
+   docker push quay.io/my-repository/node-remediation-console-plugin:latest
    ```
 
-Update and apply `oc-manifest.yaml` to use a custom plugin image.
+NOTE: If you have a Mac with Apple silicon, you will need to add the flag
+`--platform=linux/amd64` when building the image to target the correct platform
+to run in-cluster.
 
+## Deployment on cluster
+
+After pushing an image with your changes to a registry, you can deploy the
+plugin to a cluster by instantiating the provided
+[OpenShift template](template.yaml). It will run a light-weight nginx HTTP
+server to serve your plugin's assets.
+
+```sh
+oc process -f template.yaml \
+  -p PLUGIN_NAME=node-remediation-console-plugin \
+  -p NAMESPACE=node-remediation-console-plugin \
+  -p IMAGE=quay.io/my-repository/node-remediation-console-plugin:latest \
+  | oc create -f -
+```
+# Tests
+
+Currently the tests run on development environment
+
+1. Setup Local development
+2. On a new terminal run `oc login` and `yarn test` 
