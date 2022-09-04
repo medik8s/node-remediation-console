@@ -19,6 +19,8 @@ export const DetailsRightPane: React.FC<{
         label={t("Remediator")}
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
+        description={descriptions.remediator}
+        path="spec.remediationTemplate"
       >
         {getRemediatorLabel(nodeHealthCheck)}
       </DetailsItem>
@@ -51,6 +53,7 @@ export const DetailsRightPane: React.FC<{
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
         path="status.phase"
+        description={descriptions.status}
       >
         <NodeHealthCheckStatus
           nodeHealthCheck={nodeHealthCheck}

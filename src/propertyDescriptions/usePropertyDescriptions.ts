@@ -28,5 +28,9 @@ export const usePropertyDescriptions = () => {
     selector: t(
       "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes."
     ),
+    remediator: t(
+      "The remediation template type. Either 'Self node remediation' when using templates provided by the 'Self node remediation' operator or 'Other' when a custom template was specified."
+    ),
+    status: t("Defines the observed state of NodeHealthCheck."),
   };
 };

@@ -10,11 +10,18 @@ import {
 } from "../../views/FormView/UnhealthyConditionsView";
 import * as _ from "lodash";
 
-const defaultCondition: UnhealthyCondition = {
-  duration: "300s",
-  type: "Ready",
-  status: "False",
-};
+const defaultConditions: UnhealthyCondition[] = [
+  {
+    duration: "300s",
+    type: "Ready",
+    status: "False",
+  },
+  {
+    duration: "300s",
+    type: "Ready",
+    status: "Unknown",
+  },
+];
 
 const diskPressureCondition: UnhealthyCondition = {
   type: "Disk pressure",
@@ -35,29 +42,29 @@ describe("Unhealthy conditions", () => {
   });
 
   it("should show default unhealthy condition", () => {
-    validateUnhealthyConditions([defaultCondition]);
+    validateUnhealthyConditions(defaultConditions);
   });
 
   it("click add more", () => {
     clickAddUnhealthyCondition();
-    validateNumUnhealthyConditions(2);
+    validateNumUnhealthyConditions(3);
   });
 
   it("add unhealthy condition and set values", () => {
     addUnhealthyCondition();
-    setUnhealthyCondition(2, _.omit(diskPressureCondition, "status"));
-    validateStatusDisabled(2);
+    setUnhealthyCondition(3, _.omit(diskPressureCondition, "status"));
+    validateStatusDisabled(3);
     validateUnhealthyConditions([
-      defaultCondition,
+      ...defaultConditions,
       { duration: "", type: "Ready", status: "False" },
       diskPressureCondition,
     ]);
   });
 
   it("should set second unhealthy condition with custom type", () => {
-    setUnhealthyCondition(1, customTypeCondition);
+    setUnhealthyCondition(2, customTypeCondition);
     validateUnhealthyConditions([
-      defaultCondition,
+      ...defaultConditions,
       customTypeCondition,
       diskPressureCondition,
     ]);
