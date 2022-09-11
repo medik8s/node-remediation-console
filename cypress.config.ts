@@ -23,7 +23,6 @@ const runCommand = (cmd, failOnError = true) => {
 export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:9000",
-    defaultCommandTimeout: 60000,
     setupNodeEvents(on, config) {
       on("task", {
         deleteAllNHCs() {

@@ -2,5 +2,4 @@ node_modules
 dist
 cypress/videos
 cypress/screenshots
-cypress/support
 yarn-error.log

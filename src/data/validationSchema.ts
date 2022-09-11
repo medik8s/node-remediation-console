@@ -4,7 +4,7 @@ import { RemediatorLabel } from "./types";
 import { TFunction } from "i18next";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
-const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
+export const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
 const NAME_REGEX = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
 const requiredSchema = yup.string().required("Required");
 
@@ -41,7 +41,7 @@ const getFormDataSchema = (t: TFunction) =>
       })
     ),
     remediator: yup.object({
-      template: yup.mixed().when("kind", {
+      template: yup.mixed().when("label", {
         is: RemediatorLabel.CUSTOM,
         then: customRemediatorSchema,
         otherwise: yup.string(),

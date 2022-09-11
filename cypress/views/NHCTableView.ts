@@ -46,6 +46,10 @@ const toggleKababMenu = (rowNum: number) => {
   cy.get(`${getRowSelector(rowNum)} [aria-label=Actions]`).click();
 };
 
+const validatePluginLoaded = () => {
+  cy.get("[data-test=nhc-status-label]", { timeout: 60000 }).should("exist");
+};
+
 const validateRow = (
   rowNum: number,
   expectedRowData: {
@@ -74,4 +78,11 @@ const validateStatus = (rowNum: number, status: string) => {
   _validateStatus(getRowSelector(rowNum), status);
 };
 
-export { validateRow, create, validateRows, toggleKababMenu, validateStatus };
+export {
+  validateRow,
+  create,
+  validateRows,
+  toggleKababMenu,
+  validateStatus,
+  validatePluginLoaded,
+};
