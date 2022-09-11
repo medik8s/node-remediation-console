@@ -21,8 +21,8 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import NotAvailable from "../list/NotAvailable";
 import { useModals } from "components/modals/ModalsContext";
 import { TFunction } from "i18next";
-import { global_palette_green_500 as okColor } from "@patternfly/react-tokens";
-import { chart_global_danger_Color_100 as dangerColor } from "@patternfly/react-tokens";
+import { global_link_Color as okColor } from "@patternfly/react-tokens";
+import { global_danger_color_100 as dangerColor } from "@patternfly/react-tokens";
 
 export const getIcon = (phase: StatusPhase) => {
   switch (phase) {

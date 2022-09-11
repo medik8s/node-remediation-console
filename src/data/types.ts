@@ -37,7 +37,7 @@ export type UnhealthyConditions = UnhealthyCondition[];
 export type NodeHealthCheckSpec = {
   selector?: Selector;
   remediationTemplate: RemediationTemplate;
-  minHealthy?: string;
+  minHealthy?: string | number;
   unhealthyConditions?: UnhealthyConditions;
   pauseRequests?: string[];
 };

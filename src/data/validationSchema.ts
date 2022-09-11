@@ -41,7 +41,7 @@ const getFormDataSchema = (t: TFunction) =>
       })
     ),
     remediator: yup.object({
-      template: yup.mixed().when("kind", {
+      template: yup.mixed().when("label", {
         is: RemediatorLabel.CUSTOM,
         then: customRemediatorSchema,
         otherwise: yup.string(),

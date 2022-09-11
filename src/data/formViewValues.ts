@@ -52,7 +52,9 @@ export const getFormViewValues = (
   return {
     name: nodeHealthCheck.metadata?.name,
     nodeSelectorLabels: getNodeSelectorLabelDisplayNames(nodeHealthCheck),
-    minHealthy: nodeHealthCheck.spec?.minHealthy || defaultSpec.minHealthy,
+    minHealthy: (
+      nodeHealthCheck.spec?.minHealthy ?? defaultSpec.minHealthy
+    ).toString(),
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
     remediator: getRemediator(
       defaultSpec.remediationTemplate,
@@ -67,10 +69,13 @@ export const getSpec = (formViewFields: FormViewValues) => {
     minHealthy,
     unhealthyConditions,
   } = formViewFields;
+  let minHealthyVal: string | number = minHealthy.endsWith("%")
+    ? minHealthy
+    : parseInt(minHealthy);
   return {
     selector: getNodeSelector(labelDisplayNames),
     unhealthyConditions,
-    minHealthy: minHealthy,
+    minHealthy: minHealthyVal,
     remediationTemplate: getRemediationTemplate(
       defaultSpec.remediationTemplate,
       formViewFields.remediator
@@ -81,16 +86,18 @@ export const getSpec = (formViewFields: FormViewValues) => {
 export const getNodeHealthCheck = (
   formViewValues: FormViewValues,
   yamlNodeHealthCheck: NodeHealthCheck
-) => {
-  //For all fields except of selector, it behaves like other CRs: it merges the yaml with the form
-  //for the field selector, the source of truth is the form view since the list of nodes viewed does not take into account matchExpressions
+): NodeHealthCheck => {
   const formViewSpec = getSpec(formViewValues);
-  const merged = _.merge({}, yamlNodeHealthCheck, {
+  const merged = {
+    ...yamlNodeHealthCheck,
     metadata: {
+      ...yamlNodeHealthCheck.metadata,
       name: formViewValues.name,
     },
-    spec: formViewSpec,
-  });
-  merged.spec.selector = formViewSpec.selector;
+    spec: {
+      ...yamlNodeHealthCheck.spec,
+      ...formViewSpec,
+    },
+  };
   return merged;
 };

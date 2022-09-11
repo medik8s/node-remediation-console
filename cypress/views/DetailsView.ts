@@ -1,3 +1,5 @@
+import { UnhealthyCondition } from "./FormView/UnhealthyConditionsView";
+
 const validateName = (name: string) => {
   cy.get("[data-test-selector=details-item-value__Name]").should(
     "contain",
@@ -28,15 +30,17 @@ const validateMinHealthy = (minHealthy: string) => {
 
 const validateUnhealthyConditionRow = (
   rowNum: number,
-  unhealthyCondition: { type: string; status: string; duration: string }
+  unhealthyCondition: UnhealthyCondition
 ) => {
   cy.get(`[data-index=${rowNum}][data-test=unhealthy-condition-row]`).within(
     () => {
       cy.get("[data-label=Type]").should("contain", unhealthyCondition.type);
-      cy.get("[data-label=Status]").should(
-        "contain",
-        unhealthyCondition.status
-      );
+      if (unhealthyCondition.status) {
+        cy.get("[data-label=Status]").should(
+          "contain",
+          unhealthyCondition.status
+        );
+      }
       cy.get("[data-label=Duration]").should(
         "contain",
         unhealthyCondition.duration
@@ -46,7 +50,7 @@ const validateUnhealthyConditionRow = (
 };
 
 const validateUnhealthyConditions = (
-  unhealthyConditions: { type: string; status: string; duration: string }[]
+  unhealthyConditions: UnhealthyCondition[]
 ) => {
   for (let i = 0; i < unhealthyConditions.length; ++i) {
     validateUnhealthyConditionRow(i, unhealthyConditions[i]);
@@ -76,6 +80,12 @@ const validateHealthyNodes = () => {
   validateNodes("Healthy");
 };
 
+const validatePluginLoaded = () => {
+  cy.get("[data-test=unhealthy-condition-row]", { timeout: 60000 }).should(
+    "exist"
+  );
+};
+
 export {
   validateName,
   validateNodeSelector,
@@ -86,4 +96,5 @@ export {
   validateStatus,
   validateObservedNodes,
   validateHealthyNodes,
+  validatePluginLoaded,
 };

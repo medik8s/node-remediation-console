@@ -98,6 +98,19 @@ const validateStatusDisabled = (idx: number) => {
   cy.get(getStatusSelector(idx)).should("be.disabled");
 };
 
+export const defaultConditions: UnhealthyCondition[] = [
+  {
+    duration: "300s",
+    type: "Ready",
+    status: "False",
+  },
+  {
+    duration: "300s",
+    type: "Ready",
+    status: "Unknown",
+  },
+];
+
 export {
   removeUnhealthyCondition,
   setUnhealthyCondition,

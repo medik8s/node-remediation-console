@@ -1,15 +1,10 @@
 const expandComputeNav = () => {
-  cy.get("[data-quickstart-id=qs-nav-compute]").click();
+  cy.get("[data-quickstart-id=qs-nav-compute]", { timeout: 6000 }).click();
 };
 
 const gotoNodeHealthChecks = () => {
   expandComputeNav();
-  cy.contains("NodeHealthChecks").click();
+  cy.contains("NodeHealthChecks", { timeout: 6000 }).click();
 };
 
-const validateNodeHealthChecksPluginLoaded = () => {
-  expandComputeNav();
-  cy.contains("NodeHealthChecks").should("exist");
-};
-
-export { gotoNodeHealthChecks, validateNodeHealthChecksPluginLoaded };
+export { gotoNodeHealthChecks };

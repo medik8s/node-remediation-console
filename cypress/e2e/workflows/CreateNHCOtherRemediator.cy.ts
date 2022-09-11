@@ -7,8 +7,12 @@ import {
   defaultConditions,
   setUnhealthyCondition,
 } from "../../views/FormView/UnhealthyConditionsView";
+import {
+  selectOtherRemediator,
+  setOtherRemediatorData,
+} from "../../views/FormView/RemediatorView";
 
-const name = "e2e-test-new-nhc";
+const name = "e2e-test-new-nhc-other-remediator";
 
 describe("Create default NHC", () => {
   before(() => {
@@ -25,16 +29,18 @@ describe("Create default NHC", () => {
     EditorView.setName(name);
   });
 
-  it("should set min value", () => {
-    EditorView.setMinHealthy("1");
+  it("should select other remediator", () => {
+    const remediatorData = {
+      apiVersion: "a",
+      namespace: "b",
+      kind: "c",
+      name: "d",
+    };
+    selectOtherRemediator();
+    setOtherRemediatorData(remediatorData);
   });
 
-  it("should add unhealthy condition", () => {
-    addUnhealthyCondition();
-    setUnhealthyCondition(2, { type: "Memory pressure", duration: "1s" });
-  });
-
-  it("should create", () => {
+  it("should create and go to details page", () => {
     EditorView.create();
   });
 
@@ -43,14 +49,15 @@ describe("Create default NHC", () => {
     cy.url().should("contain", `/${name}`);
   });
 
-  it("should show SNR remediator", () => {
-    DetailsView.validateRemediator("Self node remediation");
+  it("should show correct name in details page", () => {
+    DetailsView.validateName(name);
   });
 
-  it("should show three unhealthy conditions in table", () => {
-    DetailsView.validateUnhealthyConditions([
-      ...defaultConditions,
-      { type: "MemoryPressure", duration: "1s", status: "True" },
-    ]);
+  it("should show SNR remediator", () => {
+    DetailsView.validateRemediator("Other");
+  });
+
+  it("should show disabled status", () => {
+    DetailsView.validateStatus("Disabled");
   });
 });
