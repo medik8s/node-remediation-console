@@ -2,6 +2,7 @@ import { gotoNewNodeHealthCheck } from "../../Routing";
 import {
   addUnhealthyCondition,
   clickAddUnhealthyCondition,
+  defaultConditions,
   setUnhealthyCondition,
   UnhealthyCondition,
   validateNumUnhealthyConditions,
@@ -9,19 +10,6 @@ import {
   validateUnhealthyConditions,
 } from "../../views/FormView/UnhealthyConditionsView";
 import * as _ from "lodash";
-
-const defaultConditions: UnhealthyCondition[] = [
-  {
-    duration: "300s",
-    type: "Ready",
-    status: "False",
-  },
-  {
-    duration: "300s",
-    type: "Ready",
-    status: "Unknown",
-  },
-];
 
 const diskPressureCondition: UnhealthyCondition = {
   type: "Disk pressure",

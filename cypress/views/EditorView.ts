@@ -22,4 +22,15 @@ const validateInEditor = () => {
   cy.get("[data-test=synced-editor-field]").should("exist");
 };
 
-export { setName, validateName, create, validateInEditor, setMinHealthy };
+const validatePluginLoaded = () => {
+  cy.get("[data-test=synced-editor-field]", { timeout: 60000 }).should("exist");
+};
+
+export {
+  setName,
+  validateName,
+  create,
+  validateInEditor,
+  setMinHealthy,
+  validatePluginLoaded,
+};

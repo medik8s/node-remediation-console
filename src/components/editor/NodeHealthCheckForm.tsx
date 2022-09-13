@@ -60,7 +60,7 @@ const HelpText: React.FC = () => {
   return (
     <p>
       {t(
-        "NodeHealthChecks identify unhealthy nodes and specify the remediation type and strategy to fix them."
+        "NodeHealthChecks define a set of criteria and thresholds to determine the health of a node."
       )}{" "}
       &nbsp;
       <LearnMoreLink />
