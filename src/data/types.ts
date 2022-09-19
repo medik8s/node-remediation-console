@@ -85,7 +85,6 @@ export enum RemediatorLabel {
 }
 
 export enum BuiltInRemediationTemplate {
-  NodeDeletion = "self-node-remediation-node-deletion-template",
   ResourceDeletion = "self-node-remediation-resource-deletion-template",
 }
 
@@ -100,10 +99,7 @@ export const isBuiltInRemediationTemplate = (
   if (typeof template !== "string") {
     return false;
   }
-  return (
-    template === BuiltInRemediationTemplate.NodeDeletion ||
-    template === BuiltInRemediationTemplate.ResourceDeletion
-  );
+  return template === BuiltInRemediationTemplate.ResourceDeletion;
 };
 
 export type FormViewValues = {

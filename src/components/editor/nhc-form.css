@@ -31,7 +31,6 @@
 
 .nhc-form__help-icon {
   padding-left: var(--pf-global--spacer--xs);
-  vertical-align: bottom;
 }
 
 .nhc-form-dropdown .pf-c-dropdown {
@@ -40,4 +39,9 @@
 
 .nhc-form-dropdown .pf-c-dropdown .pf-c-dropdown__toggle {
   width: 100%;
+}
+
+.pf-c-radio .nhc-form__help-icon {
+  padding-top: unset;
+  padding-bottom: unset;  
 }

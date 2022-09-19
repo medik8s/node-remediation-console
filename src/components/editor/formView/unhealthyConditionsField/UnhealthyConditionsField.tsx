@@ -20,7 +20,6 @@ import {
 } from "data/types";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import TypeSelectField from "./TypeField";
-import "./unhealthyConditions.css";
 import DurationField from "./DurationField";
 import StatusField from "./StatusField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
