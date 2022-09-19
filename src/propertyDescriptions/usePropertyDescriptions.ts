@@ -18,19 +18,11 @@ export const usePropertyDescriptions = () => {
     owner: t(
       "List of objects depended by this object. If ALL objects in the list have been deleted, this object will be garbage collected. If this object is managed by a controller, then an entry in this list will point to this controller, with the controller field set to true. There cannot be more than one managing controller."
     ),
-    observedNodes: t(
-      "Specified the number of nodes observed by using the NHC spec.selecor"
-    ),
-    healthyNodes: t("Specifies the number of healthy nodes observed"),
     minHealthy: t(
       "The minimum number or percentage of nodes that has to be healthy for the remediation to start."
     ),
     selector: t(
       "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes."
     ),
-    remediator: t(
-      "The remediation template type. Either 'Self node remediation' when using templates provided by the 'Self node remediation' operator or 'Other' when a custom template was specified."
-    ),
-    status: t("Defines the observed state of NodeHealthCheck."),
   };
 };
