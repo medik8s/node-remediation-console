@@ -56,7 +56,7 @@
   "Create NodeHealthCheck": "Create NodeHealthCheck",
   "Failed to retrive OCP version for LearnMore link: ": "Failed to retrive OCP version for LearnMore link: ",
   "Learn more": "Learn more",
-  "NodeHealthChecks define a set of criteria and thresholds to determine the health of a node": "NodeHealthChecks define a set of criteria and thresholds to determine the health of a node",
+  "NodeHealthChecks define a set of criteria and thresholds to determine the health of a node.": "NodeHealthChecks define a set of criteria and thresholds to determine the health of a node.",
   "This object has been updated.": "This object has been updated.",
   "Click reload to see the new version.": "Click reload to see the new version.",
   "Create": "Create",
@@ -139,9 +139,5 @@
   "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels",
   "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata": "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.\n\nPopulated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
   "List of objects depended by this object. If ALL objects in the list have been deleted, this object will be garbage collected. If this object is managed by a controller, then an entry in this list will point to this controller, with the controller field set to true. There cannot be more than one managing controller.": "List of objects depended by this object. If ALL objects in the list have been deleted, this object will be garbage collected. If this object is managed by a controller, then an entry in this list will point to this controller, with the controller field set to true. There cannot be more than one managing controller.",
-  "Specified the number of nodes observed by using the NHC spec.selecor": "Specified the number of nodes observed by using the NHC spec.selecor",
-  "Specifies the number of healthy nodes observed": "Specifies the number of healthy nodes observed",
-  "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes.": "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes.",
-  "The remediation template type. Either 'Self node remediation' when using templates provided by the 'Self node remediation' operator or 'Other' when a custom template was specified.": "The remediation template type. Either 'Self node remediation' when using templates provided by the 'Self node remediation' operator or 'Other' when a custom template was specified.",
-  "Defines the observed state of NodeHealthCheck.": "Defines the observed state of NodeHealthCheck."
+  "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes.": "Label selector to match nodes whose health will be exercised. Note: An empty selector will match all nodes."
 }
