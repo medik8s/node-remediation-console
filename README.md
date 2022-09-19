@@ -28,15 +28,15 @@ push it to an image registry.
 
 1. Build the image:
    ```sh
-   docker build -t quay.io/my-repositroy/node-remediation-console-plugin:latest .
+   docker build -t quay.io/my-repositroy/node-remediation-console:latest .
    ```
 2. Run the image:
    ```sh
-   docker run -it --rm -d -p 9001:80 quay.io/my-repository/node-remediation-console-plugin:latest
+   docker run -it --rm -d -p 9001:80 quay.io/my-repository/node-remediation-console:latest
    ```
 3. Push the image:
    ```sh
-   docker push quay.io/my-repository/node-remediation-console-plugin:latest
+   docker push quay.io/my-repository/node-remediation-console:latest
    ```
 
 NOTE: If you have a Mac with Apple silicon, you will need to add the flag
