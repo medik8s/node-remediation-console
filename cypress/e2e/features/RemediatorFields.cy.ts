@@ -29,10 +29,4 @@ describe("Remediator field", () => {
   it("should switch back to SNR remediator ", () => {
     selectSNRRemediator();
   });
-
-  it("should select node deletion stratey", () => {
-    selectSNRRemediator();
-    selectSNRStrategy("Node deletion");
-    validateSNRStrategy("Node deletion");
-  });
 });

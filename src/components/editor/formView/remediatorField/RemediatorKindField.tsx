@@ -1,4 +1,5 @@
 import { FormGroup, Tooltip } from "@patternfly/react-core";
+import HelpIcon from "components/shared/HelpIcon";
 import { withFallback } from "copiedFromConsole/error";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import RadioButtonField from "copiedFromConsole/formik-fields/RadioButtonField";
@@ -11,10 +12,25 @@ import {
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
+
 import {
   getRemediatorFieldName,
   getRemediatorKindFieldName,
 } from "../remediatorFieldUtils";
+
+const SNRRadioButtonLabel: React.FC = () => {
+  const { t } = useNodeHealthCheckTranslation();
+  return (
+    <>
+      {RemediatorLabel.SNR}
+      <HelpIcon
+        helpText={t(
+          "Self node remediation template uses the remediation strategy 'Resource Deletion'."
+        )}
+      />
+    </>
+  );
+};
 
 const RemediatorKindRadioGroup: React.FC<{
   snrTemplatesExist: boolean;
@@ -33,7 +49,7 @@ const RemediatorKindRadioGroup: React.FC<{
       >
         <RadioButtonField
           value={RemediatorLabel.SNR}
-          label={RemediatorLabel.SNR}
+          label={<SNRRadioButtonLabel />}
           isDisabled={!snrTemplatesExist}
           aria-describedby={"SNR remediator kind"}
           name={fieldName}
@@ -88,7 +104,7 @@ const RemediatorKindField_ = ({
     } else {
       setRemediator({
         label: kind,
-        template: BuiltInRemediationTemplate.NodeDeletion,
+        template: BuiltInRemediationTemplate.ResourceDeletion,
       });
     }
   };
