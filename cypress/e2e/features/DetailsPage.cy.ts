@@ -17,10 +17,8 @@ describe("test details page", () => {
   before(() => {
     cy.fixture("testDetailsPage.json").then((data) => {
       nodeHealthCheck = data.items[0];
-      cy.log("data", data);
       cy.task("deleteNodeHealthCheck", nodeHealthCheck.metadata.name);
       cy.task("apply", "testDetailsPage.json");
-      cy.log("data", data);
       gotoNodeHealthCheckDetails(nodeHealthCheck.metadata.name);
     });
   });
