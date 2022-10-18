@@ -34,13 +34,17 @@ export const DetailsRightPane: React.FC<{
         label={t("Observed nodes")}
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
-      ></DetailsItem>
+      >
+        {nodeHealthCheck.status?.observedNodes}
+      </DetailsItem>
 
       <DetailsItem
         label={t("Healthy nodes")}
         obj={nodeHealthCheck}
         resourceKind={nodeHealthCheckKind.kind}
-      ></DetailsItem>
+      >
+        {nodeHealthCheck.status?.healthyNodes}
+      </DetailsItem>
 
       <DetailsItem
         label={t("Status")}

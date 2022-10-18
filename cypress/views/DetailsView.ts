@@ -21,7 +21,7 @@ const validateRemediator = (remediator: string) => {
   );
 };
 
-const validateMinHealthy = (minHealthy: string) => {
+const validateMinHealthy = (minHealthy: string | number) => {
   cy.get('[data-test-selector="details-item-value__Min healthy"]').should(
     "contain",
     minHealthy
@@ -67,7 +67,7 @@ const validateStatus = (status) => {
 const validateNodes = (type: string) => {
   cy.get(`[data-test-selector="details-item-value__${type} nodes"]`).should(
     (element) => {
-      expect(element.text).to.match(/[0-9]+/);
+      expect(element.text()).to.match(/[0-9]+/);
     }
   );
 };
