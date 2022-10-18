@@ -1,5 +1,6 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16:latest AS builder
 USER root
+RUN npm install -g corepack
 RUN corepack enable yarn
 
 COPY . /opt/app-root/src
