@@ -23,7 +23,7 @@ IMG ?= $(IMAGE_REGISTRY)/node-remediation-console:$(IMAGE_TAG)
 # Build the docker image
 .PHONY: docker-build
 docker-build:
-	podman build -t ${IMG} .
+	podman build --build-arg VERSION=$(VERSION) -t ${IMG} .
 
 # Push the docker image
 .PHONY: docker-push
