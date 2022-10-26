@@ -1,13 +1,10 @@
-import { Chip, ChipGroup, SelectProps } from "@patternfly/react-core";
-import { getNodeWorkerLabel } from "copiedFromConsole/selectors/node";
+import { SelectProps } from "@patternfly/react-core";
 import { NodeKind } from "copiedFromConsole/types/node";
 import { MultiSelectOption } from "copiedFromConsole/formik-fields/field-types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as _ from "lodash";
 import * as React from "react";
-import { useIsSNR } from "../remediatorFieldUtils";
-import "./labelSelector.css";
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
 import MultiSelectField from "components/shared/MultiSelectField";
 
@@ -16,19 +13,8 @@ const LabelsSelector: React.FC<{
   formViewFieldName: string;
   fieldName;
 }> = ({ nodes, formViewFieldName, fieldName }) => {
-  //handling of SNR and master nodes: since SNR doesn't support master nodes, worker node label is defined by default
-  //and is disabled with a popover explaining why it's disabled
-  const isSNR = useIsSNR(formViewFieldName);
   const [{ value }, , { setValue }] = useField<string[]>(fieldName);
-  const workerLabel = getNodeWorkerLabel();
-  React.useEffect(() => {
-    if (isSNR && !value.includes(workerLabel)) {
-      //restore worker loabel if removed
-      value.unshift(workerLabel);
-    }
-  }, [isSNR]);
 
-  const disableLabel = (label) => label === workerLabel && isSNR;
   const { t } = useNodeHealthCheckTranslation();
 
   const onSelect: SelectProps["onSelect"] = (event, selection) => {
@@ -55,12 +41,6 @@ const LabelsSelector: React.FC<{
     )
   );
   nodeLabelOptions.sort((a, b) => {
-    if (disableLabel(a)) {
-      return 1;
-    }
-    if (disableLabel(b)) {
-      return -1;
-    }
     return a.localeCompare(b, undefined, { numeric: true });
   });
 
@@ -77,27 +57,6 @@ const LabelsSelector: React.FC<{
     }
   );
 
-  const chipGroupComponent = (
-    <ChipGroup>
-      {" "}
-      {(value || []).map((currentChip, index) => {
-        const isReadOnly = disableLabel(value[index]);
-        const className = isReadOnly
-          ? "nhc-form-label-selector-chip--disabled"
-          : null;
-        return (
-          <Chip
-            isReadOnly={isReadOnly}
-            key={currentChip}
-            className={className}
-            onClick={(event) => onSelect(event, currentChip)}
-          >
-            {currentChip}
-          </Chip>
-        );
-      })}
-    </ChipGroup>
-  );
   return (
     <MultiSelectField
       data-test="label-selector"
@@ -106,10 +65,9 @@ const LabelsSelector: React.FC<{
       helpText={t(
         "Use labels to select the nodes you want to remediate. Leaving this field empty will select all nodes of the cluster."
       )}
-      chipGroupComponent={chipGroupComponent}
       options={multiSelectOptions}
       onSelect={onSelect}
-      enableClear={!isSNR}
+      enableClear={true}
     />
   );
 };
