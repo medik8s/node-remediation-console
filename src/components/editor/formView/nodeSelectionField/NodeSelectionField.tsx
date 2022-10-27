@@ -5,29 +5,8 @@ import { NodeKind } from "copiedFromConsole/types/node";
 import NodeList from "./NodeList";
 import LabelsSelector from "./LabelsSelector";
 
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import { Alert } from "@patternfly/react-core";
-import { useIsSNR } from "../remediatorFieldUtils";
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
-
-const SNRWorkerNodesWarning: React.FC<{ formViewFieldName: string }> = ({
-  formViewFieldName,
-}) => {
-  const { t } = useNodeHealthCheckTranslation();
-  const isSNR = useIsSNR(formViewFieldName);
-  if (isSNR) {
-    return (
-      <Alert
-        variant="info"
-        title={t("Note: Self node remediation supports worker nodes only.")}
-        isInline
-        id="info-inline-alert"
-      />
-    );
-  }
-  return null;
-};
 
 const NodeSelectionField: React.FC<{
   allNodes: NodeKind[];
@@ -59,7 +38,6 @@ const NodeSelectionField: React.FC<{
         formViewFieldName={formViewFieldName}
         fieldName={fieldName}
       ></LabelsSelector>
-      <SNRWorkerNodesWarning formViewFieldName={formViewFieldName} />
       <div className="nhc-form-node-list" data-test="node-selector-list">
         <NodeList
           nodes={selectedNodes}
