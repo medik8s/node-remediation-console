@@ -30,13 +30,9 @@ const sortByRemediator = (
     (nodeHealthCheck1: NodeHealthCheck, nodeHealthCheck2: NodeHealthCheck) => {
       const remediator1 = getRemediatorLabel(nodeHealthCheck1);
       const remediator2 = getRemediatorLabel(nodeHealthCheck2);
-      if (remediator1 === remediator2) {
-        return 0;
-      }
-      if (remediator1 > remediator2 && sortDirection === SortByDirection.asc) {
-        return 1;
-      }
-      return -1;
+      return sortDirection === SortByDirection.asc
+        ? remediator1.localeCompare(remediator2)
+        : remediator2.localeCompare(remediator1);
     }
   );
 };
