@@ -17,13 +17,9 @@ const sortByStatus = (nodes: NodeKind[], sortDirection: SortByDirection) => {
   return nodes.sort((node1: NodeKind, node2: NodeKind) => {
     const status1 = nodeStatus(node1);
     const status2 = nodeStatus(node2);
-    if (status1 === status2) {
-      return 0;
-    }
-    if (status1 > status2 && sortDirection === SortByDirection.asc) {
-      return 1;
-    }
-    return -1;
+    return sortDirection === SortByDirection.asc
+      ? status1.localeCompare(status2)
+      : status2.localeCompare(status1);
   });
 };
 
@@ -31,13 +27,9 @@ const sortByRole = (nodes: NodeKind[], sortDirection: SortByDirection) => {
   return nodes.sort((node1: NodeKind, node2: NodeKind) => {
     const role1 = getNodeRolesText(node1);
     const role2 = getNodeRolesText(node2);
-    if (role1 === role2) {
-      return 0;
-    }
-    if (role1 > role2 && sortDirection === SortByDirection.asc) {
-      return 1;
-    }
-    return -1;
+    return sortDirection === SortByDirection.asc
+      ? role1.localeCompare(role2)
+      : role2.localeCompare(role1);
   });
 };
 
