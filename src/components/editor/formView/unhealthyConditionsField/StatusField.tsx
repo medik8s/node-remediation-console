@@ -2,10 +2,10 @@ import DropdownField, { SelectItem } from "components/shared/DropdownField";
 import { UnhealthyConditionStatus, UnhealtyConditionType } from "data/types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
+
 import * as React from "react";
 import { UnhealthyConditionFieldProps } from "./propTypes";
-
+import { find } from "lodash-es";
 const getStatuses = (
   type: UnhealtyConditionType
 ): UnhealthyConditionStatus[] => {
@@ -46,7 +46,7 @@ const StatusField: React.FC<
 
   React.useEffect(() => {
     //handle switching to a type that doesn't support the current status
-    if (!_.find<SelectItem[]>(statusOptions, { value: status })) {
+    if (!find<SelectItem[]>(statusOptions, { value: status })) {
       setStatus(statusOptions[0].value as UnhealthyConditionStatus);
     }
   }, [type, status]);

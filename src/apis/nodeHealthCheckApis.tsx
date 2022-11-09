@@ -1,13 +1,12 @@
 import { k8sDelete, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
 import { NodeHealthCheckModel } from "data/model";
 import { MachineHealthCheckKind, NodeHealthCheck } from "data/types";
-import * as _ from "lodash";
 import { useAllMachineHealthChecks } from "./machineHealthCheckApi";
-
+import { omit } from "lodash-es";
 export const updateNodeHealthCheck = (
   nodeHealthCheck: NodeHealthCheck
 ): Promise<NodeHealthCheck> => {
-  const newNodeHealthCheck: NodeHealthCheck = _.omit(nodeHealthCheck, "status");
+  const newNodeHealthCheck: NodeHealthCheck = omit(nodeHealthCheck, "status");
   return k8sUpdate({
     model: NodeHealthCheckModel,
     data: newNodeHealthCheck,

@@ -1,7 +1,7 @@
 import HelpIcon from "components/shared/HelpIcon";
 import InputField from "copiedFromConsole/formik-fields/InputField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
+
 import * as React from "react";
 import { UnhealthyConditionFieldProps } from "./propTypes";
 

@@ -2,13 +2,14 @@ import * as React from "react";
 import { Alert, Button, AlertActionCloseButton } from "@patternfly/react-core";
 import cx from "classnames";
 import { useField, useFormikContext, FormikValues } from "formik";
-import * as _ from "lodash";
+
 import { EditorType } from "../synced-editor/editor-toggle";
 import { useEditorType } from "../synced-editor/useEditorType";
 import RadioGroupField from "./RadioGroupField";
 import { load, dump } from "js-yaml";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { LoadingBox } from "copiedFromConsole/utils/status-box";
+import { get, isEmpty } from "lodash-es";
 
 type FormErrorCallback<ReturnValue = {}> = () => ReturnValue;
 type WithOrWithoutPromise<Type> = Promise<Type> | Type;
@@ -47,8 +48,8 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
 
   const { values, setFieldValue } = useFormikContext<FormikValues>();
 
-  const formData = _.get(values, formContext.name);
-  const yamlData: string = _.get(values, yamlContext.name);
+  const formData = get(values, formContext.name);
+  const yamlData: string = get(values, yamlContext.name);
 
   const [yamlWarning, setYAMLWarning] = React.useState<boolean>(false);
   const [sanitizeToCallback, setSanitizeToCallback] =
@@ -85,7 +86,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
     }
 
     // Sanitize the YAML structure if possible
-    if (!_.isEmpty(content)) {
+    if (!isEmpty(content)) {
       if (formContext.sanitizeTo) {
         try {
           content = await formContext.sanitizeTo(content);
@@ -97,7 +98,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
       }
 
       // Handle sanitized result
-      if (typeof content === "object" && !_.isEmpty(content)) {
+      if (typeof content === "object" && !isEmpty(content)) {
         setFieldValue(formContext.name, content);
         changeEditorType(EditorType.Form);
         return;

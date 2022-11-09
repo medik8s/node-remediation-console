@@ -9,7 +9,7 @@ import {
 } from "@patternfly/react-table";
 import { NodeHealthCheck, UnhealthyCondition } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
+import { map } from "lodash-es";
 
 export const UnhealthyConditionsTable: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
@@ -34,7 +34,7 @@ export const UnhealthyConditionsTable: React.FC<{
         </Tr>
       </Thead>
       <Tbody translate={undefined}>
-        {_.map(
+        {map(
           nodeHealthCheck.spec?.unhealthyConditions,
           (condition: UnhealthyCondition, idx) => (
             <Tr

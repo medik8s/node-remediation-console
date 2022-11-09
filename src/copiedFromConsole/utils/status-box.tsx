@@ -6,6 +6,7 @@ import { Trans } from "react-i18next";
 
 import { IncompleteDataError, TimeoutError } from "./error/http-error";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { get, isString, isEmpty } from "lodash-es";
 
 export const Box: React.FC<BoxProps> = ({ children, className }) => (
   <div className={classNames("cos-status-box", className)}>{children}</div>
@@ -21,7 +22,7 @@ export const LoadError: React.FC<LoadErrorProps> = ({
   return (
     <Box className={className}>
       <div className="pf-u-text-align-center cos-error-title">
-        {_.isString(message)
+        {isString(message)
           ? t("Error Loading {{label}}: {{message}}", {
               label,
               message,
@@ -131,7 +132,7 @@ export const AccessDenied: React.FC<AccessDeniedProps> = ({ message }) => {
           )}
         />
       </Box>
-      {_.isString(message) && (
+      {isString(message) && (
         <Alert
           isInline
           className="co-alert"
@@ -154,7 +155,7 @@ const Data: React.FC<DataProps> = ({
   unfilteredData,
   children,
 }) => {
-  if (NoDataEmptyMsg && _.isEmpty(unfilteredData)) {
+  if (NoDataEmptyMsg && isEmpty(unfilteredData)) {
     return (
       <div className="loading-box loading-box__loaded">
         {NoDataEmptyMsg ? <NoDataEmptyMsg /> : <EmptyBox label={label} />}
@@ -162,7 +163,7 @@ const Data: React.FC<DataProps> = ({
     );
   }
 
-  if (!data || _.isEmpty(data)) {
+  if (!data || isEmpty(data)) {
     return (
       <div className="loading-box loading-box__loaded">
         {EmptyMsg ? <EmptyMsg /> : <EmptyBox label={label} />}
@@ -178,7 +179,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
   const { t } = useNodeHealthCheckTranslation();
 
   if (loadError) {
-    const status = _.get(loadError, "response.status");
+    const status = get(loadError, "response.status");
     if (status === 404) {
       return (
         <div className="co-m-pane__body">
@@ -192,7 +193,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
       return <AccessDenied message={loadError.message} />;
     }
 
-    if (loadError instanceof IncompleteDataError && !_.isEmpty(data)) {
+    if (loadError instanceof IncompleteDataError && !isEmpty(data)) {
       return (
         <Data data={data} {...dataProps}>
           <Alert

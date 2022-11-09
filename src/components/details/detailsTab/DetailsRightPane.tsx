@@ -3,7 +3,7 @@ import { nodeHealthCheckKind } from "data/model";
 import { getRemediatorLabel } from "data/remediator";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
+
 import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
 import NodeHealthCheckStatus from "../NodeHealthCheckStatus";

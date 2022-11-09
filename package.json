@@ -88,7 +88,6 @@
     "immutable": "4.0.0",
     "js-yaml": "4.1.0",
     "json-schema": "^0.4.0",
-    "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "react-copy-to-clipboard": "^5.1.0",
     "react-linkify": "^1.0.0-alpha",

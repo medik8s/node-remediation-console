@@ -19,11 +19,15 @@ const create = () => {
 };
 
 const validateInEditor = () => {
-  cy.get("[data-test=synced-editor-field]").should("exist");
+  cy.get("[data-test=synced-editor-field]", { timeout: 120000 }).should(
+    "exist"
+  );
 };
 
 const validatePluginLoaded = () => {
-  cy.get("[data-test=synced-editor-field]", { timeout: 60000 }).should("exist");
+  cy.get("[data-test=synced-editor-field]", { timeout: 120000 }).should(
+    "exist"
+  );
 };
 
 export {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as _ from "lodash";
+
 import { getObjectItemFieldName } from "components/shared/formik-utils";
 import { Remediator } from "data/types";
 import { FormViewFieldProps } from "../propTypes";
@@ -12,9 +12,9 @@ import {
 import RemediatorKindField from "./RemediatorKindField";
 import { useField } from "formik";
 import { useFormikValidationFix } from "copiedFromConsole/hooks/formik-validation-fix";
-
+import { capitalize, startCase } from "lodash-es";
 const sentenceCase = (string: string) => {
-  return _.capitalize(_.startCase(string));
+  return capitalize(startCase(string));
 };
 
 const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => (

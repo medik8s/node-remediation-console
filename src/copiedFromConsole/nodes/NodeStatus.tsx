@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as _ from "lodash";
 
 import { NodeKind } from "../types/node";
 import Status from "../status/Status";
@@ -8,6 +7,7 @@ import { getNodeSecondaryStatus, nodeStatus } from "./node";
 import NodeUnschedulableStatus from "./NodeUnschedulableStatus";
 import SecondaryStatus from "../status/SecondaryStatus";
 import { Button } from "@patternfly/react-core";
+import { startCase } from "lodash-es";
 
 const isMonitoredCondition = (condition: Condition): boolean =>
   [
@@ -46,7 +46,7 @@ const NodeStatus: React.FC<NodeStatusProps> = ({
         status.map((item) => (
           <div key={item}>
             <Button variant="link" isInline>
-              {_.startCase(item)}
+              {startCase(item)}
             </Button>
           </div>
         ))}

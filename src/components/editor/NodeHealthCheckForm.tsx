@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as _ from "lodash";
 
 import { NodeHealthCheckSyncedEditor } from "./NodeHealthCheckSyncedEditor";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";

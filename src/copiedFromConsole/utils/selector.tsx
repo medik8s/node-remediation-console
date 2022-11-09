@@ -5,6 +5,7 @@ import { SearchIcon } from "@patternfly/react-icons";
 import { Selector as SelectorKind } from "@openshift-console/dynamic-plugin-sdk";
 import { selectorToString } from "../module/selector";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { isEmpty } from "lodash-es";
 
 const Requirement: React.FC<RequirementProps> = ({
   kind,
@@ -45,7 +46,7 @@ export const Selector: React.FC<SelectorProps> = ({
   const { t } = useNodeHealthCheckTranslation();
   return (
     <div className="co-m-selector">
-      {_.isEmpty(selector) ? (
+      {isEmpty(selector) ? (
         <p className="text-muted">{t("No selector")}</p>
       ) : (
         <Requirement

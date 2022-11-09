@@ -1,11 +1,10 @@
-import * as _ from "lodash";
 import { NodeAddress, NodeCondition, NodeKind } from "../types/node";
-
+import { get, reduce, find } from "lodash-es";
 const NODE_ROLE_PREFIX = "node-role.kubernetes.io/";
 
 export const getNodeRoles = (node: NodeKind): string[] => {
-  const labels = _.get(node, "metadata.labels");
-  return _.reduce(
+  const labels = get(node, "metadata.labels");
+  return reduce(
     labels,
     (acc: string[], v: string, k: string) => {
       if (k.startsWith(NODE_ROLE_PREFIX)) {
@@ -25,7 +24,7 @@ export const getNodeRolesText = (node: NodeKind): string => {
 };
 
 export const getNodeAddresses = (node: NodeKind): NodeAddress[] =>
-  _.get(node, "status.addresses", []);
+  get(node, "status.addresses", []);
 
 type NodeMachineAndNamespace = {
   name: string;
@@ -34,7 +33,7 @@ type NodeMachineAndNamespace = {
 export const getNodeMachineNameAndNamespace = (
   node: NodeKind
 ): NodeMachineAndNamespace => {
-  const machine = _.get(
+  const machine = get(
     node,
     'metadata.annotations["machine.openshift.io/machine"]',
     "/"
@@ -47,20 +46,20 @@ export const getNodeMachineName = (node: NodeKind): string =>
   getNodeMachineNameAndNamespace(node).name;
 
 export const isNodeUnschedulable = (node: NodeKind): boolean =>
-  _.get(node, "spec.unschedulable", false);
+  get(node, "spec.unschedulable", false);
 
 export const isNodeReady = (node: NodeKind): boolean => {
-  const conditions = _.get(node, "status.conditions", []);
-  const readyState = _.find(conditions, { type: "Ready" }) as NodeCondition;
+  const conditions = get(node, "status.conditions", []);
+  const readyState = find(conditions, { type: "Ready" }) as NodeCondition;
 
   return readyState && readyState.status === "True";
 };
 
 export const getNodeCPUCapacity = (node: NodeKind): string =>
-  _.get(node.status, "capacity.cpu");
+  get(node.status, "capacity.cpu");
 
 export const getNodeAllocatableMemory = (node: NodeKind): string =>
-  _.get(node.status, "allocatable.memory");
+  get(node.status, "allocatable.memory");
 
 export const getNodeTaints = (node: NodeKind) => node?.spec?.taints;
 

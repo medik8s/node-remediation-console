@@ -3,11 +3,11 @@ import { NodeKind } from "copiedFromConsole/types/node";
 import { MultiSelectOption } from "copiedFromConsole/formik-fields/field-types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
+
 import * as React from "react";
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
 import MultiSelectField from "components/shared/MultiSelectField";
-
+import { flatten } from "lodash-es";
 const LabelsSelector: React.FC<{
   nodes: NodeKind[];
   formViewFieldName: string;
@@ -36,9 +36,7 @@ const LabelsSelector: React.FC<{
   };
 
   const nodeLabelOptions: string[] = Array.from(
-    new Set(
-      _.flatten(nodes.map((object) => getObjectLabelDisplayNames(object)))
-    )
+    new Set(flatten(nodes.map((object) => getObjectLabelDisplayNames(object))))
   );
   nodeLabelOptions.sort((a, b) => {
     return a.localeCompare(b, undefined, { numeric: true });

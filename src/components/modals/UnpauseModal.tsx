@@ -11,7 +11,7 @@ import {
 } from "@patternfly/react-core";
 import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
 import * as React from "react";
-import * as _ from "lodash";
+
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";

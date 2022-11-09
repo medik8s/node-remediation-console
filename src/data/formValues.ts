@@ -4,7 +4,7 @@ import { NodeHealthCheck, NodeHealthCheckFormValues } from "./types";
 import { dump } from "js-yaml";
 import { isParseError } from "./parseErrors";
 import * as formViewValues from "./formViewValues";
-import * as _ from "lodash";
+
 import * as yamlText from "./yamlText";
 
 export const getFormValues = (

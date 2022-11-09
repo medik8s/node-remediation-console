@@ -5,9 +5,11 @@ import * as PropTypes from "prop-types";
 import { Alert, AlertGroup } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { LoadingInline } from "./utils/status-box";
+import { isObject } from "lodash-es";
+
 const injectDisabled = (children, disabled) => {
   return React.Children.map(children, (c) => {
-    if (!_.isObject(c) || c.type !== "button") {
+    if (!isObject(c) || c.type !== "button") {
       return c;
     }
 
