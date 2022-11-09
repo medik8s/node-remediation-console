@@ -1,13 +1,13 @@
 import { useField } from "formik";
 import * as React from "react";
-import * as _ from "lodash";
+
 import { NodeKind } from "copiedFromConsole/types/node";
 import NodeList from "./NodeList";
 import LabelsSelector from "./LabelsSelector";
 
 import { getObjectLabelDisplayNames } from "data/nodeSelector";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
-
+import { difference } from "lodash-es";
 const NodeSelectionField: React.FC<{
   allNodes: NodeKind[];
   formViewFieldName: string;
@@ -26,7 +26,7 @@ const NodeSelectionField: React.FC<{
     }
     const nodesWithLabels = allNodes.filter((node: NodeKind) => {
       const nodeLabels = getObjectLabelDisplayNames(node);
-      return _.difference(labels, nodeLabels).length === 0;
+      return difference(labels, nodeLabels).length === 0;
     });
     setSelectedNodes(nodesWithLabels);
   }, [allNodes, labels]);

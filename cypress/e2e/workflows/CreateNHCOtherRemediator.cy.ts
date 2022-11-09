@@ -2,11 +2,7 @@ import * as EditorView from "../../views/EditorView";
 import * as ConsoleNav from "../../views/ConsoleNav";
 import * as ListView from "../../views/NHCTableView";
 import * as DetailsView from "../../views/DetailsView";
-import {
-  addUnhealthyCondition,
-  defaultConditions,
-  setUnhealthyCondition,
-} from "../../views/FormView/UnhealthyConditionsView";
+
 import {
   selectOtherRemediator,
   setOtherRemediatorData,
@@ -19,6 +15,7 @@ describe("Create default NHC", () => {
     cy.task("deleteNodeHealthCheck", name);
     cy.visit("/");
     ConsoleNav.gotoNodeHealthChecks();
+    ListView.validatePluginLoaded();
   });
 
   it("should click on create", () => {

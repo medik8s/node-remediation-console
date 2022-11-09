@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { defaultSpec } from "./defaults";
 import {
   RemediationTemplate,
@@ -8,15 +7,16 @@ import {
   BuiltInRemediationTemplate,
   NodeHealthCheck,
 } from "./types";
+import { pick, isEqual } from "lodash-es";
 
 const getBuiltInRemediatorTemplate = (
   initialRemediationTemplate: RemediationTemplate,
   remediationTemplate: RemediationTemplate
 ): BuiltInRemediationTemplate | null => {
   const commonProps = ["kind", "namespace", "apiVersion"];
-  const commonPropsEqual = _.isEqual(
-    _.pick(initialRemediationTemplate, commonProps),
-    _.pick(remediationTemplate, commonProps)
+  const commonPropsEqual = isEqual(
+    pick(initialRemediationTemplate, commonProps),
+    pick(remediationTemplate, commonProps)
   );
   if (!commonPropsEqual) {
     return null;

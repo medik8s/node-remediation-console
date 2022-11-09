@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as _ from "lodash";
+
 import { useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
@@ -18,7 +18,7 @@ import { dump } from "js-yaml";
 import { Alert, FormSection } from "@patternfly/react-core";
 import { NodeKind } from "copiedFromConsole/types/node";
 import { getFormValues } from "data/formValues";
-
+import { isEmpty } from "lodash-es";
 const sanitizeToYaml = (
   values: NodeHealthCheckFormValues,
   originalNodeHealthCheck: NodeHealthCheck
@@ -72,7 +72,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
 
   const disableSubmit =
     !dirty ||
-    !_.isEmpty(errors) ||
+    !isEmpty(errors) ||
     isSubmitting ||
     (values.editorType === EditorType.Form && !!values.formParsingError);
 

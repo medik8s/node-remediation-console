@@ -15,6 +15,7 @@ describe("Create default NHC", () => {
     cy.task("deleteNodeHealthCheck", name);
     cy.visit("/");
     ConsoleNav.gotoNodeHealthChecks();
+    ListView.validatePluginLoaded();
   });
 
   it("should click on create", () => {

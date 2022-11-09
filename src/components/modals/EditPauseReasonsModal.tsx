@@ -9,13 +9,13 @@ import {
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import * as React from "react";
-import * as _ from "lodash";
+
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { NodeHealthCheck } from "data/types";
 import { editNodeHealthCheckPauseReasons } from "apis/nodeHealthCheckApis";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import AddMoreButton from "components/shared/AddMoreButton";
-
+import { clone } from "lodash-es";
 type PauseReasonFieldProps = {
   onRemove(idx: number): void;
   onAdd(): void;
@@ -111,13 +111,13 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
   };
 
   const onAdd: PauseReasonFieldProps["onAdd"] = () => {
-    const newPauseReasons = _.clone(pauseReasons);
+    const newPauseReasons = clone(pauseReasons);
     newPauseReasons.push("");
     setPauseReasons(newPauseReasons);
   };
 
   const onRemove: PauseReasonFieldProps["onRemove"] = (idx: number) => {
-    let newPauseReasons = _.clone(pauseReasons);
+    let newPauseReasons = clone(pauseReasons);
     if (pauseReasons.length === 1) {
       newPauseReasons[0] = "";
     } else {
@@ -130,7 +130,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
     idx: number,
     value: string
   ) => {
-    const newPauseReasons = _.clone(pauseReasons);
+    const newPauseReasons = clone(pauseReasons);
     newPauseReasons[idx] = value;
     setPauseReasons(newPauseReasons);
   };

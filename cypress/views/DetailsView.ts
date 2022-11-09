@@ -81,7 +81,7 @@ const validateHealthyNodes = () => {
 };
 
 const validatePluginLoaded = () => {
-  cy.get("[data-test=unhealthy-condition-row]", { timeout: 60000 }).should(
+  cy.get("[data-test=unhealthy-condition-row]", { timeout: 120000 }).should(
     "exist"
   );
 };

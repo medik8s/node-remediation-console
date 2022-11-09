@@ -89,6 +89,7 @@ const config: Configuration = {
 };
 
 if (process.env.NODE_ENV === "production") {
+  delete config.devtool;
   config.mode = "production";
   config.output.filename = "[name]-bundle-[hash].min.js";
   config.output.chunkFilename = "[name]-chunk-[chunkhash].min.js";

@@ -13,9 +13,10 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { K8sResourceKind } from "../k8s/types";
 import * as classnames from "classnames";
 import { LinkifyExternal } from "./link";
+import { toPath, isEmpty, get } from "lodash-es";
 
 export const PropertyPath = ({ kind, path }) => {
-  const pathArray: string[] = _.toPath(path);
+  const pathArray: string[] = toPath(path);
   return (
     <Breadcrumb className="co-breadcrumb">
       <BreadcrumbItem>{kind}</BreadcrumbItem>
@@ -65,8 +66,8 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   valueClassName,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const hide = hideEmpty && _.isEmpty(_.get(obj, path));
-  const value: React.ReactNode = children || _.get(obj, path, defaultValue);
+  const hide = hideEmpty && isEmpty(get(obj, path));
+  const value: React.ReactNode = children || get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
   return hide ? null : (
     <>

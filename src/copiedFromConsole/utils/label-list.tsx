@@ -6,7 +6,7 @@ import {
   Label as PfLabel,
   LabelGroup as PfLabelGroup,
 } from "@patternfly/react-core";
-
+import { isEqual, map, isEmpty } from "lodash-es";
 /* eslint-disable import/named */
 import { withTranslation, WithTranslation } from "react-i18next";
 /* eslint-enable import/named */
@@ -34,18 +34,18 @@ export const Label: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
 
 class TranslatedLabelList extends React.Component<LabelListProps> {
   shouldComponentUpdate(nextProps) {
-    return !_.isEqual(nextProps, this.props);
+    return !isEqual(nextProps, this.props);
   }
 
   render() {
     const { labels, kind, t, expand = true } = this.props;
-    const list = _.map(labels, (label, key) => (
+    const list = map(labels, (label, key) => (
       <Label key={key} kind={kind} name={key} value={label} expand={expand} />
     ));
 
     return (
       <>
-        {_.isEmpty(list) ? (
+        {isEmpty(list) ? (
           <div className="text-muted" key="0">
             {t("No labels")}
           </div>

@@ -5,7 +5,7 @@ import {
   Operator,
   Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
-import * as _ from "lodash";
+
 import { isParseError, ParseErrorCode, throwParseError } from "./parseErrors";
 import { NodeHealthCheck } from "./types";
 

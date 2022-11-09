@@ -4,7 +4,7 @@ import {
   StatusIconAndText,
 } from "@openshift-console/dynamic-plugin-sdk";
 import { K8sResourceKind } from "../k8s/types";
-import * as _ from "lodash";
+
 import * as React from "react";
 import {
   Breadcrumb,
@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import * as classNames from "classnames";
 import ActionsMenu from "./ActionsMenu";
 import { ResourceIcon } from "./resource-icon";
+import { isEmpty } from "lodash-es";
 
 export type BreadCrumbsProps = {
   breadcrumbs: { name: string; path: string }[];
@@ -79,7 +80,7 @@ export const PageHeading: React.FC<PageHeadingProps> = (
     detail = true,
   } = props;
 
-  const hasMenuActions = !_.isEmpty(menuActions);
+  const hasMenuActions = !isEmpty(menuActions);
   const showBreadcrumbs = breadcrumbs;
   return (
     <>

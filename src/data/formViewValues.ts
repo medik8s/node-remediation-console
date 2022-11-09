@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { defaultSpec } from "./defaults";
 import {
   getNodeSelector,

@@ -7,10 +7,10 @@ import { useModals } from "components/modals/ModalsContext";
 import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import * as _ from "lodash";
 import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
 import { Timestamp } from "@openshift-console/dynamic-plugin-sdk";
+import { size, get } from "lodash-es";
 
 export type ResourceSummaryProps = {
   resource: NodeHealthCheck;
@@ -58,7 +58,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         }
       >
         {t("{{count}} annotation", {
-          count: _.size(metadata.annotations),
+          count: size(metadata.annotations),
         })}
       </DetailsItem>
       <DetailsItem
@@ -68,10 +68,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         description={descriptions.selector}
         resourceKind={nodeHealthCheckKind.kind}
       >
-        <Selector
-          kind={t("Node")}
-          selector={_.get(resource, "spec.selector")}
-        />
+        <Selector kind={t("Node")} selector={get(resource, "spec.selector")} />
       </DetailsItem>
       <DetailsItem
         label={t("Created at")}

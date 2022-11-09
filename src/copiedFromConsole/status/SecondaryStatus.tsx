@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as _ from 'lodash';
+import * as React from "react";
+import { compact, concat } from "lodash-es";
 
 type SecondaryStatusProps = {
   status?: string | string[];
@@ -7,9 +7,13 @@ type SecondaryStatusProps = {
   dataStatusID?: string;
 };
 
-const SecondaryStatus: React.FC<SecondaryStatusProps> = ({ status, className, dataStatusID }) => {
-  const statusLabel = _.compact(_.concat([], status)).join(', ');
-  const cssClassName = className || '';
+const SecondaryStatus: React.FC<SecondaryStatusProps> = ({
+  status,
+  className,
+  dataStatusID,
+}) => {
+  const statusLabel = compact(concat([], status)).join(", ");
+  const cssClassName = className || "";
   if (statusLabel) {
     return (
       <div data-status-id={dataStatusID}>

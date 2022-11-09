@@ -10,6 +10,7 @@ import {
 } from "@patternfly/react-core";
 import { CopyIcon } from "@patternfly/react-icons";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { isNil } from "lodash-es";
 
 export const CopyToClipboard: React.FC<CopyToClipboardProps> = React.memo(
   (props) => {
@@ -24,7 +25,7 @@ export const CopyToClipboard: React.FC<CopyToClipboardProps> = React.memo(
     ];
 
     // Default to value if no visible value was specified.
-    const visibleValue = _.isNil(props.visibleValue)
+    const visibleValue = isNil(props.visibleValue)
       ? props.value
       : props.visibleValue;
 
