@@ -11,7 +11,6 @@ import {
   nodeHealthCheckKind,
   snrTemplateKind,
 } from "./model";
-import { Operator } from "@openshift-console/dynamic-plugin-sdk";
 
 export const DEFAULT_MIN_HEALTHY = "51%";
 export const OPERATORS_NAMESPACE = "openshift-operators";
@@ -30,14 +29,6 @@ const initialUnhealthyConditions: UnhealthyConditions = [
 ];
 
 export const defaultSpec = {
-  selector: {
-    matchExpressions: [
-      {
-        key: "node-role.kubernetes.io/worker",
-        operator: Operator.Exists,
-      },
-    ],
-  },
   remediationTemplate: {
     apiVersion: getSnrTemplateApiVersion(),
     kind: snrTemplateKind.kind,
@@ -46,6 +37,7 @@ export const defaultSpec = {
   },
   minHealthy: DEFAULT_MIN_HEALTHY,
   unhealthyConditions: initialUnhealthyConditions,
+  selector: {},
 };
 
 export const initialNodeHealthCheck: NodeHealthCheck = {

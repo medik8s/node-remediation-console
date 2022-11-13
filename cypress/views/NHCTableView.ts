@@ -47,7 +47,9 @@ const toggleKababMenu = (rowNum: number) => {
 };
 
 const validatePluginLoaded = () => {
-  cy.get("[data-test=item-create]", { timeout: 120000 }).should("exist");
+  cy.get("[data-test=loading-box__loaded]", { timeout: 120000 }).should(
+    "exist"
+  );
 };
 
 const validateRow = (
