@@ -170,7 +170,14 @@ const Data: React.FC<DataProps> = ({
       </div>
     );
   }
-  return <div className="loading-box loading-box__loaded">{children}</div>;
+  return (
+    <div
+      className="loading-box loading-box__loaded"
+      data-test="loading-box__loaded"
+    >
+      {children}
+    </div>
+  );
 };
 Data.displayName = "Data";
 
