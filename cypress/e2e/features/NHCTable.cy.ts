@@ -29,7 +29,7 @@ describe("test NodeHealthCheck list view", () => {
       name: "nhc2",
       status: "Paused",
       remediator: "Self node remediation",
-      statusReason: "2 pause reasons found",
+      statusReason: "2 pause reasons",
     },
     {
       name: "nhc3",

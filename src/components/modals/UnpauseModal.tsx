@@ -15,23 +15,8 @@ import * as React from "react";
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";
-import { global_palette_blue_100 as infoColor } from "@patternfly/react-tokens";
-
-type PauseReasonFieldProps = {
-  pauseReasons: string[];
-};
-
-const PauseReasons: React.FC<PauseReasonFieldProps> = ({ pauseReasons }) => {
-  return (
-    <TextContent>
-      {pauseReasons.map((value, idx) => (
-        <Text data-test="pause-reason" data-index={idx}>
-          {value}
-        </Text>
-      ))}
-    </TextContent>
-  );
-};
+import { global_palette_blue_300 as infoColor } from "@patternfly/react-tokens";
+import EnhancedTextList from "components/shared/EnhancedTextList";
 
 export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
   nodeHealthCheck,
@@ -83,10 +68,12 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
     >
       <Stack hasGutter>
         <StackItem>
-          <TextContent id="#pause-reason">
+          <TextContent>
             <Text component={TextVariants.h4}>{t(`Pause reasons`)}</Text>
-            <PauseReasons pauseReasons={pauseRequests} />
           </TextContent>
+        </StackItem>
+        <StackItem>
+          <EnhancedTextList textList={pauseRequests} />
         </StackItem>
         <StackItem>
           <Text>
@@ -95,7 +82,9 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           </Text>
         </StackItem>
       </Stack>
-      {error && <Alert variant="danger" title={t("Failed to unpause")} />}
+      {error && (
+        <Alert variant="danger" title={t("Failed to unpause")} isInline />
+      )}
     </Modal>
   );
 };
