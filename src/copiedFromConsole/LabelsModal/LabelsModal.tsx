@@ -7,6 +7,7 @@ import { Label as PFLabel, Stack, StackItem } from "@patternfly/react-core";
 import { isLabelValid, labelsArrayToObject, labelsToArray } from "./utils";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import TabModal from "../TabModal/TabModal";
+import "./labels-modal.css";
 
 type LabelsModalProps = {
   isOpen: boolean;
@@ -121,7 +122,7 @@ export const LabelsModal: React.FC<LabelsModalProps> = React.memo(
             )}
           </StackItem>
           <StackItem>
-            <div className="co-search-input pf-c-form-control">
+            <div className="nhc-details--labels__input pf-c-form-control">
               <tags-input>
                 <TagsInput
                   className="tags"
