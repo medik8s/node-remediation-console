@@ -9,11 +9,48 @@ import { AnnotationsModalRow } from "./AnnotationsModalRow";
 import "./AnnotationsModal.css";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import TabModal from "../TabModal/TabModal";
+import { uniqBy, find, clone } from "lodash";
 
-const getIdAnnotations = (annotations: { [key: string]: string }) =>
-  Object.fromEntries(
-    Object.entries(annotations).map(([key, value], i) => [i, { key, value }])
+type Annotations = { [key: string]: string };
+
+type AnnotationRowData = {
+  key: string;
+  value: string;
+  id: number;
+};
+
+type AnnotationsArray = AnnotationRowData[];
+
+const getAnnotationRowData = (
+  key: string,
+  value: string
+): AnnotationRowData => ({
+  key,
+  value,
+  id: Math.random(),
+});
+
+const toAnnotationArray = (
+  annotationsObject: Annotations | undefined
+): AnnotationsArray => {
+  if (!annotationsObject) {
+    return [getAnnotationRowData("", "")];
+  }
+  return Object.entries(annotationsObject).map(([key, value]) =>
+    getAnnotationRowData(key, value)
   );
+};
+
+const toAnnotations = (annotationsArray: AnnotationsArray): Annotations => {
+  const ret: Annotations = {};
+  for (const { key, value } of annotationsArray) {
+    if (key === "") {
+      continue;
+    }
+    ret[key] = value;
+  }
+  return ret;
+};
 
 export const AnnotationsModal: React.FC<{
   obj: K8sResourceCommon;
@@ -25,51 +62,40 @@ export const AnnotationsModal: React.FC<{
 }> = ({ obj, isOpen, onSubmit, onClose }) => {
   const { t } = useNodeHealthCheckTranslation();
 
-  const [annotations, setAnnotations] = React.useState<{
-    [id: number]: { [key: string]: string };
-  }>({});
+  const [annotations, setAnnotations] = React.useState<AnnotationsArray>([]);
 
   const onAnnotationAdd = () => {
-    const keys = new Set([...Object.keys(annotations)]);
-    let index = 0;
-    while (keys.has(index.toString())) {
-      index++;
-    }
-
-    setAnnotations({
-      ...annotations,
-      [index]: {
-        key: "",
-        value: "",
-      },
-    });
+    setAnnotations([...annotations, getAnnotationRowData("", "")]);
   };
 
   const onAnnotationsSubmit = () => {
-    const uniqWith = (arr, fn) =>
-      arr.filter(
-        (element, index) => arr.findIndex((step) => fn(element, step)) === index
-      );
-
-    if (
-      uniqWith(Object.values(annotations), (a, b) => a.key === b.key).length !==
-      Object.values(annotations).length
-    ) {
+    if (uniqBy(annotations, ({ key }) => key).length !== annotations.length) {
       return Promise.reject({ message: t("Duplicate keys found") });
     }
 
-    const updatedAnnotations = Object.fromEntries(
-      Object.entries(annotations).map(([, { key, value }]) => [key, value])
-    );
+    const updatedAnnotations = toAnnotations(annotations);
 
     return onSubmit(updatedAnnotations);
   };
 
+  const onRowChange = (id, key, value) => {
+    const rowData = find(annotations, { id });
+    if (!rowData) {
+      console.error(`Failed to find annotation id of  ${key}: ${value}`);
+      return;
+    }
+    rowData.key = key;
+    rowData.value = value;
+    setAnnotations(clone(annotations));
+  };
+
+  const onDelete = (deleteId) => {
+    setAnnotations(annotations.filter(({ id }) => deleteId !== id));
+  };
+
   // reset annotations when modal is closed
   React.useEffect(() => {
-    if (obj.metadata.annotations) {
-      setAnnotations(getIdAnnotations(obj.metadata.annotations));
-    }
+    setAnnotations(toAnnotationArray(obj.metadata?.annotations));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -82,23 +108,14 @@ export const AnnotationsModal: React.FC<{
       onClose={onClose}
     >
       <Grid hasGutter>
-        {Object.entries(annotations || {}).map(([id, { key, value }]) => (
+        {annotations.map((curAnnotation) => (
           <AnnotationsModalRow
-            key={id}
-            annotation={{ key, value }}
-            onChange={(annotation) =>
-              setAnnotations({
-                ...annotations,
-                [id]: annotation,
-              })
+            key={curAnnotation.id}
+            annotation={curAnnotation}
+            onChange={({ key, value }) =>
+              onRowChange(curAnnotation.id, key, value)
             }
-            onDelete={() =>
-              setAnnotations(
-                Object.fromEntries(
-                  Object.entries(annotations).filter(([k]) => k !== id)
-                )
-              )
-            }
+            onDelete={() => onDelete(curAnnotation.id)}
           />
         ))}
         <div className="co-toolbar__group co-toolbar__group--left">
