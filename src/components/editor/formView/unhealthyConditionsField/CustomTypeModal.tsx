@@ -73,6 +73,7 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
             value={customType}
             onChange={(value) => setCustomType(value)}
             data-test="custom-type-input"
+            aria-label="custom type"
           />
         </FormGroup>
       </Form>

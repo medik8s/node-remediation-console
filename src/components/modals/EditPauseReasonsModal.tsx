@@ -57,6 +57,7 @@ const PauseReasonsField: React.FC<PauseReasonFieldProps> = ({
                 onChange={(value) => onEdit(idx, value)}
                 data-test="pause-reason-input"
                 data-index={idx}
+                aria-label="pause reason"
               />
             </WithRemoveButton>
           </FormGroup>
@@ -168,7 +169,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
       ]}
     >
       <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
-      {error && <Alert variant="danger" title={failureErrorMessage} />}
+      {error && <Alert variant="danger" title={failureErrorMessage} isInline />}
     </Modal>
   );
 };

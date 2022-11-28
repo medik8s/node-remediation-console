@@ -32,9 +32,9 @@ const DisabledAlert: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
   const navigation = useNodeHealthCheckNavigation();
   return (
-    <Alert variant="info" isInline title={t("NodeHealthChecks is disabled")}>
+    <Alert variant="info" isInline title={t("NodeHealthChecks are disabled")}>
       {t(
-        "NodeHealthChecks is not available because MachineHealthChecks is already enabled. To make edits, go to"
+        "NodeHealthChecks are not available because MachineHealthChecks are already enabled. To make edits, go to"
       )}{" "}
       <Button
         variant="link"

@@ -68,6 +68,7 @@ const DeleteModal: React.FC<
         <Alert
           variant="danger"
           title={t("Failed to delete {{name}}", { name })}
+          isInline
         ></Alert>
       )}
     </Modal>
