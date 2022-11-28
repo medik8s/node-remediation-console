@@ -81,7 +81,7 @@ const ToggleShowAllButton: React.FC<{
       icon={<Icon id={SHOW_MORE_BUTTON_ID} />}
       onClick={onClick}
       variant="link"
-      className="nhc--paused-status-popover__button"
+      className="nhc-paused-status-popover__button"
     >
       {showAll ? t("Show less") : t("Show more")}
     </Button>
@@ -93,21 +93,10 @@ const PausePopoverContent: React.FC<{
   pauseReasons: string[];
   onEditPauseReasons: () => void;
 }> = ({ nodeHealthCheck, pauseReasons, onEditPauseReasons }) => {
-  const getCollapsedList = () => {
-    return pauseReasons.slice(0, 3);
-  };
   const { t } = useNodeHealthCheckTranslation();
   const modalsApi = useModals();
   const [showAll, setShowAll] = React.useState(false);
-  const [pauseReasonsToShow, setPauseReasonsToShow] = React.useState<string[]>(
-    getCollapsedList()
-  );
-  const onToggleShowAll = () => {
-    const _showAll = !showAll;
-    setShowAll(_showAll);
-    setPauseReasonsToShow(_showAll ? pauseReasons : getCollapsedList());
-  };
-
+  const pauseReasonsToShow = showAll ? pauseReasons : pauseReasons.slice(0, 3);
   return (
     <Stack>
       <StackItem>
@@ -116,10 +105,10 @@ const PausePopoverContent: React.FC<{
         </Text>
       </StackItem>
       <StackItem>
-        <TextList className="nhc--enhanced-text-list__list">
-          {pauseReasonsToShow.map((reason) => (
-            <EllipsisToolTip content={reason}>
-              <TextListItem className="nhc--enhanced-text-list__list-item">
+        <TextList className="nhc-enhanced-text-list__list">
+          {pauseReasonsToShow.map((reason, idx) => (
+            <EllipsisToolTip content={reason} key={idx}>
+              <TextListItem className="nhc-enhanced-text-list__list-item">
                 {reason}
               </TextListItem>
             </EllipsisToolTip>
@@ -128,12 +117,15 @@ const PausePopoverContent: React.FC<{
       </StackItem>
       {pauseReasons.length > 3 && (
         <StackItem>
-          <ToggleShowAllButton showAll={showAll} onClick={onToggleShowAll} />
+          <ToggleShowAllButton
+            showAll={showAll}
+            onClick={() => setShowAll(!showAll)}
+          />
         </StackItem>
       )}
       <StackItem>
         <Button
-          className="nhc--paused-status-popover__button"
+          className="nhc-paused-status-popover__button"
           variant="link"
           onClick={() => {
             onEditPauseReasons();
