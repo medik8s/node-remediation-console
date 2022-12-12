@@ -76,7 +76,7 @@
       "nodeHealthCheckDetailsPage": "./components/details/NodeHealthCheckDetailsPage.tsx"
     },
     "dependencies": {
-      "@console/pluginAPI": "^4.11"
+      "@console/pluginAPI": ">=4.11.0-0"
     }
   },
   "dependencies": {
