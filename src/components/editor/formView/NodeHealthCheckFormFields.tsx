@@ -22,7 +22,7 @@ const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
       labelIcon={
         <HelpIcon
           helpText={t(
-            "The minimum number or percentage of nodes that has to be healthy for the remediation to start."
+            "The minimum percentage or number of nodes that has to be healthy for the remediation to start."
           )}
         />
       }

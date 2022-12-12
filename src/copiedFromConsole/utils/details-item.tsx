@@ -67,7 +67,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   const hide = hideEmpty && isEmpty(get(obj, path));
-  const value: React.ReactNode = children || get(obj, path, defaultValue);
+  const value: React.ReactNode = children ?? get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
   return hide ? null : (
     <>
