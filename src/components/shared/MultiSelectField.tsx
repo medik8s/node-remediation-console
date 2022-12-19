@@ -4,29 +4,19 @@ import {
   FormGroup,
   Select,
   SelectOption,
-  SelectOptionObject,
-  SelectOptionProps,
   SelectProps,
   SelectVariant,
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
-import * as fuzzy from "fuzzysearch";
-
-export type MultiSelectOption = SelectOptionProps & {
-  id: string;
-  displayName: string;
-  isDisabled?: boolean;
-};
 
 export interface MultiSelectFieldProps extends FieldProps {
-  options: MultiSelectOption[];
+  options: string[];
   placeholderText?: string;
   onChange?: (val: string[]) => void;
   getHelperText?: (value: string) => React.ReactNode | undefined;
-  chipGroupComponent?: React.ReactNode;
-  onSelect: SelectProps["onSelect"];
   enableClear: boolean;
+  isLoading: boolean;
 }
 
 // Field value is a string[]
@@ -39,9 +29,8 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   required,
   onChange,
   labelIcon,
-  chipGroupComponent,
-  onSelect,
   enableClear,
+  isLoading,
   ...props
 }) => {
   const [isOpen, setOpen] = React.useState(false);
@@ -59,31 +48,24 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
     setOpen(false);
   };
 
-  // list of already selected options
-  const selections: (SelectOptionObject | string)[] = field.value.map(
-    (value: string) => {
-      const option = options.find((opt) => opt.value === value);
-      return option
-        ? {
-            value: option.value,
-            toString: () => option.displayName,
-            compareTo: (selectOption: { value: string }) =>
-              selectOption.value === value,
-          }
-        : value;
+  const onSelect: SelectProps["onSelect"] = (event, selection) => {
+    // already selected
+    const selected = field.value;
+    let selectionValue = selection;
+    let newValue;
+    if (selected.includes(selectionValue)) {
+      newValue = selected.filter((sel: string) => sel !== selectionValue);
+    } else {
+      newValue = [...field.value, selectionValue];
     }
-  );
+    setValue(newValue);
+  };
 
   const children = options
-    .filter((option) => !(field.value || []).includes(option.value))
+    .filter((option) => !(field.value || []).includes(option))
     .map((option) => (
-      <SelectOption
-        key={option.id}
-        id={option.id}
-        value={option.value}
-        isDisabled={option.isDisabled}
-      >
-        {option.displayName}
+      <SelectOption key={option} id={option} value={option} isDisabled={false}>
+        {option}
       </SelectOption>
     ));
 
@@ -111,22 +93,9 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         isOpen={isOpen}
         onToggle={onToggle}
         onSelect={onSelect}
-        selections={selections}
+        selections={field.value}
         onClear={enableClear ? onClearSelection : null}
-        onFilter={(e, val) => {
-          if (!val || val === "") {
-            return children;
-          }
-          const results = options
-            .filter((option) => fuzzy(val, option.displayName))
-            .map((option) => option.id);
-          return (
-            React.Children.toArray(
-              children
-            ) as React.ReactElement<SelectOptionProps>[]
-          ).filter(({ props }) => results.includes(props.id as string));
-        }}
-        chipGroupComponent={chipGroupComponent}
+        loadingVariant={isLoading ? "spinner" : undefined}
       >
         {children}
       </Select>

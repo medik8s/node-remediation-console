@@ -8,7 +8,6 @@ import { FormViewFieldProps } from "./propTypes";
 import { getObjectItemFieldName } from "components/shared/formik-utils";
 import UnhealthyConditionsField from "./unhealthyConditionsField/UnhealthyConditionsField";
 import { NodeHealthCheckFormValues } from "data/types";
-import { NodeKind } from "copiedFromConsole/types/node";
 import { withFallback } from "copiedFromConsole/error";
 import RemediatorField from "./remediatorField/RemediatorField";
 import HelpIcon from "components/shared/HelpIcon";
@@ -33,9 +32,8 @@ const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
 };
 
 const NodeHealthCheckFormFields_: React.FC<{
-  allNodes: NodeKind[];
   snrTemplatesExist: boolean;
-}> = ({ allNodes, snrTemplatesExist }) => {
+}> = ({ snrTemplatesExist }) => {
   const { t } = useNodeHealthCheckTranslation();
   const { values } = useFormikContext<NodeHealthCheckFormValues>();
   const formViewFieldName = "formData";
@@ -64,8 +62,7 @@ const NodeHealthCheckFormFields_: React.FC<{
         snrTemplatesExist={snrTemplatesExist}
       ></RemediatorField>
       <NodeSelectionField
-        allNodes={allNodes}
-        formViewFieldName={formViewFieldName}
+        fieldName={getObjectItemFieldName([formViewFieldName, "nodeSelector"])}
       />
       <MinHealthyField
         fieldName={getObjectItemFieldName([formViewFieldName, "minHealthy"])}

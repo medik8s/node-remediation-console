@@ -3,48 +3,74 @@ import * as React from "react";
 
 import { NodeKind } from "copiedFromConsole/types/node";
 import NodeList from "./NodeList";
-import LabelsSelector from "./LabelsSelector";
 
-import { getObjectLabelDisplayNames } from "data/nodeSelector";
-import { getObjectItemFieldName } from "components/shared/formik-utils";
-import { difference } from "lodash-es";
+import MultiSelectField from "components/shared/MultiSelectField";
+import { uniq, flatten } from "lodash";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import useDeepCompareMemoize from "hooks/useDeepCompareMemoize";
+import { nodeKind } from "data/model";
+import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
+import { LoadError } from "copiedFromConsole/utils/status-box";
+
+const stringifyNodeLabels = (node: NodeKind): string[] => {
+  if (!node.metadata?.labels) {
+    return [];
+  }
+  return Object.entries(node.metadata.labels).map(([key, value]) =>
+    value ? `${key}=${value}` : key
+  );
+};
+
 const NodeSelectionField: React.FC<{
-  allNodes: NodeKind[];
-  formViewFieldName: string;
-}> = ({ allNodes, formViewFieldName }) => {
-  const fieldName = getObjectItemFieldName([
-    formViewFieldName,
-    "nodeSelectorLabels",
-  ]);
-  const [{ value: labels }] = useField<string[]>(fieldName);
-  const [selectedNodes, setSelectedNodes] =
-    React.useState<NodeKind[]>(allNodes);
+  fieldName: string;
+}> = ({ fieldName }) => {
+  const { t } = useNodeHealthCheckTranslation();
+  const [{ value }] = useField<string[]>(fieldName);
+  const [options, setOptions] = React.useState<string[]>();
+  const [allNodes, loaded, loadError] = useK8sWatchResource<NodeKind[]>({
+    groupVersionKind: nodeKind,
+    isList: true,
+    namespaced: false,
+  });
+  const memoValue = useDeepCompareMemoize<string[]>(value);
   React.useEffect(() => {
-    if (labels.length === 0) {
-      setSelectedNodes(allNodes);
-      return;
+    const curOptions = options || [];
+    if (loaded && !loadError) {
+      let _options = uniq(
+        flatten(allNodes.map((node) => stringifyNodeLabels(node)))
+      );
+      //add value to options, needed for complex match expressions or labels that aren't currently on the nodes
+      //include previous options to not remove original match expressions
+      _options = uniq([...memoValue, ...curOptions, ..._options]).sort();
+      setOptions(_options);
     }
-    const nodesWithLabels = allNodes.filter((node: NodeKind) => {
-      const nodeLabels = getObjectLabelDisplayNames(node);
-      return difference(labels, nodeLabels).length === 0;
-    });
-    setSelectedNodes(nodesWithLabels);
-  }, [allNodes, labels]);
-
+  }, [memoValue, allNodes, loaded, loadError]);
+  if (loadError) {
+    return (
+      <LoadError
+        message={loadError.message || t("Failed to fetch nodes")}
+        label={t("nodes")}
+      />
+    );
+  }
   return (
     <>
-      <LabelsSelector
-        nodes={allNodes}
-        formViewFieldName={formViewFieldName}
-        fieldName={fieldName}
-      ></LabelsSelector>
+      <MultiSelectField
+        options={options || []}
+        enableClear={true}
+        isLoading={!loaded || !options}
+        name={fieldName}
+        label={t("Nodes selection")}
+        helpText={t(
+          "Use labels to select the nodes you want to remediate. Leaving this field empty will select all nodes of the cluster."
+        )}
+      ></MultiSelectField>
       <div className="nhc-form-node-list" data-test="node-selector-list">
         <NodeList
-          nodes={selectedNodes}
-          filteredNodes={selectedNodes}
-          loaded={true}
-          loadError={null}
-        ></NodeList>
+          allNodes={allNodes}
+          fieldName={fieldName}
+          allNodesLoaded={loaded}
+        />
       </div>
     </>
   );

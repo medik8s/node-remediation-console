@@ -104,7 +104,7 @@ export const isBuiltInRemediationTemplate = (
 
 export type FormViewValues = {
   name: string;
-  nodeSelectorLabels: string[];
+  nodeSelector: string[];
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator: Remediator;
