@@ -1,4 +1,7 @@
-import { interceptNodes } from "../../Intercepts";
+import {
+  interceptNodes,
+  interceptNodesWithLabelSelector,
+} from "../../Intercepts";
 import { gotoNewNodeHealthCheck } from "../../Routing";
 import {
   addLabelToNodeSelector,
@@ -15,6 +18,10 @@ describe("Node selector field", () => {
   });
 
   it("selecting a label with one matching node should show that single node", () => {
+    cy.fixture("nodes.json").then((nodes) => {
+      nodes.items = [nodes.items[0]];
+      interceptNodesWithLabelSelector(nodes);
+    });
     addLabelToNodeSelector("test-label", "test-value");
     validateNodeSelectorLabel("test-label", "test-value");
     validateNodes(["test-node"]);

@@ -16,7 +16,6 @@ import * as formViewValues from "data/formViewValues";
 import * as yamlText from "data/yamlText";
 import { dump } from "js-yaml";
 import { Alert, FormSection } from "@patternfly/react-core";
-import { NodeKind } from "copiedFromConsole/types/node";
 import { getFormValues } from "data/formValues";
 import { isEmpty } from "lodash-es";
 const sanitizeToYaml = (
@@ -41,18 +40,12 @@ const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
 type NodeHealthCheckFormSyncedEditorProps = {
   handleCancel: () => void;
   originalNodeHealthCheck: NodeHealthCheck;
-  allNodes: NodeKind[];
   snrTemplatesExist: boolean;
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
   NodeHealthCheckFormSyncedEditorProps
-> = ({
-  originalNodeHealthCheck,
-  handleCancel,
-  allNodes,
-  snrTemplatesExist,
-}) => {
+> = ({ originalNodeHealthCheck, handleCancel, snrTemplatesExist }) => {
   const {
     values,
     status,
@@ -90,10 +83,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
             {values.formParsingError}
           </Alert>
         ) : (
-          <NodeHealthCheckFormFields
-            allNodes={allNodes}
-            snrTemplatesExist={snrTemplatesExist}
-          />
+          <NodeHealthCheckFormFields snrTemplatesExist={snrTemplatesExist} />
         )}
       </FormSection>
     </FormBody>

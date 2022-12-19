@@ -5,45 +5,39 @@ import {
 } from "@openshift-console/dynamic-plugin-sdk";
 import { requirementFromString } from "./selector-requirement";
 
-type Options = { undefinedWhenEmpty?: boolean; basic?: boolean };
+export const fromRequirements = (requirements: MatchExpression[]): Selector => {
+  const matchLabels = {};
+  const matchExpressions = [];
 
-export const fromRequirements = (
-  requirements: MatchExpression[],
-  options = {} as Options
-) => {
-  options = options || {};
-  const selector = {
-    matchLabels: {},
-    matchExpressions: [],
-  };
-
-  if (options.undefinedWhenEmpty && requirements.length === 0) {
+  if (requirements.length === 0) {
     return;
   }
 
   requirements.forEach((r) => {
     if (r.operator === "Equals") {
-      selector.matchLabels[r.key] = r.values[0];
+      matchLabels[r.key] = r.values[0];
     } else {
-      selector.matchExpressions.push(r);
+      matchExpressions.push(r);
     }
   });
 
-  // old selector format?
-  if (options.basic) {
-    return selector.matchLabels;
-  }
-
-  return selector;
+  return {
+    matchLabels: Object.keys(matchLabels).length ? matchLabels : undefined,
+    matchExpressions: matchExpressions.length ? matchExpressions : undefined,
+  };
 };
 
 export const split = (str: string) =>
   str.trim() ? str.split(/,(?![^(]*\))/) : []; // [''] -> []
 
-export const selectorFromString = (str: string) => {
-  const requirements = split(str || "").map(
-    requirementFromString
-  ) as MatchExpression[];
+export const selectorFromStringArray = (strs: string[]) => {
+  const requirements = [];
+  for (const str of strs) {
+    const requirement = requirementFromString(str);
+    if (requirement) {
+      requirements.push(requirement);
+    }
+  }
   return fromRequirements(requirements);
 };
 const isOldFormat = (selector: Selector | MatchLabels) =>
@@ -113,7 +107,10 @@ export const requirementToString = (requirement: MatchExpression): string => {
   return "";
 };
 
-export const selectorToString = (selector: Selector): string => {
+export const selectorToStringArray = (selector: Selector): string[] => {
   const requirements = toRequirements(selector);
-  return requirements.map(requirementToString).join(",");
+  return requirements.map(requirementToString);
 };
+
+export const selectorToString = (selector: Selector): string =>
+  selectorToStringArray(selector).join(",");

@@ -1,8 +1,8 @@
-import { defaultSpec } from "./defaults";
 import {
-  getNodeSelector,
-  getNodeSelectorLabelDisplayNames,
-} from "./nodeSelector";
+  selectorFromStringArray,
+  selectorToStringArray,
+} from "copiedFromConsole/module/selector";
+import { defaultSpec } from "./defaults";
 import { ParseErrorCode, throwParseError } from "./parseErrors";
 import { getRemediator } from "./remediator";
 import {
@@ -51,7 +51,7 @@ export const getFormViewValues = (
 ): FormViewValues => {
   return {
     name: nodeHealthCheck.metadata?.name,
-    nodeSelectorLabels: getNodeSelectorLabelDisplayNames(nodeHealthCheck),
+    nodeSelector: selectorToStringArray(nodeHealthCheck?.spec?.selector || {}),
     minHealthy: (
       nodeHealthCheck.spec?.minHealthy ?? defaultSpec.minHealthy
     ).toString(),
@@ -76,14 +76,10 @@ export const getNodeHealthCheckMinHealthy = (minHealthy: string) => {
 };
 
 export const getSpec = (formViewFields: FormViewValues) => {
-  const {
-    nodeSelectorLabels: labelDisplayNames,
-    minHealthy,
-    unhealthyConditions,
-  } = formViewFields;
+  const { nodeSelector, minHealthy, unhealthyConditions } = formViewFields;
 
   return {
-    selector: getNodeSelector(labelDisplayNames),
+    selector: selectorFromStringArray(nodeSelector),
     unhealthyConditions,
     minHealthy: getNodeHealthCheckMinHealthy(minHealthy),
     remediationTemplate: getRemediationTemplate(

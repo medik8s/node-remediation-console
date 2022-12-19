@@ -5,12 +5,8 @@ import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
 
 import { Formik, FormikHelpers } from "formik";
 
-import {
-  k8sCreate,
-  k8sUpdate,
-  useK8sWatchResource,
-} from "@openshift-console/dynamic-plugin-sdk";
-import { NodeHealthCheckModel, nodeKind } from "data/model";
+import { k8sCreate, k8sUpdate } from "@openshift-console/dynamic-plugin-sdk";
+import { NodeHealthCheckModel } from "data/model";
 import { getValidationSchema } from "data/validationSchema";
 import { PageHeading } from "copiedFromConsole/utils/headings";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
@@ -18,9 +14,8 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { withFallback } from "copiedFromConsole/error";
 import { getFormValues, getNodeHealthCheck } from "data/formValues";
-import { NodeKind } from "copiedFromConsole/types/node";
 import { useSnrTemplatesExist } from "apis/useSNRTemplatesExist";
-import { LoadingInline, StatusBox } from "copiedFromConsole/utils/status-box";
+import { LoadingBox, LoadingInline } from "copiedFromConsole/utils/status-box";
 import "./nhc-form.css";
 import { useOpenShiftVersion } from "copiedFromConsole/hooks/useOpenShiftVersion";
 export interface NodeHealthCheckProps {
@@ -78,11 +73,6 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     () => getFormValues(nodeHealthCheck, isCreateFlow),
     []
   );
-  const [allNodes, loaded, loadError] = useK8sWatchResource<NodeKind[]>({
-    groupVersionKind: nodeKind,
-    isList: true,
-    namespaced: false,
-  });
   const [snrTemplatesLoading, snrTemplatesExist] = useSnrTemplatesExist();
 
   const navigation = useNodeHealthCheckNavigation();
@@ -118,29 +108,25 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     }
   };
 
+  if (snrTemplatesLoading) {
+    return <LoadingBox />;
+  }
   return (
     <>
       <PageHeading title={title} helpText={<HelpText />}></PageHeading>
-      <StatusBox
-        loaded={loaded && !snrTemplatesLoading}
-        loadError={loadError}
-        data={allNodes}
+      <Formik
+        enableReinitialize
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={getValidationSchema(t)}
+        validateOnMount={true}
       >
-        <Formik
-          enableReinitialize
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={getValidationSchema(t)}
-          validateOnMount={true}
-        >
-          <NodeHealthCheckSyncedEditor
-            originalNodeHealthCheck={nodeHealthCheck}
-            handleCancel={navigation.goBack}
-            allNodes={allNodes}
-            snrTemplatesExist={snrTemplatesExist}
-          />
-        </Formik>
-      </StatusBox>
+        <NodeHealthCheckSyncedEditor
+          originalNodeHealthCheck={nodeHealthCheck}
+          handleCancel={navigation.goBack}
+          snrTemplatesExist={snrTemplatesExist}
+        />
+      </Formik>
     </>
   );
 };

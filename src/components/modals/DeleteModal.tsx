@@ -29,8 +29,8 @@ const DeleteModal: React.FC<
         onDelete();
       }
     } catch (err) {
+      setIsDeleting(false);
       setError(err);
-      return;
     }
   };
   const name = nodeHealthCheck.metadata?.name;
