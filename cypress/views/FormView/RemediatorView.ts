@@ -10,11 +10,11 @@ const getOtherRemediatorElement = (fieldName) => {
 };
 
 const selectOtherRemediator = () => {
-  cy.get("[data-test=Other-view-input]").click();
+  cy.get("[data-test=custom-view-input]").click();
 };
 
 const selectSNRRemediator = () => {
-  cy.get('[data-test="Self node remediation-view-input"]').click();
+  cy.get("[data-test=snr-view-input]").click();
 };
 
 const setOtherRemediatorData = (data: {

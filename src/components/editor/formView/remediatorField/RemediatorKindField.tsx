@@ -1,28 +1,25 @@
-import { FormGroup, Tooltip } from "@patternfly/react-core";
+import { FormGroup, Skeleton, Tooltip } from "@patternfly/react-core";
+import useSnrTemplate from "apis/useSNRTemplate";
 import HelpIcon from "components/shared/HelpIcon";
 import { withFallback } from "copiedFromConsole/error";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import RadioButtonField from "copiedFromConsole/formik-fields/RadioButtonField";
-import {
-  Remediator,
-  RemediatorLabel,
-  BuiltInRemediationTemplate,
-  RemediationTemplate,
-} from "data/types";
+import { getEmptyRemediationTemplate, getSNRLabel } from "data/remediator";
+import { Remediator, RemediatorRadioOption } from "data/types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
 
 import {
   getRemediatorFieldName,
-  getRemediatorKindFieldName,
+  getRemediatorRadioOptionFieldName,
 } from "../remediatorFieldUtils";
 
 const SNRRadioButtonLabel: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
   return (
     <>
-      {RemediatorLabel.SNR}
+      {getSNRLabel(t)}
       <HelpIcon
         helpText={t(
           "Self node remediation template uses the remediation strategy 'Resource Deletion'."
@@ -35,7 +32,7 @@ const SNRRadioButtonLabel: React.FC = () => {
 const RemediatorKindRadioGroup: React.FC<{
   snrTemplatesExist: boolean;
   fieldName: string;
-  onChange: (kind: RemediatorLabel) => void;
+  onChange: (kind: RemediatorRadioOption) => void;
 }> = ({ snrTemplatesExist, fieldName, onChange }) => {
   const { t } = useNodeHealthCheckTranslation();
   const fieldId = getFieldId(fieldName, "radiogroup");
@@ -48,7 +45,7 @@ const RemediatorKindRadioGroup: React.FC<{
         hidden={snrTemplatesExist}
       >
         <RadioButtonField
-          value={RemediatorLabel.SNR}
+          value={RemediatorRadioOption.SNR}
           label={<SNRRadioButtonLabel />}
           isDisabled={!snrTemplatesExist}
           aria-describedby={"SNR remediator kind"}
@@ -57,8 +54,8 @@ const RemediatorKindRadioGroup: React.FC<{
         />
       </Tooltip>
       <RadioButtonField
-        value={RemediatorLabel.CUSTOM}
-        label={RemediatorLabel.CUSTOM}
+        value={RemediatorRadioOption.CUSTOM}
+        label={t("Other")}
         aria-describedby={"CUSTOM remediator kind"}
         name={fieldName}
         onChange={onChange}
@@ -67,52 +64,41 @@ const RemediatorKindRadioGroup: React.FC<{
   );
 };
 
-const getEmptyRemediationTemplate = (): RemediationTemplate => ({
-  apiVersion: "",
-  kind: "",
-  name: "",
-  namespace: "",
-});
-
 const RemediatorKindField_ = ({
   formViewFieldName,
-  snrTemplatesExist,
 }: {
   formViewFieldName: string;
-  snrTemplatesExist: boolean;
 }) => {
+  const [snrTemplate, loaded] = useSnrTemplate();
   const [, , { setValue: setRemediator }] = useField<Remediator>(
     getRemediatorFieldName(formViewFieldName)
   );
 
   const setCustomRemediator = () => {
     setRemediator({
-      label: RemediatorLabel.CUSTOM,
+      radioOption: RemediatorRadioOption.CUSTOM,
       template: getEmptyRemediationTemplate(),
     });
   };
 
-  React.useEffect(() => {
-    if (!snrTemplatesExist) {
-      setCustomRemediator();
-    }
-  }, []);
-
-  const onChange = (kind: RemediatorLabel) => {
-    if (kind === RemediatorLabel.CUSTOM) {
+  const onChange = (kind: RemediatorRadioOption) => {
+    if (kind === RemediatorRadioOption.CUSTOM) {
       setCustomRemediator();
     } else {
       setRemediator({
-        label: kind,
-        template: BuiltInRemediationTemplate.ResourceDeletion,
+        radioOption: RemediatorRadioOption.SNR,
+        template: snrTemplate,
       });
     }
   };
+  if (!loaded) {
+    return <Skeleton />;
+  }
   return (
     <RemediatorKindRadioGroup
-      fieldName={getRemediatorKindFieldName(formViewFieldName)}
+      fieldName={getRemediatorRadioOptionFieldName(formViewFieldName)}
       onChange={onChange}
-      snrTemplatesExist={snrTemplatesExist}
+      snrTemplatesExist={!!snrTemplate}
     ></RemediatorKindRadioGroup>
   );
 };

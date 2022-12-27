@@ -22,21 +22,27 @@ import { TFunction } from "i18next";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
 import "./nhc-list.css";
-const sortByRemediator = (
-  nodeHealthChecks: NodeHealthCheck[],
-  sortDirection: SortByDirection
-) => {
-  return nodeHealthChecks.sort(
-    (nodeHealthCheck1: NodeHealthCheck, nodeHealthCheck2: NodeHealthCheck) => {
-      const remediator1 = getRemediatorLabel(nodeHealthCheck1);
-      const remediator2 = getRemediatorLabel(nodeHealthCheck2);
-      return sortDirection === SortByDirection.asc
-        ? remediator1.localeCompare(remediator2)
-        : remediator2.localeCompare(remediator1);
-    }
-  );
-};
 
+const getSortByRemediator = (t: TFunction) => {
+  const sortByRemediator = (
+    nodeHealthChecks: NodeHealthCheck[],
+    sortDirection: SortByDirection
+  ) => {
+    return nodeHealthChecks.sort(
+      (
+        nodeHealthCheck1: NodeHealthCheck,
+        nodeHealthCheck2: NodeHealthCheck
+      ) => {
+        const remediator1 = getRemediatorLabel(nodeHealthCheck1, t);
+        const remediator2 = getRemediatorLabel(nodeHealthCheck2, t);
+        return sortDirection === SortByDirection.asc
+          ? remediator1.localeCompare(remediator2)
+          : remediator2.localeCompare(remediator1);
+      }
+    );
+  };
+  return sortByRemediator;
+};
 const getTableColumns = (t: TFunction): TableColumn<NodeHealthCheck>[] => [
   {
     title: t("Name"),
@@ -53,7 +59,7 @@ const getTableColumns = (t: TFunction): TableColumn<NodeHealthCheck>[] => [
   {
     title: t("Remediator"),
     id: "remediator",
-    sort: sortByRemediator,
+    sort: getSortByRemediator(t),
     transforms: [sortable],
   },
   {
@@ -64,8 +70,10 @@ const getTableColumns = (t: TFunction): TableColumn<NodeHealthCheck>[] => [
   },
   { title: "", id: "kabab-menu" },
 ];
+
 const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
-  const remediatorLabel = getRemediatorLabel(obj);
+  const { t } = useNodeHealthCheckTranslation();
+  const remediatorLabel = getRemediatorLabel(obj, t);
   if (!remediatorLabel) {
     return <NotAvailable />;
   }
@@ -131,7 +139,7 @@ export const NodeHealthchecksTable: React.FC<NodeHealthchecksTableProps> = ({
   loadError,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const columns = getTableColumns(t);
+  const columns = React.useMemo(() => getTableColumns(t), [t]);
   return (
     <VirtualizedTable<NodeHealthCheck>
       data={data}

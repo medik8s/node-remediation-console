@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
-import { RemediatorLabel } from "./types";
 import { TFunction } from "i18next";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
@@ -8,7 +7,7 @@ export const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
 const NAME_REGEX = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
 const requiredSchema = yup.string().required("Required");
 
-const customRemediatorSchema = yup.object({
+const remediatorSchema = yup.object({
   apiVersion: requiredSchema,
   kind: requiredSchema,
   name: requiredSchema,
@@ -41,11 +40,7 @@ const getFormDataSchema = (t: TFunction) =>
       })
     ),
     remediator: yup.object({
-      template: yup.mixed().when("label", {
-        is: RemediatorLabel.CUSTOM,
-        then: customRemediatorSchema,
-        otherwise: yup.string(),
-      }),
+      template: remediatorSchema,
     }),
   });
 

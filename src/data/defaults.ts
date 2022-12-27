@@ -1,21 +1,16 @@
+import useSnrTemplate from "apis/useSNRTemplate";
+import * as React from "react";
+import { getNodeHealthCheckApiVersion, nodeHealthCheckKind } from "./model";
+import { getEmptyRemediationTemplate } from "./remediator";
 import {
-  BuiltInRemediationTemplate,
   InitialNodeHealthCheck,
-  NodeHealthCheck,
   UnhealthyConditions,
   UnhealthyConditionStatus,
 } from "./types";
-import {
-  getNodeHealthCheckApiVersion,
-  getSnrTemplateApiVersion,
-  nodeHealthCheckKind,
-  snrTemplateKind,
-} from "./model";
 
 export const DEFAULT_MIN_HEALTHY = "51%";
-export const OPERATORS_NAMESPACE = "openshift-operators";
 
-const initialUnhealthyConditions: UnhealthyConditions = [
+export const defaultUnhealthyConditions: UnhealthyConditions = [
   {
     duration: "300s",
     status: UnhealthyConditionStatus.False,
@@ -28,27 +23,33 @@ const initialUnhealthyConditions: UnhealthyConditions = [
   },
 ];
 
-export const defaultSpec = {
-  remediationTemplate: {
-    apiVersion: getSnrTemplateApiVersion(),
-    kind: snrTemplateKind.kind,
-    name: BuiltInRemediationTemplate.ResourceDeletion,
-    namespace: "openshift-operators",
-  },
-  minHealthy: DEFAULT_MIN_HEALTHY,
-  unhealthyConditions: initialUnhealthyConditions,
-  selector: {},
-};
-
-export const initialNodeHealthCheck: NodeHealthCheck = {
-  apiVersion: getNodeHealthCheckApiVersion(),
-  kind: nodeHealthCheckKind.kind,
-  metadata: {
-    name: "",
-  },
-};
-
-export const defaultNodeHealthCheck: InitialNodeHealthCheck = {
-  ...initialNodeHealthCheck,
-  spec: defaultSpec,
+export const useDefaultNodeHealthCheck = (): [
+  InitialNodeHealthCheck | undefined,
+  boolean
+] => {
+  const [snrTemplate, loaded] = useSnrTemplate();
+  const defaultNodeHealthCheck = React.useMemo<
+    InitialNodeHealthCheck | undefined
+  >(() => {
+    if (!loaded) {
+      return undefined;
+    }
+    const defaultRemediator = snrTemplate
+      ? snrTemplate
+      : getEmptyRemediationTemplate();
+    return {
+      apiVersion: getNodeHealthCheckApiVersion(),
+      kind: nodeHealthCheckKind.kind,
+      metadata: {
+        name: "",
+      },
+      spec: {
+        remediationTemplate: defaultRemediator,
+        unhealthyConditions: defaultUnhealthyConditions,
+        minHealthy: DEFAULT_MIN_HEALTHY,
+        selector: {},
+      },
+    };
+  }, [snrTemplate, loaded]);
+  return [defaultNodeHealthCheck, loaded];
 };
