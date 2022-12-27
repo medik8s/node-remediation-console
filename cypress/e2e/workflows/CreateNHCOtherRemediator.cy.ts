@@ -51,7 +51,7 @@ describe("Create default NHC", () => {
   });
 
   it("should show SNR remediator", () => {
-    DetailsView.validateRemediator("Other");
+    DetailsView.validateRemediator("c");
   });
 
   it("should show disabled status", () => {

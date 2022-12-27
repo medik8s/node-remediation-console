@@ -35,8 +35,7 @@ const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => (
 
 export const RemediatorField_: React.FC<{
   formViewFieldName: string;
-  snrTemplatesExist: boolean;
-}> = ({ formViewFieldName, snrTemplatesExist }) => {
+}> = ({ formViewFieldName }) => {
   const [value] = useField<Remediator>(
     getRemediatorFieldName(formViewFieldName)
   );
@@ -45,10 +44,7 @@ export const RemediatorField_: React.FC<{
   const isSNR = useIsSNR(formViewFieldName);
   return (
     <>
-      <RemediatorKindField
-        formViewFieldName={formViewFieldName}
-        snrTemplatesExist={snrTemplatesExist}
-      />
+      <RemediatorKindField formViewFieldName={formViewFieldName} />
       {!isSNR && (
         <CustomRemediatorField
           fieldName={templateFieldName}
