@@ -15,7 +15,7 @@ describe("test NodeHealthCheck list view", () => {
     {
       name: "nhc0",
       status: "Disabled",
-      remediator: "Other",
+      remediator: "other",
       statusReason:
         'NHC is disabled: RemediationTemplateNotFound: Failed to get remediation template &ObjectReference{Kind:other,Namespace:other,Name:other,UID:,APIVersion:other,ResourceVersion:,FieldPath:,}: no matches for kind "other" in version "other"',
     },
