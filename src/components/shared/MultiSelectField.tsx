@@ -9,7 +9,7 @@ import {
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
-
+import * as fuzzy from "fuzzysearch";
 export interface MultiSelectFieldProps extends FieldProps {
   options: string[];
   placeholderText?: string;
@@ -96,6 +96,12 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         selections={field.value}
         onClear={enableClear ? onClearSelection : null}
         loadingVariant={isLoading ? "spinner" : undefined}
+        onFilter={(e, val) => {
+          if (!val || val === "") {
+            return children;
+          }
+          return children.filter((child) => fuzzy(val, child.props.value));
+        }}
       >
         {children}
       </Select>

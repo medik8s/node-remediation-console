@@ -104,7 +104,7 @@ const NodeList: React.FC<{
   const [loadError, setLoadError] = React.useState<unknown>();
   const memoValue = useDeepCompareMemoize<string[]>(value);
   React.useEffect(() => {
-    if (!memoValue || !allNodes || !nodeModel) {
+    if (!memoValue || !allNodesLoaded || !nodeModel) {
       return;
     }
     if (memoValue.length === 0) {
@@ -126,7 +126,7 @@ const NodeList: React.FC<{
         setLoadError(err);
         setLoading(false);
       });
-  }, [memoValue, allNodes, nodeModel]);
+  }, [memoValue, allNodesLoaded, nodeModel]); // doesn't respond to allNodes, it changes every second
   return (
     <VirtualizedTable<NodeKind>
       data={selectedNodes}

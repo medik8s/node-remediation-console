@@ -44,7 +44,7 @@ const NodeSelectionField: React.FC<{
       _options = uniq([...memoValue, ...curOptions, ..._options]).sort();
       setOptions(_options);
     }
-  }, [memoValue, allNodes, loaded, loadError]);
+  }, [memoValue, loaded, loadError]); // doesn't respond to allNodes, it changes every second
   if (loadError) {
     return (
       <LoadError
