@@ -40,12 +40,11 @@ const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
 type NodeHealthCheckFormSyncedEditorProps = {
   handleCancel: () => void;
   originalNodeHealthCheck: NodeHealthCheck;
-  snrTemplatesExist: boolean;
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
   NodeHealthCheckFormSyncedEditorProps
-> = ({ originalNodeHealthCheck, handleCancel, snrTemplatesExist }) => {
+> = ({ originalNodeHealthCheck, handleCancel }) => {
   const {
     values,
     status,
@@ -83,7 +82,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
             {values.formParsingError}
           </Alert>
         ) : (
-          <NodeHealthCheckFormFields snrTemplatesExist={snrTemplatesExist} />
+          <NodeHealthCheckFormFields />
         )}
       </FormSection>
     </FormBody>

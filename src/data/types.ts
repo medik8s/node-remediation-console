@@ -79,27 +79,14 @@ export enum TimeUnit {
   MilliSecond = "ms",
 }
 
-export enum RemediatorLabel {
-  SNR = "Self node remediation",
-  CUSTOM = "Other",
-}
-
-export enum BuiltInRemediationTemplate {
-  ResourceDeletion = "self-node-remediation-resource-deletion-template",
+export enum RemediatorRadioOption {
+  SNR = "snr",
+  CUSTOM = "custom",
 }
 
 export type Remediator = {
-  label: RemediatorLabel;
-  template: BuiltInRemediationTemplate | RemediationTemplate;
-};
-
-export const isBuiltInRemediationTemplate = (
-  template: BuiltInRemediationTemplate | RemediationTemplate | string
-): template is BuiltInRemediationTemplate => {
-  if (typeof template !== "string") {
-    return false;
-  }
-  return template === BuiltInRemediationTemplate.ResourceDeletion;
+  radioOption: RemediatorRadioOption;
+  template: RemediationTemplate;
 };
 
 export type FormViewValues = {
@@ -129,5 +116,15 @@ export type MachineHealthCheckKind = K8sResourceCommon & {
   spec: {
     selector: Selector;
     unhealthyConditions: MachineHealthCondition[];
+  };
+};
+
+export type SelfNodeRemediationTemplate = K8sResourceCommon & {
+  spec?: {
+    template?: {
+      spec?: {
+        remediationStrategy: string;
+      };
+    };
   };
 };

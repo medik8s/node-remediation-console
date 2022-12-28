@@ -35,7 +35,8 @@
     "**/bower_components": true,
     "**/.cache-loader": true,
     "**/dist": true,
-    "**/.yarn/releases/**": true
+    "**/.yarn/releases/**": true,
+    "**/.history": true
   },
   "files.exclude": {
     "**/.git": true,
@@ -43,7 +44,8 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/.cache-loader": true
+    "**/.cache-loader": true,
+    "**/.history": true
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -52,7 +54,8 @@
     "**/.hg/store/**": true,
     "**/bower_components": true,
     "**/.cache-loader": true,
-    "**dist": true
+    "**dist": true,
+    "**/.history": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

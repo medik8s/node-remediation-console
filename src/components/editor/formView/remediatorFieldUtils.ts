@@ -1,14 +1,16 @@
 import { getObjectItemFieldName } from "components/shared/formik-utils";
-import { RemediatorLabel } from "data/types";
+import { RemediatorRadioOption } from "data/types";
 import { useField } from "formik";
 
 const REMEDIATOR_FIELD_NAME = "remediator";
 
-export const getRemediatorKindFieldName = (formViewFieldName: string) => {
+export const getRemediatorRadioOptionFieldName = (
+  formViewFieldName: string
+) => {
   return getObjectItemFieldName([
     formViewFieldName,
     REMEDIATOR_FIELD_NAME,
-    "label",
+    "radioOption",
   ]);
 };
 
@@ -24,8 +26,8 @@ export const getRemediatorFieldName = (formViewFieldName: string) =>
   getObjectItemFieldName([formViewFieldName, REMEDIATOR_FIELD_NAME]);
 
 export const useIsSNR = (formViewFieldName): boolean => {
-  const [{ value: remediatorKind }] = useField<RemediatorLabel>(
-    getRemediatorKindFieldName(formViewFieldName)
+  const [{ value: remediatorKind }] = useField<RemediatorRadioOption>(
+    getRemediatorRadioOptionFieldName(formViewFieldName)
   );
-  return remediatorKind === RemediatorLabel.SNR;
+  return remediatorKind === RemediatorRadioOption.SNR;
 };

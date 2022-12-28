@@ -14,8 +14,7 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { withFallback } from "copiedFromConsole/error";
 import { getFormValues, getNodeHealthCheck } from "data/formValues";
-import { useSnrTemplatesExist } from "apis/useSNRTemplatesExist";
-import { LoadingBox, LoadingInline } from "copiedFromConsole/utils/status-box";
+import { LoadingInline } from "copiedFromConsole/utils/status-box";
 import "./nhc-form.css";
 import { useOpenShiftVersion } from "copiedFromConsole/hooks/useOpenShiftVersion";
 export interface NodeHealthCheckProps {
@@ -73,7 +72,6 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     () => getFormValues(nodeHealthCheck, isCreateFlow),
     []
   );
-  const [snrTemplatesLoading, snrTemplatesExist] = useSnrTemplatesExist();
 
   const navigation = useNodeHealthCheckNavigation();
 
@@ -108,9 +106,6 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     }
   };
 
-  if (snrTemplatesLoading) {
-    return <LoadingBox />;
-  }
   return (
     <>
       <PageHeading title={title} helpText={<HelpText />}></PageHeading>
@@ -124,7 +119,6 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
         <NodeHealthCheckSyncedEditor
           originalNodeHealthCheck={nodeHealthCheck}
           handleCancel={navigation.goBack}
-          snrTemplatesExist={snrTemplatesExist}
         />
       </Formik>
     </>

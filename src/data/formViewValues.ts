@@ -2,33 +2,19 @@ import {
   selectorFromStringArray,
   selectorToStringArray,
 } from "copiedFromConsole/module/selector";
-import { defaultSpec } from "./defaults";
+import { defaultUnhealthyConditions, DEFAULT_MIN_HEALTHY } from "./defaults";
+import { snrTemplateKind } from "./model";
 import { ParseErrorCode, throwParseError } from "./parseErrors";
-import { getRemediator } from "./remediator";
+import { getEmptyRemediationTemplate } from "./remediator";
 import {
   UnhealthyCondition,
   NodeHealthCheck,
   FormViewValues,
-  RemediationTemplate,
-  Remediator,
-  isBuiltInRemediationTemplate,
+  RemediatorRadioOption,
 } from "./types";
 import { MIN_HEALTHY_REGEX } from "./validationSchema";
 
 export const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?)(ns|us|µs|ms|s|m|h)$/;
-
-const getRemediationTemplate = (
-  initialRemediationTemplate: RemediationTemplate,
-  remediator: Remediator
-): RemediationTemplate => {
-  if (isBuiltInRemediationTemplate(remediator.template)) {
-    return {
-      ...initialRemediationTemplate,
-      name: remediator.template,
-    };
-  }
-  return remediator.template;
-};
 
 const getUnhealthyConditionsValue = (
   nodeHealthCheck: NodeHealthCheck
@@ -37,7 +23,7 @@ const getUnhealthyConditionsValue = (
     return nodeHealthCheck.spec?.unhealthyConditions &&
       nodeHealthCheck.spec.unhealthyConditions.length > 0
       ? nodeHealthCheck.spec?.unhealthyConditions
-      : defaultSpec.unhealthyConditions;
+      : defaultUnhealthyConditions;
   } catch (err) {
     throwParseError(
       ParseErrorCode.INVALID_UNHEALTHY_CONDITIONS,
@@ -49,17 +35,22 @@ const getUnhealthyConditionsValue = (
 export const getFormViewValues = (
   nodeHealthCheck: NodeHealthCheck
 ): FormViewValues => {
+  const remediationTemplate =
+    nodeHealthCheck.spec?.remediationTemplate || getEmptyRemediationTemplate();
   return {
     name: nodeHealthCheck.metadata?.name,
-    nodeSelector: selectorToStringArray(nodeHealthCheck?.spec?.selector || {}),
+    nodeSelector: selectorToStringArray(nodeHealthCheck.spec?.selector || {}),
     minHealthy: (
-      nodeHealthCheck.spec?.minHealthy ?? defaultSpec.minHealthy
+      nodeHealthCheck.spec?.minHealthy ?? DEFAULT_MIN_HEALTHY
     ).toString(),
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
-    remediator: getRemediator(
-      defaultSpec.remediationTemplate,
-      nodeHealthCheck.spec?.remediationTemplate
-    ),
+    remediator: {
+      radioOption:
+        remediationTemplate.kind === snrTemplateKind.kind
+          ? RemediatorRadioOption.SNR
+          : RemediatorRadioOption.CUSTOM,
+      template: remediationTemplate,
+    },
   };
 };
 
@@ -82,10 +73,7 @@ export const getSpec = (formViewFields: FormViewValues) => {
     selector: selectorFromStringArray(nodeSelector),
     unhealthyConditions,
     minHealthy: getNodeHealthCheckMinHealthy(minHealthy),
-    remediationTemplate: getRemediationTemplate(
-      defaultSpec.remediationTemplate,
-      formViewFields.remediator
-    ),
+    remediationTemplate: formViewFields.remediator.template,
   };
 };
 
