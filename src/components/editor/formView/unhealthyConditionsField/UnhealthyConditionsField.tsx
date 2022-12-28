@@ -6,6 +6,7 @@ import {
   Form,
   Stack,
   StackItem,
+  Divider,
 } from "@patternfly/react-core";
 import { ArrayHelpers, FieldArray, useField } from "formik";
 import {
@@ -78,10 +79,10 @@ export const UnhealthyConditionArray: React.FC<{
       validateOnChange={false}
       render={({ push, remove }) => (
         <Stack hasGutter>
-          <StackItem>
-            {value.map((currentValue, idx) => {
-              return (
-                <React.Fragment key={idx}>
+          {value.map((currentValue, idx) => {
+            return (
+              <React.Fragment key={idx}>
+                <StackItem>
                   <WithRemoveButton
                     onClick={() => remove(idx)}
                     isDisabled={value.length === 1}
@@ -95,10 +96,13 @@ export const UnhealthyConditionArray: React.FC<{
                     onRemove={() => remove(idx)}
                     idx={idx}
                   />
-                </React.Fragment>
-              );
-            })}
-          </StackItem>
+                </StackItem>
+                <StackItem>
+                  <Divider />
+                </StackItem>
+              </React.Fragment>
+            );
+          })}
           <StackItem>
             <AddUnhealthyCondition onPush={push} />
           </StackItem>

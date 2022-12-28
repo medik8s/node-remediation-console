@@ -37,10 +37,10 @@ const RemediatorKindRadioGroup: React.FC<{
   const { t } = useNodeHealthCheckTranslation();
   const fieldId = getFieldId(fieldName, "radiogroup");
   return (
-    <FormGroup fieldId={fieldId} label={"Remedatior"} isInline={true}>
+    <FormGroup fieldId={fieldId} label={"Remediator"} isInline={true}>
       <Tooltip
         content={t(
-          "Self node remediation is disabled because it's templates can't be found. Please reinstall the Self Node Remediation Operator."
+          "Self node remediation is disabled because its templates can't be found. Please reinstall the Self Node Remediation Operator."
         )}
         hidden={snrTemplatesExist}
       >
