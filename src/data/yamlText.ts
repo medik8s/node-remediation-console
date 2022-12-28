@@ -5,11 +5,14 @@ export const getNodeHealthCheck = (
   originalNodeHealthCheck: NodeHealthCheck,
   yamlText: string
 ): NodeHealthCheck => {
-  let nodeHealthCheckYaml = load(yamlText) as NodeHealthCheck;
-  let nodeHealthCheck = {
-    ...originalNodeHealthCheck,
-    metadata: nodeHealthCheckYaml.metadata,
-    spec: nodeHealthCheckYaml.spec,
-  };
-  return nodeHealthCheck;
+  try {
+    let nodeHealthCheckYaml = load(yamlText) as NodeHealthCheck;
+    return {
+      ...originalNodeHealthCheck,
+      metadata: nodeHealthCheckYaml.metadata,
+      spec: nodeHealthCheckYaml.spec,
+    };
+  } catch (err) {
+    return originalNodeHealthCheck;
+  }
 };
