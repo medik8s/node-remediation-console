@@ -1,13 +1,35 @@
 import * as React from "react";
 
-import { NodeKind } from "../types/node";
+import { NodeCondition, NodeKind } from "../types/node";
 import Status from "../status/Status";
 import { Condition } from "../console-app/queries";
-import { getNodeSecondaryStatus, nodeStatus } from "./node";
 import NodeUnschedulableStatus from "./NodeUnschedulableStatus";
 import SecondaryStatus from "../status/SecondaryStatus";
 import { Button } from "@patternfly/react-core";
-import { startCase } from "lodash-es";
+import { startCase, get, find } from "lodash-es";
+import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+
+const isNodeUnschedulable = (node: NodeKind): boolean =>
+  get(node, "spec.unschedulable", false);
+
+const isNodeReady = (node: NodeKind): boolean => {
+  const conditions = get(node, "status.conditions", []);
+  const readyState = find(conditions, { type: "Ready" }) as NodeCondition;
+
+  return readyState && readyState.status === "True";
+};
+
+export const nodeStatus = (node: NodeKind) =>
+  isNodeReady(node) ? "Ready" : "Not Ready";
+
+const getNodeSecondaryStatus = (node: NodeKind): string[] => {
+  const { t } = useNodeHealthCheckTranslation();
+  const states = [];
+  if (isNodeUnschedulable(node)) {
+    states.push(t("Scheduling disabled"));
+  }
+  return states;
+};
 
 const isMonitoredCondition = (condition: Condition): boolean =>
   [

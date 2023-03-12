@@ -120,7 +120,7 @@ const UnhealthyConditionsField = ({ fieldName }: FormViewFieldProps) => {
         <Text component={TextVariants.h3}>Unhealthy conditions</Text>
         <Text component={TextVariants.small}>
           {t(
-            "Nodes that meet any of these conditions for a certain amount of time will be remediated."
+            "Nodes that meet any of these conditions for the given duration will be remediated."
           )}
         </Text>
       </TextContent>

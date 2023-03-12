@@ -1,24 +1,21 @@
 import {
-  k8sList,
   ResourceLink,
   RowProps,
   TableColumn,
   TableData,
-  useK8sModel,
   VirtualizedTable,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { getNodeRolesText } from "copiedFromConsole/selectors/node";
 import { NodeKind } from "copiedFromConsole/types/node";
 import { nodeKind } from "data/model";
 import * as React from "react";
-import NodeStatus from "copiedFromConsole/nodes/NodeStatus";
+import NodeStatus, { nodeStatus } from "copiedFromConsole/nodes/NodeStatus";
 import { sortable, SortByDirection } from "@patternfly/react-table";
-import { nodeStatus } from "copiedFromConsole/nodes/node";
+
 import { useField } from "formik";
-import { selectorFromStringArray } from "copiedFromConsole/module/selector";
-import { useDeepCompareMemoize } from "copiedFromConsole/hooks/deep-compare-memoize";
 import { EmptyState, Title } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { getNodeRolesText } from "data/nodeRoles";
+import useSelectedNodes from "apis/useSelectedNodes";
 
 const sortByStatus = (nodes: NodeKind[], sortDirection: SortByDirection) => {
   return nodes.sort((node1: NodeKind, node2: NodeKind) => {
@@ -72,7 +69,7 @@ const NodeRow: React.FC<RowProps<NodeKind>> = ({ obj, activeColumnIDs }) => {
         />
       </TableData>
       <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
-        <NodeStatus node={obj}></NodeStatus>
+        <NodeStatus node={obj} />
       </TableData>
       <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
         {getNodeRolesText(obj)}
@@ -81,61 +78,35 @@ const NodeRow: React.FC<RowProps<NodeKind>> = ({ obj, activeColumnIDs }) => {
   );
 };
 
-const EmptyMsg = () => {
-  const { t } = useNodeHealthCheckTranslation();
-  return (
-    <EmptyState>
-      <Title headingLevel="h2" size="lg">
-        {t("No nodes match the selected labels")}
-      </Title>
-    </EmptyState>
-  );
+const getEmptyMsg = (selectedLabels: string[]) => {
+  const component = () => {
+    const { t } = useNodeHealthCheckTranslation();
+    return (
+      <EmptyState>
+        <Title headingLevel="h2" size="lg">
+          {selectedLabels.length === 0
+            ? t("No nodes were selected, use filter to select nodes")
+            : t("No nodes match the selected labels")}
+        </Title>
+      </EmptyState>
+    );
+  };
+  return component;
 };
 
-const NodeList: React.FC<{
-  allNodes: NodeKind[];
-  fieldName: string;
-  allNodesLoaded: boolean;
-}> = ({ allNodes, fieldName, allNodesLoaded }) => {
+const NodeList = ({ fieldName }: { fieldName: string }) => {
   const [{ value }] = useField<string[]>(fieldName);
-  const [nodeModel, modelLoading] = useK8sModel(nodeKind);
-  const [selectedNodes, setSelectedNodes] = React.useState<NodeKind[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [loadError, setLoadError] = React.useState<unknown>();
-  const memoValue = useDeepCompareMemoize<string[]>(value);
-  React.useEffect(() => {
-    if (!memoValue || !allNodesLoaded || !nodeModel) {
-      return;
-    }
-    if (memoValue.length === 0) {
-      setLoading(false);
-      setSelectedNodes(allNodes);
-      return;
-    }
-    setLoadError(undefined);
-    setLoading(true);
-    k8sList({
-      model: nodeModel,
-      queryParams: { labelSelector: selectorFromStringArray(memoValue) },
-    })
-      .then((nodeList) => {
-        setLoading(false);
-        setSelectedNodes(nodeList as NodeKind[]);
-      })
-      .catch((err) => {
-        setLoadError(err);
-        setLoading(false);
-      });
-  }, [memoValue, allNodesLoaded, nodeModel]); // doesn't respond to allNodes, it changes every second
+  const [selectedNodes, loaded, error] = useSelectedNodes(value);
+  console.log("selectedNodes", selectedNodes);
   return (
     <VirtualizedTable<NodeKind>
-      data={selectedNodes}
-      unfilteredData={selectedNodes}
-      loaded={!modelLoading && !loading && allNodesLoaded}
-      loadError={loadError}
+      data={selectedNodes || []}
+      unfilteredData={selectedNodes || []}
+      loaded={loaded}
+      loadError={error}
       columns={columns}
       Row={NodeRow}
-      EmptyMsg={EmptyMsg}
+      EmptyMsg={getEmptyMsg(value)}
     />
   );
 };
