@@ -4,6 +4,7 @@ import {
   Form,
   FormGroup,
   Modal,
+  ModalBoxFooter,
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
@@ -16,6 +17,7 @@ import { editNodeHealthCheckPauseReasons } from "apis/nodeHealthCheckApis";
 import { WithRemoveButton } from "components/shared/WithRemoveButton";
 import AddMoreButton from "components/shared/AddMoreButton";
 import { clone } from "lodash-es";
+
 type PauseReasonFieldProps = {
   onRemove(idx: number): void;
   onAdd(): void;
@@ -31,7 +33,7 @@ const PauseReasonsField: React.FC<PauseReasonFieldProps> = ({
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   return (
-    <Form>
+    <>
       {pauseReasons.map((value, idx) => {
         return (
           <FormGroup
@@ -70,7 +72,7 @@ const PauseReasonsField: React.FC<PauseReasonFieldProps> = ({
         }}
         dataTest="add-pause-reason"
       />
-    </Form>
+    </>
   );
 };
 
@@ -98,7 +100,8 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>();
   const [error, setError] = React.useState<boolean>();
   const { t } = useNodeHealthCheckTranslation();
-  const onConfirm = async () => {
+
+  const onSubmit = async () => {
     setIsSubmitting(true);
     try {
       await editNodeHealthCheckPauseReasons(nodeHealthCheck, pauseReasons);
@@ -147,29 +150,34 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
       variant={ModalVariant.small}
       title={title}
       className="nhc-modal"
-      actions={[
-        <Button
-          key="confirm"
-          variant="primary"
-          onClick={onConfirm}
-          isDisabled={hasEmptyValue() || isSubmitting}
-          isLoading={isSubmitting}
-          data-test="confirm"
-        >
-          {confirmButtonText}
-        </Button>,
-        <Button
-          key="cancel"
-          variant="link"
-          onClick={onClose}
-          data-test="cancel"
-        >
-          {t("Cancel")}
-        </Button>,
-      ]}
     >
-      <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
-      {error && <Alert variant="danger" title={failureErrorMessage} isInline />}
+      <Form>
+        <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
+        {error && (
+          <Alert variant="danger" title={failureErrorMessage} isInline />
+        )}
+        <ModalBoxFooter>
+          <Button
+            key="confirm"
+            variant="primary"
+            onClick={onSubmit}
+            isDisabled={hasEmptyValue() || isSubmitting}
+            isLoading={isSubmitting}
+            data-test="confirm"
+            type="submit"
+          >
+            {confirmButtonText}
+          </Button>
+          <Button
+            key="cancel"
+            variant="link"
+            onClick={onClose}
+            data-test="cancel"
+          >
+            {t("Cancel")}
+          </Button>
+        </ModalBoxFooter>
+      </Form>
     </Modal>
   );
 };

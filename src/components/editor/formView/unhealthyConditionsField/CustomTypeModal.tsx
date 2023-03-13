@@ -3,10 +3,10 @@ import {
   Form,
   FormGroup,
   Modal,
+  ModalBoxFooter,
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
-import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import * as React from "react";
 import * as _ from "lodash";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -31,6 +31,7 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
       setCustomType("");
     }
   }, [isOpen]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -38,35 +39,14 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
       variant={ModalVariant.small}
       title={t("Use custom type")}
       data-test="use-custom-type-modal"
-      actions={[
-        <Button
-          key="confirm"
-          variant="primary"
-          onClick={() => {
-            setValue(customType);
-            onClose();
-          }}
-          isDisabled={!customType}
-          data-test="confirm-custom-type"
-        >
-          Create
-        </Button>,
-        <Button
-          key="cancel"
-          variant="link"
-          onClick={onClose}
-          data-test="cancel-custom-type"
-        >
-          {t("Cancel")}
-        </Button>,
-      ]}
+      actions={[]}
     >
       <Form>
         <FormGroup
+          fieldId="custom-type"
           isRequired
           label={t("Type")}
           helperText={t("Name of the custom type")}
-          fieldId={getFieldId("customType", "input")}
         >
           <TextInput
             name={fieldName}
@@ -76,6 +56,30 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
             aria-label="custom type"
           />
         </FormGroup>
+        <ModalBoxFooter>
+          <Button
+            key="confirm"
+            variant="primary"
+            onClick={() => {
+              setValue(customType);
+              onClose();
+            }}
+            isDisabled={!customType}
+            data-test="confirm-custom-type"
+            type="submit"
+          >
+            {t("Create")}
+          </Button>
+          <Button
+            key="cancel"
+            variant="link"
+            onClick={onClose}
+            data-test="cancel-custom-type"
+          >
+            {t("Cancel")}
+          </Button>
+          ,
+        </ModalBoxFooter>
       </Form>
     </Modal>
   );
