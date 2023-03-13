@@ -4,7 +4,22 @@ import { TFunction } from "i18next";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
 export const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
-const NAME_REGEX = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/;
+const NAME_START_END_REGEX = /^[a-z0-9]$/;
+const NAME_MAX_LENGTH = 253;
+
+export const nameValidationMessages = (t: TFunction) => ({
+  INVALID_LENGTH: t("1-{{max}} characters", {
+    max: NAME_MAX_LENGTH,
+  }),
+  NOT_UNIQUE: t("Must be unique"),
+  INVALID_VALUE: t(
+    "Use lowercase alphanumeric characters, dot (.) or hyphen (-)"
+  ),
+  INVALID_START_END: t(
+    "Must start and end with an lowercase alphanumeric character"
+  ),
+});
+
 const requiredSchema = yup.string().required("Required");
 
 const remediatorSchema = yup.object({
@@ -14,13 +29,37 @@ const remediatorSchema = yup.object({
   namespace: requiredSchema,
 });
 
+export const nameSchema = (t: TFunction) => {
+  const nameValidationMessagesList = nameValidationMessages(t);
+  return yup
+    .string()
+    .min(1, nameValidationMessagesList.INVALID_LENGTH)
+    .max(253, nameValidationMessagesList.INVALID_LENGTH)
+    .test(
+      nameValidationMessagesList.INVALID_START_END,
+      nameValidationMessagesList.INVALID_START_END,
+      (value?: string) => {
+        const trimmed = value?.trim();
+        if (!trimmed) {
+          return true;
+        }
+        return (
+          !!trimmed[0].match(NAME_START_END_REGEX) &&
+          (trimmed[trimmed.length - 1]
+            ? !!trimmed[trimmed.length - 1].match(NAME_START_END_REGEX)
+            : true)
+        );
+      }
+    )
+    .matches(/^[a-z0-9-.]*$/, {
+      message: nameValidationMessagesList.INVALID_VALUE,
+      excludeEmptyString: true,
+    });
+};
+
 const getFormDataSchema = (t: TFunction) =>
   yup.object({
-    name: requiredSchema.matches(new RegExp(NAME_REGEX), {
-      message: `${t(
-        "Expected value matches regular expression:"
-      )} ${NAME_REGEX}`,
-    }),
+    name: requiredSchema.concat(nameSchema(t)),
     minHealthy: requiredSchema.concat(
       yup.string().matches(new RegExp(MIN_HEALTHY_REGEX), {
         message: t(
