@@ -5,8 +5,11 @@ import {
   Alert,
   AlertVariant,
   Button,
+  ButtonProps,
   ButtonVariant,
+  Form,
   Modal,
+  ModalBoxFooter,
   ModalVariant,
   Stack,
   StackItem,
@@ -25,6 +28,7 @@ type TabModalProps<T extends K8sResourceCommon = K8sResourceCommon> = {
   modalVariant?: ModalVariant;
   positionTop?: boolean;
   submitBtnVariant?: ButtonVariant;
+  submitBtnType?: ButtonProps["type"];
   titleIconVariant?:
     | "success"
     | "danger"
@@ -52,6 +56,7 @@ const TabModal: TabModalFC = React.memo(
     positionTop = true,
     submitBtnVariant,
     titleIconVariant,
+    submitBtnType,
   }) => {
     const { t } = useNodeHealthCheckTranslation();
 
@@ -86,43 +91,46 @@ const TabModal: TabModalFC = React.memo(
         onClose={closeModal}
         title={headerText}
         titleIconVariant={titleIconVariant}
-        actions={[
-          <Button
-            onClick={handleSubmit}
-            isDisabled={isDisabled || isSubmitting}
-            isLoading={isSubmitting}
-            variant={submitBtnVariant ?? "primary"}
-          >
-            {submitBtnText || t("Save")}
-          </Button>,
-          <Button onClick={closeModal} variant="link">
-            {t("Cancel")}
-          </Button>,
-        ]}
         isOpen={isOpen}
         id="tab-modal"
       >
-        {children}
-        {error && (
-          <StackItem>
-            <Alert
-              isInline
-              variant={AlertVariant.danger}
-              title={t("An error occurred")}
+        <Form>
+          {children}
+          {error && (
+            <StackItem>
+              <Alert
+                isInline
+                variant={AlertVariant.danger}
+                title={t("An error occurred")}
+              >
+                <Stack hasGutter>
+                  <StackItem>{error.message}</StackItem>
+                  {error?.href && (
+                    <StackItem>
+                      <a href={error.href} target="_blank" rel="noreferrer">
+                        {error.href}
+                      </a>
+                    </StackItem>
+                  )}
+                </Stack>
+              </Alert>
+            </StackItem>
+          )}
+          <ModalBoxFooter>
+            <Button
+              onClick={handleSubmit}
+              isDisabled={isDisabled || isSubmitting}
+              isLoading={isSubmitting}
+              variant={submitBtnVariant ?? "primary"}
+              type={submitBtnType}
             >
-              <Stack hasGutter>
-                <StackItem>{error.message}</StackItem>
-                {error?.href && (
-                  <StackItem>
-                    <a href={error.href} target="_blank" rel="noreferrer">
-                      {error.href}
-                    </a>
-                  </StackItem>
-                )}
-              </Stack>
-            </Alert>
-          </StackItem>
-        )}
+              {submitBtnText || t("Save")}
+            </Button>
+            <Button onClick={closeModal} variant="link">
+              {t("Cancel")}
+            </Button>
+          </ModalBoxFooter>
+        </Form>
       </Modal>
     );
   }

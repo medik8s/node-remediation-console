@@ -106,6 +106,7 @@ export const AnnotationsModal: React.FC<{
       onSubmit={onAnnotationsSubmit}
       isOpen={isOpen}
       onClose={onClose}
+      submitBtnType="submit"
     >
       <Grid hasGutter>
         {annotations.map((curAnnotation) => (

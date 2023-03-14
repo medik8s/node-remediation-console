@@ -53,14 +53,14 @@ const UnhealthyConditionItem: React.FC<{
   const [{ value: type }] = useField<UnhealtyConditionType>(typeFieldName);
   return (
     <Form data-test="unhealthy-condition" data-index={idx}>
-      <TypeSelectField name={typeFieldName}></TypeSelectField>
+      <TypeSelectField name={typeFieldName} />
       <StatusField
         name={getObjectItemFieldName([fieldName, "status"])}
         type={type}
-      ></StatusField>
+      />
       <DurationField
         name={`${getObjectItemFieldName([fieldName, "duration"])}`}
-      ></DurationField>
+      />
     </Form>
   );
 };
