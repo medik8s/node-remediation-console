@@ -3,20 +3,20 @@ import { useField } from "formik";
 import {
   FormGroup,
   Select,
-  SelectOption,
   SelectProps,
   SelectVariant,
 } from "@patternfly/react-core";
 import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
 import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
-import * as fuzzy from "fuzzysearch";
+import fuzzy from "fuzzysearch";
 export interface MultiSelectFieldProps extends FieldProps {
-  options: string[];
+  options: JSX.Element[];
   placeholderText?: string;
   onChange?: (val: string[]) => void;
   getHelperText?: (value: string) => React.ReactNode | undefined;
   enableClear: boolean;
   isLoading: boolean;
+  isRequired: boolean;
 }
 
 // Field value is a string[]
@@ -31,6 +31,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   labelIcon,
   enableClear,
   isLoading,
+  isRequired,
   ...props
 }) => {
   const [isOpen, setOpen] = React.useState(false);
@@ -61,13 +62,23 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
     setValue(newValue);
   };
 
-  const children = options
-    .filter((option) => !(field.value || []).includes(option))
-    .map((option) => (
-      <SelectOption key={option} id={option} value={option} isDisabled={false}>
-        {option}
-      </SelectOption>
-    ));
+  const onFilter = (_, textInput) => {
+    if (textInput === "") {
+      return options;
+    } else {
+      let filteredGroups = options
+        .map((group) => {
+          let filteredGroup = React.cloneElement(group, {
+            children: group.props.children.filter((item) => {
+              return fuzzy(textInput, item.props.value);
+            }),
+          });
+          if (filteredGroup.props.children.length > 0) return filteredGroup;
+        })
+        .filter((newGroup) => newGroup);
+      return filteredGroups;
+    }
+  };
 
   return (
     <FormGroup
@@ -76,7 +87,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       helperText={hText}
       helperTextInvalid={errorMessage}
       validated={isValid ? "default" : "error"}
-      isRequired={required}
+      isRequired={isRequired}
       labelIcon={labelIcon}
       data-test={`multi-select-${label}`}
     >
@@ -84,26 +95,24 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         {...field}
         {...props}
         id={fieldId}
-        variant={SelectVariant.typeaheadMulti}
+        variant={SelectVariant.checkbox}
         typeAheadAriaLabel="Select a label"
         validated={isValid ? "default" : "error"}
         aria-describedby={`${fieldId}-helper`}
         isCreatable={false}
-        placeholderText={placeholderText}
+        placeholderText="Filter by label"
         isOpen={isOpen}
         onToggle={onToggle}
         onSelect={onSelect}
         selections={field.value}
         onClear={enableClear ? onClearSelection : null}
         loadingVariant={isLoading ? "spinner" : undefined}
-        onFilter={(e, val) => {
-          if (!val || val === "") {
-            return children;
-          }
-          return children.filter((child) => fuzzy(val, child.props.value));
-        }}
+        isGrouped
+        hasInlineFilter
+        onFilter={onFilter}
+        maxHeight={400}
       >
-        {children}
+        {options}
       </Select>
     </FormGroup>
   );

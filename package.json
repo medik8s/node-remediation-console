@@ -13,7 +13,8 @@
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}'",
     "lint": "eslint ./src --fix && stylelint \"src/**/*.css\" --allow-empty-input --fix",
     "open-cypress": "yarn cypress open --e2e --browser=chrome",
-    "test": "yarn cypress run --e2e --browser=chrome"
+    "test": "yarn cypress run --e2e --browser=chrome",
+    "http-server": "./http-server.sh dist"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.12.2",
@@ -31,7 +32,9 @@
     "@types/react": "17.0.37",
     "@types/react-helmet": "6.1.4",
     "@types/react-router-dom": "5.3.2",
+    "@types/semver": "^7.3.12",
     "@types/yup": "^0.29.14",
+    "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "copy-webpack-plugin": "6.4.1",
@@ -62,7 +65,7 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4",
-    "@types/semver": "^7.3.12"
+    "http-server": "^14.1.1"
   },
   "consolePlugin": {
     "name": "node-remediation-console-plugin",

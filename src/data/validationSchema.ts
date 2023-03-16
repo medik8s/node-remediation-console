@@ -81,6 +81,7 @@ const getFormDataSchema = (t: TFunction) =>
     remediator: yup.object({
       template: remediatorSchema,
     }),
+    nodeSelector: yup.array().of(yup.string()).required().min(1),
   });
 
 export const getValidationSchema = (t: TFunction) =>
