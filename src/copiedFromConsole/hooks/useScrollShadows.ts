@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { useResizeObserver } from './useResizeObserver';
+import * as React from "react";
+import { useResizeObserver } from "./useResizeObserver";
 
 export enum Shadows {
-  none = 'none',
-  both = 'both',
-  top = 'top',
-  bottom = 'bottom',
+  none = "none",
+  both = "both",
+  top = "top",
+  bottom = "bottom",
 }
 
 export const useScrollShadows = (node: HTMLElement): Shadows => {
@@ -33,11 +33,11 @@ export const useScrollShadows = (node: HTMLElement): Shadows => {
       // compute initial shadows
       computeShadows();
       // listen for scroll events
-      node.addEventListener('scroll', computeShadows);
+      node.addEventListener("scroll", computeShadows);
     }
     return () => {
       if (node) {
-        node.removeEventListener('scroll', computeShadows);
+        node.removeEventListener("scroll", computeShadows);
       }
     };
   }, [node, computeShadows]);

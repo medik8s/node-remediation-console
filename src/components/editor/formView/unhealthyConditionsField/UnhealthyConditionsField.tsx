@@ -108,7 +108,7 @@ export const UnhealthyConditionArray: React.FC<{
           </StackItem>
         </Stack>
       )}
-    ></FieldArray>
+    />
   );
 };
 

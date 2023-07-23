@@ -80,6 +80,7 @@ const NodeRow: React.FC<RowProps<NodeKind>> = ({ obj, activeColumnIDs }) => {
 
 const getEmptyMsg = (selectedLabels: string[]) => {
   const component = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { t } = useNodeHealthCheckTranslation();
     return (
       <EmptyState>

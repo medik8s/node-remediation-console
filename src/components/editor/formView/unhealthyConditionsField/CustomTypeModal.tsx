@@ -8,7 +8,6 @@ import {
   TextInput,
 } from "@patternfly/react-core";
 import * as React from "react";
-import * as _ from "lodash";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { useField } from "formik";
 

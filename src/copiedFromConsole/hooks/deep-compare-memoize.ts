@@ -1,6 +1,6 @@
 import * as React from "react";
 import { isEqual } from "lodash-es";
-export const useDeepCompareMemoize = <T = any>(
+export const useDeepCompareMemoize = <T = unknown>(
   value: T,
   strinfigy?: boolean
 ): T => {

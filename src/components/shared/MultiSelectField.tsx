@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as React from "react";
 import { useField } from "formik";
 import {
@@ -24,9 +28,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   label,
   options,
   helpText,
-  placeholderText,
   getHelperText,
-  required,
   onChange,
   labelIcon,
   enableClear,
@@ -52,7 +54,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const onSelect: SelectProps["onSelect"] = (event, selection) => {
     // already selected
     const selected = field.value;
-    let selectionValue = selection;
+    const selectionValue = selection;
     let newValue;
     if (selected.includes(selectionValue)) {
       newValue = selected.filter((sel: string) => sel !== selectionValue);
@@ -66,9 +68,9 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
     if (textInput === "") {
       return options;
     } else {
-      let filteredGroups = options
+      const filteredGroups = options
         .map((group) => {
-          let filteredGroup = React.cloneElement(group, {
+          const filteredGroup = React.cloneElement(group, {
             children: group.props.children.filter((item) => {
               return fuzzy(textInput, item.props.value);
             }),

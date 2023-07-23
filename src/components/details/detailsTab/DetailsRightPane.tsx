@@ -28,7 +28,7 @@ export const DetailsRightPane: React.FC<{
         path="spec.minHealthy"
         description={descriptions.minHealthy}
         resourceKind={nodeHealthCheckKind.kind}
-      ></DetailsItem>
+      />
 
       <DetailsItem
         label={t("Observed nodes")}

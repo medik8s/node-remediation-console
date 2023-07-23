@@ -188,7 +188,7 @@ const NodeHealthCheckStatus: React.FC<{
     return <NotAvailable />;
   }
   const phase = nodeHealthCheck.status?.phase;
-  let icon = getIcon(phase);
+  const icon = getIcon(phase);
   if (!icon) {
     return <span>{getPhaseLabel(t, phase)}</span>;
   }

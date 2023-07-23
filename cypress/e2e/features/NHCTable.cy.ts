@@ -1,4 +1,3 @@
-import exp = require("constants");
 import { gotoNodeHealthCheckListPage } from "../../Routing";
 import {
   DeleteNHC,
@@ -7,11 +6,10 @@ import {
   UnpauseNHC,
 } from "../../views/ActionsView";
 import * as NHCTableView from "../../views/NHCTableView";
-import _ = require("lodash");
 import { validateInEditor } from "../../views/EditorView";
 
 describe("test NodeHealthCheck list view", () => {
-  let expectedRows = [
+  const expectedRows = [
     {
       name: "nhc0",
       status: "Disabled",

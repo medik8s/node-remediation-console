@@ -35,7 +35,7 @@ type TabModalProps<T extends K8sResourceCommon = K8sResourceCommon> = {
     | "warning"
     | "info"
     | "default"
-    | React.ComponentType<any>;
+    | React.ComponentType<unknown>;
 };
 
 export type TabModalFC = <T extends K8sResourceCommon = K8sResourceCommon>(

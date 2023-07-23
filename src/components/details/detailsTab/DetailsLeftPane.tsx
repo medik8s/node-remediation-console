@@ -42,7 +42,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         canEdit={canEdit}
         editAsGroup
         resourceKind={nodeHealthCheckKind.kind}
-        onEdit={(e) => modalsContext.openModal(ModalId.EDIT_LABELS, resource)}
+        onEdit={() => modalsContext.openModal(ModalId.EDIT_LABELS, resource)}
         description={descriptions.labels}
       >
         <LabelList kind={nodeHealthCheckStringKind} labels={metadata.labels} />
@@ -53,7 +53,7 @@ export const DetailsLeftPane: React.FC<ResourceSummaryProps> = ({
         path="metadata.annotations"
         resourceKind={nodeHealthCheckKind.kind}
         description={descriptions.annotations}
-        onEdit={(e) =>
+        onEdit={() =>
           modalsContext.openModal(ModalId.EDIT_ANNOTATIONS, resource)
         }
       >

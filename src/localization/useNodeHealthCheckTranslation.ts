@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { useTranslation } from "react-i18next";
 
 export const useNodeHealthCheckTranslation = () => {

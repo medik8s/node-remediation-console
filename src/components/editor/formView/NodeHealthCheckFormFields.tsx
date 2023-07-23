@@ -45,7 +45,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
           `Note: Some fields may not be represented in this form view. Please select "YAML view" for full control`
         )}
         id="info-inline-alert"
-      ></Alert>
+      />
       <InputField
         type={TextInputTypes.text}
         required

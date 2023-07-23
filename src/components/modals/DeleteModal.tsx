@@ -13,12 +13,12 @@ import { NodeHealthCheckModalProps } from "./propTypes";
 const DeleteModal: React.FC<
   NodeHealthCheckModalProps & { onDelete: () => void }
 > = ({ isOpen, nodeHealthCheck, onClose, onDelete }) => {
-  if (!isOpen) {
-    return null;
-  }
   const [error, setError] = React.useState<boolean>();
   const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
   const { t } = useNodeHealthCheckTranslation();
+  if (!isOpen) {
+    return null;
+  }
   const onClickDelete = async () => {
     try {
       setIsDeleting(true);
@@ -69,7 +69,7 @@ const DeleteModal: React.FC<
           variant="danger"
           title={t("Failed to delete {{name}}", { name })}
           isInline
-        ></Alert>
+        />
       )}
     </Modal>
   );

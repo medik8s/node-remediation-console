@@ -7,8 +7,8 @@ import "./enhanced-text-list.css";
 
 const EnhancedTextList: React.FC<{ textList: string[] }> = ({ textList }) => (
   <TextList className="nhc-enhanced-text-list__list">
-    {textList.map((text) => (
-      <EllipsisToolTip content={text}>
+    {textList.map((text, idx) => (
+      <EllipsisToolTip content={text} key={idx}>
         <TextListItem className="nhc-enhanced-text-list__list-item">
           {text}
         </TextListItem>

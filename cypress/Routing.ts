@@ -9,7 +9,9 @@ const gotoNewNodeHealthCheck = () => {
   EditorPage.validatePluginLoaded();
 };
 
-const gotoNodeHealthCheckListPage = (options?: Object) => {
+const gotoNodeHealthCheckListPage = (
+  options?: Partial<Cypress.VisitOptions>
+) => {
   cy.visit(root, options);
   TablePage.validatePluginLoaded();
 };

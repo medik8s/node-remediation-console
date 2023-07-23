@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as classNames from 'classnames';
+import * as React from "react";
+import * as classNames from "classnames";
 
 type FormBodyProps = {
   children: React.ReactNode;
@@ -19,10 +19,20 @@ const FormBody: React.FC<FormBodyProps & React.HTMLProps<HTMLDivElement>> = ({
 }) => (
   <div
     {...props}
-    className={classNames('pf-c-form', { 'co-m-pane__body': !disablePaneBody }, className)}
+    className={classNames(
+      "pf-c-form",
+      { "co-m-pane__body": !disablePaneBody },
+      className
+    )}
     style={
       flexLayout
-        ? { display: 'flex', flex: 1, flexDirection: 'column', paddingBottom: 0, ...(style ?? {}) }
+        ? {
+            display: "flex",
+            flex: 1,
+            flexDirection: "column",
+            paddingBottom: 0,
+            ...(style ?? {}),
+          }
         : { paddingBottom: 0, ...(style ?? {}) }
     }
   >

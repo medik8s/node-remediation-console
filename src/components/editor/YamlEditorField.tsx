@@ -15,7 +15,8 @@ const YamlEditorField: React.FC<{
   const [{ value: reloadCount }] = useField<number>("reloadCount");
   const [initialObj, setInitialObj] = React.useState<NodeHealthCheck>();
   const [yamlError, setYamlError] = React.useState<string>();
-  const [monacoModel, setMonacoModel] = React.useState<any>();
+  const [monacoModel, setMonacoModel] =
+    React.useState<monaco.editor.ITextModel>();
   React.useEffect(() => {
     //workaround for ResourceYAMLEditor not exposing onChange
     let interval = setInterval(() => {

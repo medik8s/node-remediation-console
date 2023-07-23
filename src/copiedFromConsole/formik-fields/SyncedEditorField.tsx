@@ -11,9 +11,13 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import { LoadingBox } from "copiedFromConsole/utils/status-box";
 import { get, isEmpty } from "lodash-es";
 
-type FormErrorCallback<ReturnValue = {}> = () => ReturnValue;
+type FormErrorCallback<ReturnValue = Record<string, unknown>> =
+  () => ReturnValue;
 type WithOrWithoutPromise<Type> = Promise<Type> | Type;
-export type SanitizeToForm<YAMLStruct = {}, FormOutput = {}> = (
+export type SanitizeToForm<
+  YAMLStruct = Record<string, unknown>,
+  FormOutput = Record<string, unknown>
+> = (
   preFormData: YAMLStruct
 ) => WithOrWithoutPromise<FormOutput | FormErrorCallback<FormOutput>>;
 export type SanitizeToYAML = (preFormData: string) => string;
@@ -31,7 +35,7 @@ type SyncedEditorFieldProps = {
   formContext: EditorContext<SanitizeToForm>;
   yamlContext: EditorContext<SanitizeToYAML>;
   lastViewUserSettingKey: string;
-  prune?: (data: any) => any;
+  prune?: (data: unknown) => unknown;
   noMargin?: boolean;
 };
 
