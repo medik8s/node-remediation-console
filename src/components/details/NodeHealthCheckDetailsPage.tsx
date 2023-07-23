@@ -37,7 +37,11 @@ export const useNodeHealthCheckTabs = () => {
   return tabs;
 };
 
-const NodeHealthCheckDetailsPage_: React.FC = ({ match }: any) => {
+const NodeHealthCheckDetailsPage_ = ({
+  match,
+}: {
+  match: { params: { name: string } };
+}) => {
   const { name } = match.params;
   const navigation = useNodeHealthCheckNavigation();
   const [nodeHealthCheck, loaded, loadError] =
@@ -51,7 +55,7 @@ const NodeHealthCheckDetailsPage_: React.FC = ({ match }: any) => {
       <ModalsContextProvider>
         <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
         <HorizontalNav pages={tabs} resource={nodeHealthCheck} />
-        <Modals onDelete={navigation.gotoList} />
+        <Modals onDelete={() => navigation.gotoList()} />
       </ModalsContextProvider>
     </StatusBox>
   );

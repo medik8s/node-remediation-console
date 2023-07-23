@@ -21,13 +21,7 @@
   "[graphql]": {
     "editor.formatOnSave": true
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "json"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json"],
   "javascript.validate.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
@@ -35,8 +29,7 @@
     "**/bower_components": true,
     "**/.cache-loader": true,
     "**/dist": true,
-    "**/.yarn/releases/**": true,
-    "**/.history": true
+    "**/.yarn/releases/**": true
   },
   "files.exclude": {
     "**/.git": true,
@@ -44,8 +37,7 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/.cache-loader": true,
-    "**/.history": true
+    "**/.cache-loader": true
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -54,8 +46,7 @@
     "**/.hg/store/**": true,
     "**/bower_components": true,
     "**/.cache-loader": true,
-    "**dist": true,
-    "**/.history": true
+    "**dist": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
@@ -64,7 +55,8 @@
     "comments": "on",
     "strings": "on",
     "other": "on"
-  }
+  },
+  "typescript.preferences.importModuleSpecifier": "relative"
   // TODO support prettier + stylelint
   // "prettier.stylelintIntegration": true,
   // "css.validate": false,

@@ -1,6 +1,6 @@
 export declare global {
   interface Window {
-    monaco: any;
+    monaco: unknown;
     SERVER_FLAGS: {
       alertManagerBaseURL: string;
       authDisabled: boolean;

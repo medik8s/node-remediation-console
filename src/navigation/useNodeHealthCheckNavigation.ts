@@ -31,7 +31,7 @@ export const useNodeHealthCheckNavigation = (): NavigationApi => {
       gotoDetails: (name: string) => history.push(getNodeHealthCheckUrl(name)),
       gotoEditor: (name: string) =>
         history.push(`${getNodeHealthCheckUrl(name)}/edit`),
-      goBack: history.goBack,
+      goBack: () => history.goBack(),
       gotoMachineHealthChecks: () => history.push(MACHINE_HEALTHCHECKS_URL),
     }),
     [history]

@@ -175,8 +175,8 @@ export const SectionHeading: React.SFC<SectionHeadingProps> = ({
 );
 
 export type SectionHeadingProps = {
-  children?: any;
-  style?: any;
+  children?: unknown;
+  style?: unknown;
   text: string;
   required?: boolean;
   id?: string;

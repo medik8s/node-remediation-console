@@ -108,7 +108,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
 
   return (
     <>
-      <PageHeading title={title} helpText={<HelpText />}></PageHeading>
+      <PageHeading title={title} helpText={<HelpText />} />
       <Formik
         enableReinitialize
         initialValues={initialValues}
@@ -118,7 +118,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
       >
         <NodeHealthCheckSyncedEditor
           originalNodeHealthCheck={nodeHealthCheck}
-          handleCancel={navigation.goBack}
+          handleCancel={() => navigation.goBack()}
         />
       </Formik>
     </>

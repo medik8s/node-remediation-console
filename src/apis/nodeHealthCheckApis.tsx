@@ -91,7 +91,7 @@ const isTerminatingMachineHealthCheck = (
   );
 };
 
-export const useNodeHealthChecksDisabled = () => {
+export const useNodeHealthChecksDisabled = (): [boolean, boolean, unknown] => {
   const [machineHealthChecks, loaded, error] = useAllMachineHealthChecks();
   const isDisabled = () => {
     if (!machineHealthChecks || !loaded || error) {

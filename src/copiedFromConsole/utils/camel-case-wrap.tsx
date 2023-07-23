@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
 const MEMO = {};
 
 const CamelCaseWrap: React.FC<CamelCaseWrapProps> = ({ value, dataTest }) => {
   if (!value) {
-    return '-';
+    return "-";
   }
 
   if (MEMO[value]) {

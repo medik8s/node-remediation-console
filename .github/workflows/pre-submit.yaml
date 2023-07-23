@@ -17,5 +17,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Lint
+      run: make lint
+      
     - name: Test container build
       run: make docker-build
+    

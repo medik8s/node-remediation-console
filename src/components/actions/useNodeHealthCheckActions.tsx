@@ -22,7 +22,7 @@ const useNodeHealthCheckActions = (
   const getModalIds = (): ModalId[] => {
     let res: ModalId[] = [];
     const disabled = nodeHealthCheck.status?.phase === StatusPhase.DISABLED;
-    let pauseRequests = nodeHealthCheck.spec?.pauseRequests || [];
+    const pauseRequests = nodeHealthCheck.spec?.pauseRequests || [];
     if (disabled) {
       return [ModalId.DELETE];
     }

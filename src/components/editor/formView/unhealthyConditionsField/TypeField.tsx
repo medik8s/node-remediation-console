@@ -53,7 +53,7 @@ const TypeSelectField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
         label={"Type"}
         isRequired
         items={dropdownItems}
-      ></DropdownField>
+      />
       <CustomTypeModal
         fieldName={name}
         onClose={() => setCustomTypeModalOpen(false)}

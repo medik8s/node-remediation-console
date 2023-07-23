@@ -1,12 +1,9 @@
-import * as EditorView from "../../views/EditorView";
 import * as Routing from "../../Routing";
 import {
   selectOtherRemediator,
   setOtherRemediatorData,
   validateOtherRemediatorData,
   selectSNRRemediator,
-  selectSNRStrategy,
-  validateSNRStrategy,
 } from "../../views/FormView/RemediatorView";
 
 describe("Remediator field", () => {

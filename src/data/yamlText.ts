@@ -6,7 +6,7 @@ export const getNodeHealthCheck = (
   yamlText: string
 ): NodeHealthCheck => {
   try {
-    let nodeHealthCheckYaml = load(yamlText) as NodeHealthCheck;
+    const nodeHealthCheckYaml = load(yamlText) as NodeHealthCheck;
     return {
       ...originalNodeHealthCheck,
       metadata: nodeHealthCheckYaml.metadata,

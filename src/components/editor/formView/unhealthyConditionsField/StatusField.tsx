@@ -58,7 +58,7 @@ const StatusField: React.FC<
       isRequired
       items={statusOptions}
       isDisabled={statusOptions.length === 1}
-    ></DropdownField>
+    />
   );
 };
 

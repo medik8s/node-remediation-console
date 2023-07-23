@@ -42,12 +42,12 @@ export type CustomResourceDefinition = {
   };
 } & K8sResourceCommon;
 
-export type Descriptor<T = any> = {
+export type Descriptor<T = unknown> = {
   path: string;
   displayName: string;
   description: string;
   "x-descriptors"?: T[];
-  value?: any;
+  value?: unknown;
 };
 
 export type CRDDescription = {
@@ -87,8 +87,8 @@ export type APIServiceDefinition = {
 // or status, weakening type checking.
 export type K8sResourceKind = K8sResourceCommon & {
   spec?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  status?: { [key: string]: any };
-  data?: { [key: string]: any };
+  status?: { [key: string]: unknown };
+  data?: { [key: string]: unknown };
 };

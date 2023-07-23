@@ -99,7 +99,7 @@ const RemediatorKindField_ = ({
       fieldName={getRemediatorRadioOptionFieldName(formViewFieldName)}
       onChange={onChange}
       snrTemplatesExist={!!snrTemplate}
-    ></RemediatorKindRadioGroup>
+    />
   );
 };
 

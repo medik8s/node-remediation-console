@@ -72,7 +72,9 @@ const LabelSelectionField = ({
       _selectGroups.push(
         <SelectGroup label={t("Label")}>
           {getAllNodesLabels(allNodes).map((option) => (
-            <SelectOption value={option}>{option}</SelectOption>
+            <SelectOption value={option} key={option}>
+              {option}
+            </SelectOption>
           ))}
         </SelectGroup>
       );

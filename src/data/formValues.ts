@@ -1,6 +1,10 @@
 import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
 import { getFormViewValues } from "./formViewValues";
-import { NodeHealthCheck, NodeHealthCheckFormValues } from "./types";
+import {
+  FormViewValues,
+  NodeHealthCheck,
+  NodeHealthCheckFormValues,
+} from "./types";
 import { dump } from "js-yaml";
 import { isParseError } from "./parseErrors";
 import * as formViewValues from "./formViewValues";
@@ -14,8 +18,8 @@ export const getFormValues = (
   const yamlData = dump(nodeHealthCheck, {
     skipInvalid: true,
   });
-  let formParsingError = null;
-  let formData = null;
+  let formParsingError: string | null = null;
+  let formData: FormViewValues | null = null;
   let editorType = EditorType.YAML;
   try {
     formData = getFormViewValues(nodeHealthCheck);
@@ -42,7 +46,7 @@ export const getNodeHealthCheck = (
   originalNodeHealthCheck: NodeHealthCheck,
   values: NodeHealthCheckFormValues
 ): NodeHealthCheck => {
-  let nodeHealthCheck = yamlText.getNodeHealthCheck(
+  const nodeHealthCheck = yamlText.getNodeHealthCheck(
     originalNodeHealthCheck,
     values.yamlData
   );

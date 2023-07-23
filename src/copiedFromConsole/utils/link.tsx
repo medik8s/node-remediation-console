@@ -61,7 +61,7 @@ export const getNamespace = (path: string): string => {
 };
 
 export const getURLSearchParams = () => {
-  const all: any = {};
+  const all: unknown = {};
   const params = new URLSearchParams(window.location.search);
   params.forEach((v, k) => {
     all[k] = v;

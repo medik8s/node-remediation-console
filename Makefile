@@ -20,6 +20,11 @@ export IMAGE_TAG
 # Image pullspec to use for all building/pushing image targets
 IMG ?= $(IMAGE_REGISTRY)/node-remediation-console:$(IMAGE_TAG)
 
+# Push the docker image
+.PHONY: lint
+lint:
+	yarn install && yarn lint
+
 # Build the docker image
 .PHONY: docker-build
 docker-build:

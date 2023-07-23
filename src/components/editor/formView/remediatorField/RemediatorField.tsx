@@ -27,7 +27,7 @@ const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => (
           name={inputFieldName}
           key={inputFieldName}
           label={sentenceCase(subFieldName)}
-        ></InputField>
+        />
       );
     })}
   </>
@@ -45,11 +45,7 @@ export const RemediatorField_: React.FC<{
   return (
     <>
       <RemediatorKindField formViewFieldName={formViewFieldName} />
-      {!isSNR && (
-        <CustomRemediatorField
-          fieldName={templateFieldName}
-        ></CustomRemediatorField>
-      )}
+      {!isSNR && <CustomRemediatorField fieldName={templateFieldName} />}
     </>
   );
 };

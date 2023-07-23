@@ -32,28 +32,28 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
       {modalsContext.isOpen(ModalId.PAUSE) && (
         <PauseModal
           isOpen={modalsContext.isOpen(ModalId.PAUSE)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
         />
       )}
       {modalsContext.isOpen(ModalId.EDIT_PAUSE) && (
         <EditPauseModal
           isOpen={modalsContext.isOpen(ModalId.EDIT_PAUSE)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
         />
       )}
       {modalsContext.isOpen(ModalId.UNPAUSE) && (
         <UnpauseModal
           isOpen={modalsContext.isOpen(ModalId.UNPAUSE)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
         />
       )}
       {modalsContext.isOpen(ModalId.DELETE) && (
         <DeleteModal
           isOpen={modalsContext.isOpen(ModalId.DELETE)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           nodeHealthCheck={modalsContext.getNodeHealthCheck()}
           onDelete={onDelete}
         />
@@ -61,7 +61,7 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
       {modalsContext.isOpen(ModalId.EDIT_LABELS) && (
         <LabelsModal
           isOpen={modalsContext.isOpen(ModalId.EDIT_LABELS)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           obj={modalsContext.getNodeHealthCheck()}
           onLabelsSubmit={(labels) =>
             updateNodeHealthCheckLabels(
@@ -74,7 +74,7 @@ const Modals: React.FC<{ onDelete?: () => void }> = ({ onDelete }) => {
       {modalsContext.isOpen(ModalId.EDIT_ANNOTATIONS) && (
         <AnnotationsModal
           isOpen={modalsContext.isOpen(ModalId.EDIT_ANNOTATIONS)}
-          onClose={modalsContext.closeModal}
+          onClose={() => modalsContext.closeModal()}
           obj={modalsContext.getNodeHealthCheck()}
           onSubmit={(annotations) =>
             updateNodeHealthCheckAnnotations(

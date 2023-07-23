@@ -14,7 +14,7 @@ const useSnrTemplate = (): [RemediationTemplate | undefined, boolean] => {
     if (error) {
       return undefined;
     }
-    let templateCR = templates.find(
+    const templateCR = templates.find(
       (template) =>
         template.spec?.template?.spec?.remediationStrategy ===
         "ResourceDeletion"
@@ -28,7 +28,7 @@ const useSnrTemplate = (): [RemediationTemplate | undefined, boolean] => {
       namespace: templateCR.metadata?.namespace,
       name: templateCR.metadata?.name,
     };
-  }, [templates]);
+  }, [templates, error]);
 
   return [template, loaded];
 };

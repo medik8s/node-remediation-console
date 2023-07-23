@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Title, FormHelperText } from '@patternfly/react-core';
+import * as React from "react";
+import { Title, FormHelperText } from "@patternfly/react-core";
 
-type SpacerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+type SpacerSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 
 type FormHeaderProps = {
   title: React.ReactNode;
@@ -10,10 +10,19 @@ type FormHeaderProps = {
   marginBottom?: SpacerSize;
 };
 
-const FormHeader: React.FC<FormHeaderProps> = ({ title, helpText, marginTop, marginBottom }) => {
+const FormHeader: React.FC<FormHeaderProps> = ({
+  title,
+  helpText,
+  marginTop,
+  marginBottom,
+}) => {
   const marginStyles = {
-    ...(marginTop ? { marginTop: `var(--pf-global--spacer--${marginTop})` } : {}),
-    ...(marginBottom ? { marginBottom: `var(--pf-global--spacer--${marginBottom})` } : {}),
+    ...(marginTop
+      ? { marginTop: `var(--pf-global--spacer--${marginTop})` }
+      : {}),
+    ...(marginBottom
+      ? { marginBottom: `var(--pf-global--spacer--${marginBottom})` }
+      : {}),
   };
 
   return (
@@ -21,7 +30,10 @@ const FormHeader: React.FC<FormHeaderProps> = ({ title, helpText, marginTop, mar
       <Title headingLevel="h1" size="2xl">
         {title}
       </Title>
-      <FormHelperText isHidden={false} style={{ marginTop: 'var(--pf-global--spacer--xs)' }}>
+      <FormHelperText
+        isHidden={false}
+        style={{ marginTop: "var(--pf-global--spacer--xs)" }}
+      >
         {helpText}
       </FormHelperText>
     </div>

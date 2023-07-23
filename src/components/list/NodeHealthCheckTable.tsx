@@ -113,7 +113,7 @@ const getNodeHealthCheckRowComponent = (
           <NodeHealthCheckActionsMenu
             nodeHealthCheck={obj}
             isKababToggle={true}
-          ></NodeHealthCheckActionsMenu>
+          />
         </TableData>
       </>
     );
@@ -125,11 +125,11 @@ type NodeHealthchecksTableProps = {
   data: NodeHealthCheck[];
   unfilteredData: NodeHealthCheck[];
   loaded: boolean;
-  loadError: any;
+  loadError: unknown;
 };
 
 const EmptyNodeHealthChecks: React.FC = () => {
-  return <EmptyBox label={NodeHealthCheckModel.labelPlural}></EmptyBox>;
+  return <EmptyBox label={NodeHealthCheckModel.labelPlural} />;
 };
 
 export const NodeHealthchecksTable: React.FC<NodeHealthchecksTableProps> = ({

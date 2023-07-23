@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Button, Popover, PopoverPosition } from '@patternfly/react-core';
+import * as React from "react";
+import { Button, Popover, PopoverPosition } from "@patternfly/react-core";
 
 type PopoverStatusProps = {
   statusBody: React.ReactNode;
@@ -8,7 +8,7 @@ type PopoverStatusProps = {
   title?: string;
   hideHeader?: boolean;
   isVisible?: boolean;
-  shouldClose?: (hideFunction: any) => void;
+  shouldClose?: (hideFunction: unknown) => void;
 };
 
 const PopoverStatus: React.FC<PopoverStatusProps> = ({

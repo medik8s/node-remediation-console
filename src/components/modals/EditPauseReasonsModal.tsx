@@ -121,7 +121,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
   };
 
   const onRemove: PauseReasonFieldProps["onRemove"] = (idx: number) => {
-    let newPauseReasons = clone(pauseReasons);
+    const newPauseReasons = clone(pauseReasons);
     if (pauseReasons.length === 1) {
       newPauseReasons[0] = "";
     } else {

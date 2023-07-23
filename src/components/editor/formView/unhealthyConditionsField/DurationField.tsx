@@ -25,7 +25,7 @@ const DurationField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
       )}
       required
       data-test="duration-input"
-    ></InputField>
+    />
   );
 };
 

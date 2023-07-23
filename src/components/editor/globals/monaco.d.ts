@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable @typescript-eslint/ban-types */
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -19,7 +21,7 @@ declare namespace monaco {
   }
 
   export interface IEvent<T> {
-    (listener: (e: T) => any, thisArg?: any): IDisposable;
+    (listener: (e: T) => unknown, thisArg?: unknown): IDisposable;
   }
 
   /**
@@ -57,7 +59,7 @@ declare namespace monaco {
      * An event emitted when cancellation is requested
      * @event
      */
-    readonly onCancellationRequested: IEvent<any>;
+    readonly onCancellationRequested: IEvent<unknown>;
   }
   /**
    * Uniform Resource Identifier (Uri) http://tools.ietf.org/html/rfc3986.
@@ -74,7 +76,7 @@ declare namespace monaco {
    *       urn:example:animal:ferret:nose
    */
   export class Uri implements UriComponents {
-    static isUri(thing: any): thing is Uri;
+    static isUri(thing: unknown): thing is Uri;
     /**
      * scheme is the 'http' part of 'http://www.msft.com/some/path?query#fragment'.
      * The part before the first colon.
@@ -523,7 +525,7 @@ declare namespace monaco {
     /**
      * Test if `obj` is an `IPosition`.
      */
-    static isIPosition(obj: any): obj is IPosition;
+    static isIPosition(obj: unknown): obj is IPosition;
   }
 
   /**
@@ -669,7 +671,7 @@ declare namespace monaco {
     /**
      * Test if `obj` is an `IRange`.
      */
-    static isIRange(obj: any): obj is IRange;
+    static isIRange(obj: unknown): obj is IRange;
     /**
      * Test if the two ranges are touching in any way.
      */
@@ -790,7 +792,7 @@ declare namespace monaco {
     /**
      * Test if `obj` is an `ISelection`.
      */
-    static isISelection(obj: any): obj is ISelection;
+    static isISelection(obj: unknown): obj is ISelection;
     /**
      * Create with a direction.
      */
@@ -1055,7 +1057,7 @@ declare namespace monaco.editor {
     /**
      * The data to send over when calling create on the module.
      */
-    createData?: any;
+    createData?: unknown;
     /**
      * A label to be used to identify the web worker for debugging purposes.
      */
@@ -1063,7 +1065,7 @@ declare namespace monaco.editor {
     /**
      * An object that can be used by the web worker to make calls back to the main thread.
      */
-    host?: any;
+    host?: unknown;
     /**
      * Keep idle models.
      * Defaults to false, which means that idle models will stop syncing after a while.
@@ -1113,7 +1115,7 @@ declare namespace monaco.editor {
      * Method that will be executed when the action is triggered.
      * @param editor The editor instance is passed in as a convenience
      */
-    run(editor: ICodeEditor, ...args: any[]): void | Promise<void>;
+    run(editor: ICodeEditor, ...args: unknown[]): void | Promise<void>;
   }
 
   /**
@@ -1236,7 +1238,7 @@ declare namespace monaco.editor {
     getModifiedEditor(): IStandaloneCodeEditor;
   }
   export interface ICommandHandler {
-    (...args: any[]): void;
+    (...args: unknown[]): void;
   }
 
   export interface IContextKey<T> {
@@ -1246,7 +1248,7 @@ declare namespace monaco.editor {
   }
 
   export interface IEditorOverrideServices {
-    [index: string]: any;
+    [index: string]: unknown;
   }
 
   export interface IMarker {
@@ -2235,7 +2237,7 @@ declare namespace monaco.editor {
     cursorState: ICursorState[];
     viewState: IViewState;
     contributionsState: {
-      [id: string]: any;
+      [id: string]: unknown;
     };
   }
 
@@ -2435,7 +2437,7 @@ declare namespace monaco.editor {
      * @param handlerId The id of the handler or the id of a contribution.
      * @param payload Extra data to be sent to the handler.
      */
-    trigger(source: string, handlerId: string, payload: any): void;
+    trigger(source: string, handlerId: string, payload: unknown): void;
     /**
      * Gets the current model attached to this editor.
      */
@@ -2462,11 +2464,11 @@ declare namespace monaco.editor {
     /**
      * Store view state.
      */
-    saveViewState?(): any;
+    saveViewState?(): unknown;
     /**
      * Restore view state.
      */
-    restoreViewState?(state: any): void;
+    restoreViewState?(state: unknown): void;
   }
 
   /**
@@ -4187,7 +4189,7 @@ declare namespace monaco.editor {
       number
     >;
     roundedSelection: IEditorOption<EditorOption.roundedSelection, boolean>;
-    rulers: IEditorOption<EditorOption.rulers, {}>;
+    rulers: IEditorOption<EditorOption.rulers, Record<string, unknown>>;
     scrollbar: IEditorOption<
       EditorOption.scrollbar,
       InternalEditorScrollbarOptions
@@ -4271,15 +4273,13 @@ declare namespace monaco.editor {
       : never;
   }[keyof EditorOptionsType];
 
-  type ComputedEditorOptionValue<
-    T extends IEditorOption<any, any>
-  > = T extends IEditorOption<any, infer R> ? R : never;
+  type ComputedEditorOptionValue<T extends IEditorOption<unknown, unknown>> =
+    T extends IEditorOption<unknown, infer R> ? R : never;
 
-  export type FindComputedEditorOptionValueById<
-    T extends EditorOption
-  > = NonNullable<
-    ComputedEditorOptionValue<EditorOptionsType[FindEditorOptionsKeyById<T>]>
-  >;
+  export type FindComputedEditorOptionValueById<T extends EditorOption> =
+    NonNullable<
+      ComputedEditorOptionValue<EditorOptionsType[FindEditorOptionsKeyById<T>]>
+    >;
 
   /**
    * A view zone is a full horizontal rectangle that 'pushes' text down.
@@ -4557,7 +4557,7 @@ declare namespace monaco.editor {
     /**
      * Some extra detail.
      */
-    readonly detail: any;
+    readonly detail: unknown;
   }
 
   /**
@@ -4955,9 +4955,7 @@ declare namespace monaco.editor {
      * Explanation 2: the results of this method will not change if the container of the editor gets repositioned.
      * Warning: the results of this method are inaccurate for positions that are outside the current editor viewport.
      */
-    getScrolledVisiblePosition(
-      position: IPosition
-    ): {
+    getScrolledVisiblePosition(position: IPosition): {
       top: number;
       left: number;
       height: number;
@@ -6576,7 +6574,7 @@ declare namespace monaco.languages {
     id: string;
     title: string;
     tooltip?: string;
-    arguments?: any[];
+    arguments?: unknown[];
   }
 
   export interface CodeLens {

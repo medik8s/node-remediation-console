@@ -8,7 +8,8 @@
     "allowJs": true,
     "strict": false,
     "noUnusedLocals": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node", "cypress"]
   },
-  "include": ["src", "models"]
+  "include": ["src", "cypress"]
 }
