@@ -87,6 +87,7 @@ export enum RemediatorRadioOption {
 export type Remediator = {
   radioOption: RemediatorRadioOption;
   template: RemediationTemplate;
+  timeout?: string;
 };
 
 export type FormViewValues = {
@@ -95,6 +96,7 @@ export type FormViewValues = {
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator: Remediator;
+  remediators: Remediator[];
 };
 
 export type NodeHealthCheckFormValues = {
