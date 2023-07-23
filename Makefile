@@ -25,6 +25,11 @@ IMG ?= $(IMAGE_REGISTRY)/node-remediation-console:$(IMAGE_TAG)
 lint:
 	yarn install && yarn lint
 
+# Clean node_modules and yarn cache to avoid disk space issues
+.PHONY: clean
+clean: 
+	rm -rf node_modules && yarn cache clean
+
 # Build the docker image
 .PHONY: docker-build
 docker-build:
@@ -34,3 +39,4 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	podman push ${IMG}
+

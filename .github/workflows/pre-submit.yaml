@@ -19,6 +19,9 @@ jobs:
 
     - name: Lint
       run: make lint
+
+    - name: clean
+      run: make clean
       
     - name: Test container build
       run: make docker-build
