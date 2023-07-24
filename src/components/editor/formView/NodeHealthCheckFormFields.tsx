@@ -1,16 +1,17 @@
 import * as React from "react";
 import { useFormikContext } from "formik";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { Alert, TextInputTypes } from "@patternfly/react-core";
 import InputField from "../../../copiedFromConsole/formik-fields/InputField";
 import NodeSelectionField from "./nodeSelectionField/NodeSelectionField";
 import { FormViewFieldProps } from "./propTypes";
-import { getObjectItemFieldName } from "components/shared/formik-utils";
 import UnhealthyConditionsField from "./unhealthyConditionsField/UnhealthyConditionsField";
-import { NodeHealthCheckFormValues } from "data/types";
 import { withFallback } from "copiedFromConsole/error";
-import RemediatorField from "./remediatorField/RemediatorField";
 import HelpIcon from "components/shared/HelpIcon";
+import { getObjectItemFieldName } from "../../shared/formik-utils";
+import { NodeHealthCheckFormValues } from "../../../data/types";
+import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
+import useSnrTemplate from "../../../apis/useSNRTemplate";
+import RemediatorsArrayField from "./remediatorField/RemediatorsArrayField";
 
 const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();
@@ -35,7 +36,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
   const { values } = useFormikContext<NodeHealthCheckFormValues>();
   const formViewFieldName = "formData";
-
+  const snrTemplateResult = useSnrTemplate();
   return (
     <>
       <Alert
@@ -55,7 +56,8 @@ const NodeHealthCheckFormFields_: React.FC = () => {
         data-test="NodeHealthCheck-name"
         helpText={t("A unique name for the NodeHealthCheck")}
       />
-      <RemediatorField formViewFieldName={formViewFieldName} />
+      <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
+
       <NodeSelectionField
         fieldName={getObjectItemFieldName([formViewFieldName, "nodeSelector"])}
       />

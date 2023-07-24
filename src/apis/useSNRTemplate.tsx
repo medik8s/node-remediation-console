@@ -1,9 +1,13 @@
 import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
 import { snrTemplateKind } from "data/model";
-import { RemediationTemplate, SelfNodeRemediationTemplate } from "data/types";
+import {
+  RemediationTemplate,
+  SelfNodeRemediationTemplate,
+  SnrTemplateResult,
+} from "data/types";
 import * as React from "react";
 
-const useSnrTemplate = (): [RemediationTemplate | undefined, boolean] => {
+const useSnrTemplate = (): SnrTemplateResult => {
   const [templates, loaded, error] = useK8sWatchResource<
     SelfNodeRemediationTemplate[]
   >({

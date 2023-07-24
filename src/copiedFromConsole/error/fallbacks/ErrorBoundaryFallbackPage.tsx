@@ -2,8 +2,8 @@ import * as React from "react";
 import { Text, TextVariants } from "@patternfly/react-core";
 import { ErrorBoundaryFallbackProps } from "../types";
 import ErrorDetailsBlock from "./ErrorDetailsBlock";
-import { ExpandCollapse } from "copiedFromConsole/utils/expand-collapse";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
+import { ExpandCollapse } from "../../utils/expand-collapse";
 
 /**
  * Standard fallback catch -- expected to take up the whole page.

@@ -10,9 +10,10 @@ import {
   SelectProps,
   SelectVariant,
 } from "@patternfly/react-core";
-import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
-import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
+
 import fuzzy from "fuzzysearch";
+import { getFieldId } from "../../copiedFromConsole/formik-fields/field-utils";
+import { FieldProps } from "../../copiedFromConsole/formik-fields/field-types";
 export interface MultiSelectFieldProps extends FieldProps {
   options: JSX.Element[];
   placeholderText?: string;

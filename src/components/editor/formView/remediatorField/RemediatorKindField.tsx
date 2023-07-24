@@ -1,19 +1,23 @@
 import { FormGroup, Skeleton, Tooltip } from "@patternfly/react-core";
-import useSnrTemplate from "apis/useSNRTemplate";
-import HelpIcon from "components/shared/HelpIcon";
-import { withFallback } from "copiedFromConsole/error";
-import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
-import RadioButtonField from "copiedFromConsole/formik-fields/RadioButtonField";
-import { getEmptyRemediationTemplate, getSNRLabel } from "data/remediator";
-import { Remediator, RemediatorRadioOption } from "data/types";
+
 import { useField } from "formik";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+
 import * as React from "react";
 
+import { withFallback } from "../../../../copiedFromConsole/error";
+import { getFieldId } from "../../../../copiedFromConsole/formik-fields/field-utils";
+import RadioButtonField from "../../../../copiedFromConsole/formik-fields/RadioButtonField";
 import {
-  getRemediatorFieldName,
-  getRemediatorRadioOptionFieldName,
-} from "../remediatorFieldUtils";
+  getSNRLabel,
+  getEmptyRemediationTemplate,
+} from "../../../../data/remediator";
+import {
+  RemediatorRadioOption,
+  Remediator,
+  SnrTemplateResult,
+} from "../../../../data/types";
+import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
+import HelpIcon from "../../../shared/HelpIcon";
 
 const SNRRadioButtonLabel: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
@@ -65,14 +69,14 @@ const RemediatorKindRadioGroup: React.FC<{
 };
 
 const RemediatorKindField_ = ({
-  formViewFieldName,
+  fieldName,
+  snrTemplateResult,
 }: {
-  formViewFieldName: string;
+  fieldName: string;
+  snrTemplateResult: SnrTemplateResult;
 }) => {
-  const [snrTemplate, loaded] = useSnrTemplate();
-  const [, , { setValue: setRemediator }] = useField<Remediator>(
-    getRemediatorFieldName(formViewFieldName)
-  );
+  const [snrTemplate, loaded] = snrTemplateResult;
+  const [, , { setValue: setRemediator }] = useField<Remediator>(fieldName);
 
   const setCustomRemediator = () => {
     setRemediator({
@@ -96,7 +100,7 @@ const RemediatorKindField_ = ({
   }
   return (
     <RemediatorKindRadioGroup
-      fieldName={getRemediatorRadioOptionFieldName(formViewFieldName)}
+      fieldName={`${fieldName}.radioOption`}
       onChange={onChange}
       snrTemplatesExist={!!snrTemplate}
     />

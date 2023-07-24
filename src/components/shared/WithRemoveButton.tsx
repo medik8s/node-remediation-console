@@ -9,6 +9,7 @@ export const WithRemoveButton = ({
   direction = "row",
   grow = true,
   dataTest,
+  ariaLabel,
 }: {
   children: React.ReactNode;
   isDisabled: boolean;
@@ -16,6 +17,7 @@ export const WithRemoveButton = ({
   direction?: "column" | "columnReverse" | "row" | "rowReverse";
   onClick: () => void;
   dataTest: string;
+  ariaLabel?: string;
 }) => {
   return (
     <Flex direction={{ default: direction }}>
@@ -25,6 +27,7 @@ export const WithRemoveButton = ({
       >
         {children}
       </FlexItem>
+
       <FlexItem id="remove-button">
         <Button
           type="button"
@@ -32,6 +35,7 @@ export const WithRemoveButton = ({
           onClick={onClick}
           isDisabled={isDisabled}
           data-test={dataTest}
+          aria-label={ariaLabel}
         >
           <MinusCircleIcon />
         </Button>

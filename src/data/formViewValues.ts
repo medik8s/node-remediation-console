@@ -51,6 +51,15 @@ export const getFormViewValues = (
           : RemediatorRadioOption.CUSTOM,
       template: remediationTemplate,
     },
+    remediators: [
+      {
+        radioOption:
+          remediationTemplate.kind === snrTemplateKind.kind
+            ? RemediatorRadioOption.SNR
+            : RemediatorRadioOption.CUSTOM,
+        template: remediationTemplate,
+      },
+    ],
   };
 };
 

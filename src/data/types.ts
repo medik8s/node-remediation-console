@@ -96,7 +96,7 @@ export type FormViewValues = {
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator: Remediator;
-  remediators: Remediator[];
+  remediators?: Remediator[];
 };
 
 export type NodeHealthCheckFormValues = {
@@ -130,3 +130,5 @@ export type SelfNodeRemediationTemplate = K8sResourceCommon & {
     };
   };
 };
+
+export type SnrTemplateResult = [RemediationTemplate | undefined, boolean];
