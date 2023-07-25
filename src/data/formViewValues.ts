@@ -11,8 +11,35 @@ import {
   NodeHealthCheck,
   FormViewValues,
   RemediatorRadioOption,
+  RemediationTemplate,
+  Remediator,
+  NodeHealthCheckSpec,
+  EscalatingRemediator,
 } from "./types";
 import { MIN_HEALTHY_REGEX } from "./validationSchema";
+
+const getRemediationTemplateFormValues = (
+  template?: RemediationTemplate,
+  timeout?: string,
+  order?: number
+): Remediator => {
+  if (!template) {
+    return {
+      radioOption: RemediatorRadioOption.CUSTOM,
+      template: getEmptyRemediationTemplate(),
+    };
+  }
+  const radioOption =
+    template.kind === snrTemplateKind.kind
+      ? RemediatorRadioOption.SNR
+      : RemediatorRadioOption.CUSTOM;
+  return {
+    radioOption,
+    template,
+    timeout,
+    order,
+  };
+};
 
 export const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?)(ns|us|µs|ms|s|m|h)$/;
 
@@ -32,11 +59,26 @@ const getUnhealthyConditionsValue = (
   }
 };
 
+const getEscalatingRemediatorsFormValues = (
+  escalatingRemediators?: EscalatingRemediator[]
+): Remediator[] => {
+  if (!escalatingRemediators) return [];
+  const sortedEscalatingRemediators = escalatingRemediators.sort(
+    (remediator1, remediator2) => remediator1.order - remediator2.order
+  );
+  return sortedEscalatingRemediators.map((remediator) => {
+    return getRemediationTemplateFormValues(
+      remediator.remediationTemplate,
+      remediator.timeout,
+      remediator.order
+    );
+  });
+};
+
 export const getFormViewValues = (
   nodeHealthCheck: NodeHealthCheck
 ): FormViewValues => {
-  const remediationTemplate =
-    nodeHealthCheck.spec?.remediationTemplate || getEmptyRemediationTemplate();
+  const useEscalating = !!nodeHealthCheck.spec?.escalatingRemediators;
   return {
     name: nodeHealthCheck.metadata?.name,
     nodeSelector: selectorToStringArray(nodeHealthCheck.spec?.selector || {}),
@@ -44,22 +86,11 @@ export const getFormViewValues = (
       nodeHealthCheck.spec?.minHealthy ?? DEFAULT_MIN_HEALTHY
     ).toString(),
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
-    remediator: {
-      radioOption:
-        remediationTemplate.kind === snrTemplateKind.kind
-          ? RemediatorRadioOption.SNR
-          : RemediatorRadioOption.CUSTOM,
-      template: remediationTemplate,
-    },
-    remediators: [
-      {
-        radioOption:
-          remediationTemplate.kind === snrTemplateKind.kind
-            ? RemediatorRadioOption.SNR
-            : RemediatorRadioOption.CUSTOM,
-        template: remediationTemplate,
-      },
-    ],
+    remediator: !useEscalating ? getRemediationTemplateFormValues() : undefined,
+    escalatingRemediators: getEscalatingRemediatorsFormValues(
+      nodeHealthCheck.spec?.escalatingRemediators
+    ),
+    useEscalating: !!nodeHealthCheck.spec?.escalatingRemediators,
   };
 };
 
@@ -75,14 +106,25 @@ export const getNodeHealthCheckMinHealthy = (minHealthy: string) => {
   return minHealthyVal;
 };
 
-export const getSpec = (formViewFields: FormViewValues) => {
+export const getSpec = (
+  formViewFields: FormViewValues
+): NodeHealthCheckSpec => {
   const { nodeSelector, minHealthy, unhealthyConditions } = formViewFields;
 
   return {
     selector: selectorFromStringArray(nodeSelector),
     unhealthyConditions,
     minHealthy: getNodeHealthCheckMinHealthy(minHealthy),
-    remediationTemplate: formViewFields.remediator.template,
+    remediationTemplate: formViewFields.useEscalating
+      ? formViewFields.remediator.template
+      : undefined,
+    escalatingRemediators: formViewFields.useEscalating
+      ? formViewFields.escalatingRemediators.map((remediator, _index) => ({
+          remediationTemplate: remediator.template,
+          order: remediator.order,
+          timeout: remediator.timeout,
+        }))
+      : undefined,
   };
 };
 

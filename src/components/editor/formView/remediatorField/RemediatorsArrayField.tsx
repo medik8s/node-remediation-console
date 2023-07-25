@@ -147,7 +147,7 @@ const RemediatorsArrayField = ({
   snrTemplateResult: SnrTemplateResult;
 }) => {
   return (
-    <FieldArray name="formData.remediators" validateOnChange={false}>
+    <FieldArray name="formData.escalatingRemediators" validateOnChange={false}>
       {(props) => {
         return (
           <RemediatorsArrayFieldContent

@@ -11,7 +11,7 @@ import { getObjectItemFieldName } from "../../shared/formik-utils";
 import { NodeHealthCheckFormValues } from "../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
 import useSnrTemplate from "../../../apis/useSNRTemplate";
-import RemediatorsArrayField from "./remediatorField/RemediatorsArrayField";
+import RemediationTemplateField from "./remediatorField/RemediationTemplateField";
 
 const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();
@@ -56,7 +56,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
         data-test="NodeHealthCheck-name"
         helpText={t("A unique name for the NodeHealthCheck")}
       />
-      <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
+      <RemediationTemplateField snrTemplateResult={snrTemplateResult} />
 
       <NodeSelectionField
         fieldName={getObjectItemFieldName([formViewFieldName, "nodeSelector"])}

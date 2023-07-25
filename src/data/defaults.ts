@@ -22,6 +22,7 @@ export const defaultUnhealthyConditions: UnhealthyConditions = [
     type: "Ready",
   },
 ];
+``;
 
 export const useDefaultNodeHealthCheck = (): [
   InitialNodeHealthCheck | undefined,

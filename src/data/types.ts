@@ -32,14 +32,21 @@ export type RemediationTemplate = {
   namespace: string;
 };
 
+export type EscalatingRemediator = {
+  remediationTemplate: RemediationTemplate;
+  order?: number;
+  timeout?: string;
+};
+
 export type UnhealthyConditions = UnhealthyCondition[];
 
 export type NodeHealthCheckSpec = {
   selector?: Selector;
-  remediationTemplate: RemediationTemplate;
+  remediationTemplate?: RemediationTemplate;
   minHealthy?: string | number;
   unhealthyConditions?: UnhealthyConditions;
   pauseRequests?: string[];
+  escalatingRemediators?: EscalatingRemediator[];
 };
 
 export type BasicResourceInfo = {
@@ -49,7 +56,10 @@ export type BasicResourceInfo = {
 };
 
 export type InitialNodeHealthCheck = {
-  spec: Omit<Required<NodeHealthCheckSpec>, "pauseRequests">;
+  spec: Omit<
+    Required<NodeHealthCheckSpec>,
+    "pauseRequests" | "escalatingRemediators"
+  >;
 } & BasicResourceInfo;
 
 export enum StatusPhase {
@@ -88,15 +98,22 @@ export type Remediator = {
   radioOption: RemediatorRadioOption;
   template: RemediationTemplate;
   timeout?: string;
+  order?: number;
 };
+
+export enum RemediatorMode {
+  SINGLE = "single",
+  MULTIPLE = "multiple",
+}
 
 export type FormViewValues = {
   name: string;
   nodeSelector: string[];
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
-  remediator: Remediator;
-  remediators?: Remediator[];
+  remediator?: Remediator;
+  escalatingRemediators: Remediator[];
+  useEscalating: boolean;
 };
 
 export type NodeHealthCheckFormValues = {
