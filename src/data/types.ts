@@ -112,7 +112,7 @@ export type FormViewValues = {
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator?: Remediator;
-  escalatingRemediators: Remediator[];
+  escalatingRemediators?: Remediator[];
   useEscalating: boolean;
 };
 

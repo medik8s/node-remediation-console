@@ -5,7 +5,6 @@ import {
 import { defaultUnhealthyConditions, DEFAULT_MIN_HEALTHY } from "./defaults";
 import { snrTemplateKind } from "./model";
 import { ParseErrorCode, throwParseError } from "./parseErrors";
-import { getEmptyRemediationTemplate } from "./remediator";
 import {
   UnhealthyCondition,
   NodeHealthCheck,
@@ -22,12 +21,9 @@ const getRemediationTemplateFormValues = (
   template?: RemediationTemplate,
   timeout?: string,
   order?: number
-): Remediator => {
+): Remediator | undefined => {
   if (!template) {
-    return {
-      radioOption: RemediatorRadioOption.CUSTOM,
-      template: getEmptyRemediationTemplate(),
-    };
+    return undefined;
   }
   const radioOption =
     template.kind === snrTemplateKind.kind
@@ -110,16 +106,15 @@ export const getSpec = (
   formViewFields: FormViewValues
 ): NodeHealthCheckSpec => {
   const { nodeSelector, minHealthy, unhealthyConditions } = formViewFields;
-
   return {
     selector: selectorFromStringArray(nodeSelector),
     unhealthyConditions,
     minHealthy: getNodeHealthCheckMinHealthy(minHealthy),
-    remediationTemplate: formViewFields.useEscalating
-      ? formViewFields.remediator.template
+    remediationTemplate: !formViewFields.useEscalating
+      ? formViewFields.remediator?.template
       : undefined,
     escalatingRemediators: formViewFields.useEscalating
-      ? formViewFields.escalatingRemediators.map((remediator, _index) => ({
+      ? formViewFields.escalatingRemediators?.map((remediator, _index) => ({
           remediationTemplate: remediator.template,
           order: remediator.order,
           timeout: remediator.timeout,

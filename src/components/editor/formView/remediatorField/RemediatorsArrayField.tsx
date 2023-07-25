@@ -114,17 +114,19 @@ const RemediatorsArrayFieldContent = ({
       <DragDrop onDrop={onDrop}>
         <Droppable>
           <Stack hasGutter>
-            {remediators.map((_remediator: Remediator, index: number) => (
-              <Draggable key={index}>
-                <SingleRemediatorField
-                  key={index}
-                  index={index}
-                  remove={remove}
-                  snrTemplateResult={snrTemplateResult}
-                  fieldName={`${fieldName}[${index}]`}
-                />
-              </Draggable>
-            ))}
+            {(remediators || []).map(
+              (_remediator: Remediator, index: number) => (
+                <Draggable key={index}>
+                  <SingleRemediatorField
+                    key={index}
+                    index={index}
+                    remove={remove}
+                    snrTemplateResult={snrTemplateResult}
+                    fieldName={`${fieldName}[${index}]`}
+                  />
+                </Draggable>
+              )
+            )}
           </Stack>
         </Droppable>
       </DragDrop>
