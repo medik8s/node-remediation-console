@@ -8,7 +8,7 @@ import { capitalize, startCase } from "lodash-es";
 import { getObjectItemFieldName } from "../../../shared/formik-utils";
 import InputField from "../../../../copiedFromConsole/formik-fields/InputField";
 import { useFormikValidationFix } from "../../../../copiedFromConsole/hooks/formik-validation-fix";
-import { Remediator, SnrTemplateResult } from "../../../../data/types";
+import { RemediationTemplate, Remediator } from "../../../../data/types";
 const sentenceCase = (string: string) => {
   return capitalize(startCase(string));
 };
@@ -31,16 +31,13 @@ const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => (
 
 export const RemediatorField: React.FC<{
   fieldName: string;
-  snrTemplateResult: SnrTemplateResult;
-}> = ({ fieldName, snrTemplateResult }) => {
+  snrTemplate: RemediationTemplate | undefined;
+}> = ({ fieldName, snrTemplate }) => {
   const [value] = useField<Remediator>(fieldName);
   useFormikValidationFix(value);
   return (
     <>
-      <RemediatorKindField
-        fieldName={fieldName}
-        snrTemplateResult={snrTemplateResult}
-      />
+      <RemediatorKindField fieldName={fieldName} snrTemplate={snrTemplate} />
       <CustomRemediatorField fieldName={`${fieldName}.template`} />
     </>
   );

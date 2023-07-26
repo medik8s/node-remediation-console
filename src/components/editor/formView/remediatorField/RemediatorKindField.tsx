@@ -1,4 +1,4 @@
-import { FormGroup, Skeleton, Tooltip } from "@patternfly/react-core";
+import { FormGroup, Tooltip } from "@patternfly/react-core";
 
 import { useField } from "formik";
 
@@ -14,7 +14,7 @@ import {
 import {
   RemediatorRadioOption,
   Remediator,
-  SnrTemplateResult,
+  RemediationTemplate,
 } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import HelpIcon from "../../../shared/HelpIcon";
@@ -70,12 +70,11 @@ const RemediatorKindRadioGroup: React.FC<{
 
 const RemediatorKindField_ = ({
   fieldName,
-  snrTemplateResult,
+  snrTemplate,
 }: {
   fieldName: string;
-  snrTemplateResult: SnrTemplateResult;
+  snrTemplate: RemediationTemplate | undefined;
 }) => {
-  const [snrTemplate, loaded] = snrTemplateResult;
   const [, , { setValue: setRemediator }] = useField<Remediator>(fieldName);
 
   const setCustomRemediator = () => {
@@ -95,9 +94,7 @@ const RemediatorKindField_ = ({
       });
     }
   };
-  if (!loaded) {
-    return <Skeleton />;
-  }
+
   return (
     <RemediatorKindRadioGroup
       fieldName={`${fieldName}.radioOption`}

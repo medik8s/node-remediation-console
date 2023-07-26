@@ -114,7 +114,7 @@ export const getSpec = (
       ? formViewFields.remediator?.template
       : undefined,
     escalatingRemediators: formViewFields.useEscalating
-      ? formViewFields.escalatingRemediators?.map((remediator, _index) => ({
+      ? formViewFields.escalatingRemediators?.map((remediator) => ({
           remediationTemplate: remediator.template,
           order: remediator.order,
           timeout: remediator.timeout,
