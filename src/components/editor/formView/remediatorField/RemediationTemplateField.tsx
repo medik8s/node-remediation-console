@@ -1,5 +1,12 @@
-import { FormGroup, Skeleton } from "@patternfly/react-core";
+import {
+  FormGroup,
+  Skeleton,
+  Stack,
+  StackItem,
+  Text,
+} from "@patternfly/react-core";
 import { useFormikContext } from "formik";
+import { CheckboxField } from "formik-pf";
 import { range } from "lodash";
 import * as React from "react";
 import { getDefaultRemediator } from "../../../../data/remediator";
@@ -10,7 +17,6 @@ import {
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import RemediatorField from "./RemediatorField";
 import RemediatorsArrayField from "./RemediatorsArrayField";
-import UseEscalatingCheckboxField from "./UseEcalatingCheckboxField";
 
 const Loading = () => (
   <>
@@ -51,19 +57,47 @@ const RemediationTemplateField = ({
     snrTemplate,
   ]);
   return (
-    <FormGroup title={t("Remediation template")} fieldId="remediation-template">
-      <UseEscalatingCheckboxField />
-      {!loaded && <Loading />}
-      {loaded && !values.formData.useEscalating && (
-        <RemediatorField
-          fieldName={"formData.remediator"}
-          snrTemplate={snrTemplate}
+    <Stack hasGutter>
+      <StackItem>
+        <FormGroup
+          label={t("Remediation template")}
+          isRequired
+          fieldId="remediation-template"
+          style={{ padding: "unset" }}
         />
+      </StackItem>
+      <StackItem>
+        <Text>
+          {t(
+            "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout"
+          )}
+        </Text>
+      </StackItem>
+      <StackItem>
+        <CheckboxField
+          name="formData.useEscalating"
+          label={t("Use escalating remediations")}
+        />
+      </StackItem>
+      {!loaded && (
+        <StackItem>
+          <Loading />
+        </StackItem>
+      )}
+      {loaded && !values.formData.useEscalating && (
+        <StackItem>
+          <RemediatorField
+            fieldName={"formData.remediator"}
+            snrTemplate={snrTemplate}
+          />
+        </StackItem>
       )}
       {loaded && values.formData.useEscalating && (
-        <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
+        <StackItem>
+          <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
+        </StackItem>
       )}
-    </FormGroup>
+    </Stack>
   );
 };
 

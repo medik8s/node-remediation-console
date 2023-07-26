@@ -28,8 +28,6 @@ const mockSnrRemdiatorResult: [RemediationTemplate, boolean] = [
   true,
 ];
 
-import "@patternfly/react-core/dist/styles/base.css";
-
 type FormWrapperProps = {
   children: React.ReactNode;
   initialValues?: unknown;
@@ -99,6 +97,7 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
     </PageSection>
   </Page>
 );
+
 const RemediatorsArrayFieldWrapper = () => {
   return (
     <FormWrapper initialValues={{ formData: {} }}>
