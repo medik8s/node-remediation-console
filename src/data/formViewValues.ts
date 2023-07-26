@@ -55,14 +55,14 @@ const getUnhealthyConditionsValue = (
   }
 };
 
-const getEscalatingRemediatorsFormValues = (
-  escalatingRemediators?: EscalatingRemediator[]
+const getescalatingRemediationsFormValues = (
+  escalatingRemediations?: EscalatingRemediator[]
 ): Remediator[] => {
-  if (!escalatingRemediators) return [];
-  const sortedEscalatingRemediators = escalatingRemediators.sort(
+  if (!escalatingRemediations) return [];
+  const sortedescalatingRemediations = escalatingRemediations.sort(
     (remediator1, remediator2) => remediator1.order - remediator2.order
   );
-  return sortedEscalatingRemediators.map((remediator) => {
+  return sortedescalatingRemediations.map((remediator) => {
     return getRemediationTemplateFormValues(
       remediator.remediationTemplate,
       remediator.timeout,
@@ -74,7 +74,7 @@ const getEscalatingRemediatorsFormValues = (
 export const getFormViewValues = (
   nodeHealthCheck: NodeHealthCheck
 ): FormViewValues => {
-  const useEscalating = !!nodeHealthCheck.spec?.escalatingRemediators;
+  const useEscalating = !!nodeHealthCheck.spec?.escalatingRemediations;
   return {
     name: nodeHealthCheck.metadata?.name,
     nodeSelector: selectorToStringArray(nodeHealthCheck.spec?.selector || {}),
@@ -83,10 +83,10 @@ export const getFormViewValues = (
     ).toString(),
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
     remediator: !useEscalating ? getRemediationTemplateFormValues() : undefined,
-    escalatingRemediators: getEscalatingRemediatorsFormValues(
-      nodeHealthCheck.spec?.escalatingRemediators
+    escalatingRemediations: getescalatingRemediationsFormValues(
+      nodeHealthCheck.spec?.escalatingRemediations
     ),
-    useEscalating: !!nodeHealthCheck.spec?.escalatingRemediators,
+    useEscalating: !!nodeHealthCheck.spec?.escalatingRemediations,
   };
 };
 
@@ -113,8 +113,8 @@ export const getSpec = (
     remediationTemplate: !formViewFields.useEscalating
       ? formViewFields.remediator?.template
       : undefined,
-    escalatingRemediators: formViewFields.useEscalating
-      ? formViewFields.escalatingRemediators?.map((remediator) => ({
+    escalatingRemediations: formViewFields.useEscalating
+      ? formViewFields.escalatingRemediations?.map((remediator) => ({
           remediationTemplate: remediator.template,
           order: remediator.order,
           timeout: remediator.timeout,

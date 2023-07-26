@@ -46,7 +46,7 @@ export type NodeHealthCheckSpec = {
   minHealthy?: string | number;
   unhealthyConditions?: UnhealthyConditions;
   pauseRequests?: string[];
-  escalatingRemediators?: EscalatingRemediator[];
+  escalatingRemediations?: EscalatingRemediator[];
 };
 
 export type BasicResourceInfo = {
@@ -58,7 +58,7 @@ export type BasicResourceInfo = {
 export type InitialNodeHealthCheck = {
   spec: Omit<
     Required<NodeHealthCheckSpec>,
-    "pauseRequests" | "escalatingRemediators"
+    "pauseRequests" | "escalatingRemediations"
   >;
 } & BasicResourceInfo;
 
@@ -112,7 +112,7 @@ export type FormViewValues = {
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator?: Remediator;
-  escalatingRemediators?: Remediator[];
+  escalatingRemediations?: Remediator[];
   useEscalating: boolean;
 };
 

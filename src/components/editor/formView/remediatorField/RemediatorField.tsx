@@ -8,26 +8,40 @@ import { capitalize, startCase } from "lodash-es";
 import { getObjectItemFieldName } from "../../../shared/formik-utils";
 import InputField from "../../../../copiedFromConsole/formik-fields/InputField";
 import { useFormikValidationFix } from "../../../../copiedFromConsole/hooks/formik-validation-fix";
-import { RemediationTemplate, Remediator } from "../../../../data/types";
+import {
+  RemediationTemplate,
+  Remediator,
+  RemediatorRadioOption,
+} from "../../../../data/types";
+import { Stack, StackItem } from "@patternfly/react-core";
 const sentenceCase = (string: string) => {
   return capitalize(startCase(string));
 };
 
-const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => (
-  <>
-    {["apiVersion", "kind", "name", "namespace"].map((subFieldName) => {
-      const inputFieldName = getObjectItemFieldName([fieldName, subFieldName]);
-      return (
-        <InputField
-          required
-          name={inputFieldName}
-          key={inputFieldName}
-          label={sentenceCase(subFieldName)}
-        />
-      );
-    })}
-  </>
-);
+const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => {
+  const [{ value }] = useField<Remediator>(fieldName);
+  return (
+    <Stack hasGutter>
+      {["apiVersion", "kind", "name", "namespace"].map((subFieldName) => {
+        const inputFieldName = getObjectItemFieldName([
+          fieldName,
+          "template",
+          subFieldName,
+        ]);
+        return (
+          <StackItem key={inputFieldName}>
+            <InputField
+              required
+              name={inputFieldName}
+              label={sentenceCase(subFieldName)}
+              isDisabled={value?.radioOption === RemediatorRadioOption.SNR}
+            />
+          </StackItem>
+        );
+      })}
+    </Stack>
+  );
+};
 
 export const RemediatorField: React.FC<{
   fieldName: string;
@@ -36,10 +50,14 @@ export const RemediatorField: React.FC<{
   const [value] = useField<Remediator>(fieldName);
   useFormikValidationFix(value);
   return (
-    <>
-      <RemediatorKindField fieldName={fieldName} snrTemplate={snrTemplate} />
-      <CustomRemediatorField fieldName={`${fieldName}.template`} />
-    </>
+    <Stack hasGutter>
+      <StackItem>
+        <RemediatorKindField fieldName={fieldName} snrTemplate={snrTemplate} />
+      </StackItem>
+      <StackItem>
+        <CustomRemediatorField fieldName={fieldName} />
+      </StackItem>
+    </Stack>
   );
 };
 

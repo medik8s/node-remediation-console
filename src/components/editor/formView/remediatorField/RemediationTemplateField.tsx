@@ -44,32 +44,31 @@ const RemediationTemplateField = ({
     if (!values.formData.remediator) {
       setFieldValue("formData.remediator", defaultRemediator);
     }
-    if (!values.formData.escalatingRemediators?.length) {
-      setFieldValue("formData.escalatingRemediators", [
+    if (!values.formData.escalatingRemediations?.length) {
+      setFieldValue("formData.escalatingRemediations", [
         { ...defaultRemediator, order: 0 },
       ]);
     }
   }, [
     loaded,
     values.formData.remediator,
-    values.formData.escalatingRemediators,
+    values.formData.escalatingRemediations,
     setFieldValue,
     snrTemplate,
   ]);
   return (
     <Stack hasGutter>
-      <StackItem>
+      <StackItem style={{ marginBottom: "unset" }}>
         <FormGroup
           label={t("Remediation template")}
           isRequired
           fieldId="remediation-template"
-          style={{ padding: "unset" }}
         />
       </StackItem>
       <StackItem>
         <Text>
           {t(
-            "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout"
+            "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout."
           )}
         </Text>
       </StackItem>
@@ -93,9 +92,18 @@ const RemediationTemplateField = ({
         </StackItem>
       )}
       {loaded && values.formData.useEscalating && (
-        <StackItem>
-          <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
-        </StackItem>
+        <>
+          <StackItem>
+            <Text>
+              {t(
+                "Rearrange the templates using drag and drop or by editing the ‘Order’ field. The remediations will be executed in the specified order."
+              )}
+            </Text>
+          </StackItem>
+          <StackItem>
+            <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
+          </StackItem>
+        </>
       )}
     </Stack>
   );

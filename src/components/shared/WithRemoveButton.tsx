@@ -20,7 +20,7 @@ export const WithRemoveButton = ({
   ariaLabel?: string;
 }) => {
   return (
-    <Flex direction={{ default: direction }}>
+    <Flex direction={{ default: direction }} flexWrap={{ default: "nowrap" }}>
       <FlexItem
         grow={grow ? { default: "grow" } : undefined}
         spacer={{ default: "spacerSm" }}

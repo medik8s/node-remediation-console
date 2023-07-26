@@ -78,8 +78,24 @@ const getFormDataSchema = (t: TFunction) =>
         ),
       })
     ),
-    remediator: yup.object({
-      template: remediatorSchema,
+    remediator: yup.object().when("useEscalating", {
+      is: false,
+      then: yup.object().shape({ template: remediatorSchema }),
+    }),
+    escalatingRemediations: yup.array().when("useEscalating", {
+      is: true,
+      then: yup.array().of(
+        yup.object().shape({
+          template: remediatorSchema,
+          timeout: requiredSchema.concat(
+            yup.string().matches(new RegExp(DURATION_REGEX), {
+              message: `${t(
+                "Expected value matches regular expression:"
+              )} ${DURATION_REGEX}`,
+            })
+          ),
+        })
+      ),
     }),
     nodeSelector: yup.array().of(yup.string()).required().min(1),
   });

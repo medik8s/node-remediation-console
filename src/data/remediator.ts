@@ -20,8 +20,15 @@ export const getRemediatorLabel = (
   nodeHealthCheck: NodeHealthCheck,
   t: TFunction
 ): string | undefined => {
-  if (!nodeHealthCheck.spec || !nodeHealthCheck.spec.remediationTemplate) {
+  if (
+    !nodeHealthCheck.spec ||
+    (!nodeHealthCheck.spec.remediationTemplate &&
+      !nodeHealthCheck.spec.escalatingRemediations)
+  ) {
     return undefined;
+  }
+  if (nodeHealthCheck.spec.escalatingRemediations?.length > 0) {
+    return t("Escalating remediations");
   }
   const remediationTemplate = nodeHealthCheck.spec.remediationTemplate;
   return remediationTemplate.kind === snrTemplateKind.kind
