@@ -46,7 +46,6 @@ const LabelSelectionField = ({
   const [selectGroups, setSelectGroups] = React.useState<JSX.Element[]>([]);
   const memoValue = useDeepCompareMemoize<string[]>(field.value);
   const [allLabels, setAllLabels] = React.useState<string[]>([]);
-
   React.useEffect(() => {
     if (!isLoading) {
       let _options = uniq(

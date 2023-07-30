@@ -32,14 +32,21 @@ export type RemediationTemplate = {
   namespace: string;
 };
 
+export type EscalatingRemediator = {
+  remediationTemplate: RemediationTemplate;
+  order?: number;
+  timeout?: string;
+};
+
 export type UnhealthyConditions = UnhealthyCondition[];
 
 export type NodeHealthCheckSpec = {
   selector?: Selector;
-  remediationTemplate: RemediationTemplate;
+  remediationTemplate?: RemediationTemplate;
   minHealthy?: string | number;
   unhealthyConditions?: UnhealthyConditions;
   pauseRequests?: string[];
+  escalatingRemediations?: EscalatingRemediator[];
 };
 
 export type BasicResourceInfo = {
@@ -49,7 +56,10 @@ export type BasicResourceInfo = {
 };
 
 export type InitialNodeHealthCheck = {
-  spec: Omit<Required<NodeHealthCheckSpec>, "pauseRequests">;
+  spec: Omit<
+    Required<NodeHealthCheckSpec>,
+    "pauseRequests" | "escalatingRemediations"
+  >;
 } & BasicResourceInfo;
 
 export enum StatusPhase {
@@ -87,14 +97,23 @@ export enum RemediatorRadioOption {
 export type Remediator = {
   radioOption: RemediatorRadioOption;
   template: RemediationTemplate;
+  timeout?: string;
+  order?: number;
 };
+
+export enum RemediatorMode {
+  SINGLE = "single",
+  MULTIPLE = "multiple",
+}
 
 export type FormViewValues = {
   name: string;
   nodeSelector: string[];
   minHealthy: string;
   unhealthyConditions: UnhealthyCondition[];
-  remediator: Remediator;
+  remediator?: Remediator;
+  escalatingRemediations?: Remediator[];
+  useEscalating: boolean;
 };
 
 export type NodeHealthCheckFormValues = {
@@ -128,3 +147,5 @@ export type SelfNodeRemediationTemplate = K8sResourceCommon & {
     };
   };
 };
+
+export type SnrTemplateResult = [RemediationTemplate | undefined, boolean];

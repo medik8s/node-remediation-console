@@ -3,6 +3,7 @@ import InputField from "copiedFromConsole/formik-fields/InputField";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
 import * as React from "react";
+import { getDurationHelptext } from "../../../../copiedFromConsole/utils/durationUtils";
 import { UnhealthyConditionFieldProps } from "./propTypes";
 
 const DurationField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
@@ -20,9 +21,7 @@ const DurationField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
       name={name}
       label={t("Duration")}
       labelIcon={icon}
-      helpText={t(
-        `Expects a string of decimal numbers each with optional fraction and a unit suffix, eg "300ms", "1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".`
-      )}
+      helpText={getDurationHelptext(t)}
       required
       data-test="duration-input"
     />

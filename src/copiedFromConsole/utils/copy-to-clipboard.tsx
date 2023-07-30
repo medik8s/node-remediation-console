@@ -9,8 +9,8 @@ import {
   Tooltip,
 } from "@patternfly/react-core";
 import { CopyIcon } from "@patternfly/react-icons";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { isNil } from "lodash-es";
+import { useNodeHealthCheckTranslation } from "../../localization/useNodeHealthCheckTranslation";
 
 export const CopyToClipboard: React.FC<CopyToClipboardProps> = React.memo(
   (props) => {

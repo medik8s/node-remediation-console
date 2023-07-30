@@ -1,6 +1,6 @@
-import { CopyToClipboard } from "copiedFromConsole/utils/copy-to-clipboard";
-import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
+import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
+import { CopyToClipboard } from "../../utils/copy-to-clipboard";
 import { ErrorBoundaryFallbackProps } from "../types";
 
 const ErrorDetailsBlock: React.FC<ErrorBoundaryFallbackProps> = (props) => {

@@ -10,9 +10,11 @@ import {
   SelectProps,
   SelectVariant,
 } from "@patternfly/react-core";
-import { getFieldId } from "copiedFromConsole/formik-fields/field-utils";
-import { FieldProps } from "copiedFromConsole/formik-fields/field-types";
+
 import fuzzy from "fuzzysearch";
+import { getFieldId } from "../../copiedFromConsole/formik-fields/field-utils";
+import { FieldProps } from "../../copiedFromConsole/formik-fields/field-types";
+import { useFormikValidationFix } from "../../copiedFromConsole/hooks/formik-validation-fix";
 export interface MultiSelectFieldProps extends FieldProps {
   options: JSX.Element[];
   placeholderText?: string;
@@ -42,6 +44,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const isValid = !(touched && error);
   const errorMessage = !isValid ? error : "";
   const hText = getHelperText ? getHelperText(field.value) : helpText;
+  useFormikValidationFix(field.value);
 
   const onToggle = (isOpen: boolean) => setOpen(isOpen);
   const onClearSelection = () => {
