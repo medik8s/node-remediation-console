@@ -98,7 +98,6 @@ const getEmptyMsg = (selectedLabels: string[]) => {
 const NodeList = ({ fieldName }: { fieldName: string }) => {
   const [{ value }] = useField<string[]>(fieldName);
   const [selectedNodes, loaded, error] = useSelectedNodes(value);
-  console.log("selectedNodes", selectedNodes);
   return (
     <VirtualizedTable<NodeKind>
       data={selectedNodes || []}

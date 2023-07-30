@@ -1,4 +1,5 @@
 import {
+  EscalatingRemediator,
   NodeHealthCheck,
   RemediationTemplate,
   Remediator,
@@ -47,3 +48,10 @@ export const getDefaultRemediator = (
     order: 0,
   };
 };
+
+export const getSortedRemediators = (
+  remediators: (EscalatingRemediator | Remediator)[]
+): (EscalatingRemediator | Remediator)[] =>
+  remediators.sort(
+    (remediator1, remediator2) => remediator1.order - remediator2.order
+  );

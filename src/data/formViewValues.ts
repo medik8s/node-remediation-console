@@ -5,6 +5,7 @@ import {
 import { defaultUnhealthyConditions, DEFAULT_MIN_HEALTHY } from "./defaults";
 import { snrTemplateKind } from "./model";
 import { ParseErrorCode, throwParseError } from "./parseErrors";
+import { getSortedRemediators } from "./remediator";
 import {
   UnhealthyCondition,
   NodeHealthCheck,
@@ -59,9 +60,9 @@ const getescalatingRemediationsFormValues = (
   escalatingRemediations?: EscalatingRemediator[]
 ): Remediator[] => {
   if (!escalatingRemediations) return [];
-  const sortedescalatingRemediations = escalatingRemediations.sort(
-    (remediator1, remediator2) => remediator1.order - remediator2.order
-  );
+  const sortedescalatingRemediations = getSortedRemediators(
+    escalatingRemediations
+  ) as EscalatingRemediator[];
   return sortedescalatingRemediations.map((remediator) => {
     return getRemediationTemplateFormValues(
       remediator.remediationTemplate,

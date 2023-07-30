@@ -48,6 +48,7 @@
   "Failed to fetch nodes": "Failed to fetch nodes",
   "nodes": "nodes",
   "Remediation template": "Remediation template",
+  "Escalating remediations is a list of remediation templates with an order and timeout field.": "Escalating remediations is a list of remediation templates with an order and timeout field.",
   "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout.": "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout.",
   "Use escalating remediations": "Use escalating remediations",
   "Rearrange the templates using drag and drop or by editing the ‘Order’ field. The remediations will be executed in the specified order.": "Rearrange the templates using drag and drop or by editing the ‘Order’ field. The remediations will be executed in the specified order.",

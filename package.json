@@ -104,7 +104,6 @@
     "classnames": "2.2.6",
     "cypress": "^10.6.0",
     "formik": "2.2.9",
-    "formik-pf": "^0.0.1-alpha10",
     "fuzzysearch": "^1.0.3",
     "i18next": "^21.8.14",
     "immutable": "4.0.0",

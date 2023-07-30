@@ -6,7 +6,6 @@ import {
   Text,
 } from "@patternfly/react-core";
 import { useFormikContext } from "formik";
-import { CheckboxField } from "formik-pf";
 import { range } from "lodash";
 import * as React from "react";
 import { getDefaultRemediator } from "../../../../data/remediator";
@@ -15,8 +14,19 @@ import {
   SnrTemplateResult,
 } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
+import CheckboxField from "../../../shared/CheckboxField";
 import RemediatorField from "./RemediatorField";
 import RemediatorsArrayField from "./RemediatorsArrayField";
+
+const UseEscalatingField = () => {
+  const { t } = useNodeHealthCheckTranslation();
+  return (
+    <CheckboxField
+      name="formData.useEscalating"
+      label={t("Use escalating remediations")}
+    />
+  );
+};
 
 const Loading = () => (
   <>
@@ -73,10 +83,7 @@ const RemediationTemplateField = ({
         </Text>
       </StackItem>
       <StackItem>
-        <CheckboxField
-          name="formData.useEscalating"
-          label={t("Use escalating remediations")}
-        />
+        <UseEscalatingField />
       </StackItem>
       {!loaded && (
         <StackItem>

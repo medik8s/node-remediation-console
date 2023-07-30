@@ -4,7 +4,6 @@ import {
   ExpandableSection,
   Flex,
   FlexItem,
-  FormGroup,
   Label,
   Stack,
   StackItem,
@@ -12,7 +11,10 @@ import {
 
 import { FieldArray, FieldArrayRenderProps, useField } from "formik";
 import * as React from "react";
-import { getEmptyRemediationTemplate } from "../../../../data/remediator";
+import {
+  getEmptyRemediationTemplate,
+  getSortedRemediators,
+} from "../../../../data/remediator";
 import {
   Remediator,
   RemediatorRadioOption,
@@ -23,10 +25,12 @@ import RemediatorField from "./RemediatorField";
 import { DragDrop, Draggable, Droppable } from "@patternfly/react-core";
 import { WithRemoveButton } from "../../../shared/WithRemoveButton";
 import { GripVerticalIcon, InfoCircleIcon } from "@patternfly/react-icons";
-import { InputField, NumberSpinnerField } from "formik-pf";
 import { getDurationHelptext } from "../../../../copiedFromConsole/utils/durationUtils";
 import HelpIcon from "../../../shared/HelpIcon";
 import AddMoreButton from "../../../shared/AddMoreButton";
+import NumberSpinnerField from "../../../shared/NumberSpinnerField";
+import { useDebounce } from "../../../../copiedFromConsole/hooks/useDebounce";
+import InputField from "../../../../copiedFromConsole/formik-fields/InputField";
 
 const ToggleContent = ({
   fieldName,
@@ -38,7 +42,7 @@ const ToggleContent = ({
   const [{ value }, { error }] = useField<Remediator>(fieldName);
   const { t } = useNodeHealthCheckTranslation();
   return (
-    <Flex>
+    <Flex alignItems={{ default: "alignItemsFlexStart" }}>
       <FlexItem>
         {value?.template?.name
           ? value?.template?.name
@@ -46,7 +50,7 @@ const ToggleContent = ({
       </FlexItem>
       {error && !isExpanded && (
         <FlexItem>
-          <Label color="red" icon={<InfoCircleIcon />}>
+          <Label color="red" icon={<InfoCircleIcon />} variant="outline">
             {t("Missing information")}
           </Label>
         </FlexItem>
@@ -61,8 +65,8 @@ const TimeoutField = ({ fieldName }: { fieldName: string }) => {
     <InputField
       name={fieldName}
       label={t("Timeout")}
-      isRequired
-      helperText={getDurationHelptext(t)}
+      required
+      helpText={getDurationHelptext(t)}
       labelIcon={
         <HelpIcon
           helpText={t(
@@ -74,26 +78,29 @@ const TimeoutField = ({ fieldName }: { fieldName: string }) => {
   );
 };
 
-const OrderField = ({ fieldName }: { fieldName: string }) => {
+const OrderField = ({
+  fieldName,
+  onChange,
+}: {
+  fieldName: string;
+  onChange: () => void;
+}) => {
   const { t } = useNodeHealthCheckTranslation();
+
   return (
-    //WORKAROUND: Adding formgroup as separate element since NumberSpinnerField ignores formgroup attributes
-    <>
-      <FormGroup
-        isRequired
-        name={fieldName}
-        label={t("Order")}
-        labelIcon={
-          <HelpIcon
-            helpText={t(
-              "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier."
-            )}
-          />
-        }
-        fieldId={fieldName}
-      />
-      <NumberSpinnerField name={fieldName} />
-    </>
+    <NumberSpinnerField
+      name={fieldName}
+      required
+      label={t("Order")}
+      labelIcon={
+        <HelpIcon
+          helpText={t(
+            "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier."
+          )}
+        />
+      }
+      onChange={onChange}
+    />
   );
 };
 
@@ -162,7 +169,10 @@ const SingleRemediatorField = ({
                     <TimeoutField fieldName={`${fieldName}.timeout`} />
                   </StackItem>
                   <StackItem>
-                    <OrderField fieldName={`${fieldName}.order`} />
+                    <OrderField
+                      fieldName={`${fieldName}.order`}
+                      onChange={onOrderChanged}
+                    />
                   </StackItem>
                 </Stack>
               </ExpandableSection>
@@ -221,7 +231,14 @@ const RemediatorsArrayFieldContent = ({
     getExpanded(remediators?.length || 0, remediators?.length === 1)
   );
 
+  const onOrderFieldChange = () => {
+    setRemediators(getSortedRemediators(remediators) as Remediator[]);
+  };
+
+  const debounce = useDebounce(onOrderFieldChange, 300);
+
   const onDrop = (source: SourceType, dest: DestinationType) => {
+    debounce.cancel();
     if (dest) {
       const newItems = reorder(remediators, source.index, dest.index).map(
         (r, idx) => ({ ...r, order: idx })
@@ -243,21 +260,6 @@ const RemediatorsArrayFieldContent = ({
     push(newRemediator);
   };
 
-  // const debouncedOnOrderChange = React.useMemo(
-  //   () =>
-  //     debounce(
-  //       () =>
-  //         setRemediators(
-  //           remediators.sort(
-  //             (remediator1, remediator2) =>
-  //               remediator1.order - remediator2.order
-  //           )
-  //         ),
-  //       500
-  //     ),
-  //   [remediators, setRemediators]
-  // );
-
   return (
     <Stack hasGutter>
       <StackItem>
@@ -273,7 +275,7 @@ const RemediatorsArrayFieldContent = ({
                       remove={remove}
                       snrTemplateResult={snrTemplateResult}
                       fieldName={`${fieldName}[${index}]`}
-                      onOrderChanged={() => console.log("order changed")}
+                      onOrderChanged={debounce}
                       isExpanded={expanded[index]}
                       toggleExpand={(idx) =>
                         setExpanded({ ...expanded, [idx]: !expanded[idx] })
