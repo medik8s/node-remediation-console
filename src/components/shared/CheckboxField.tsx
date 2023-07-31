@@ -41,7 +41,7 @@ const CheckboxField = ({
           checked: field.value,
           id: name,
           label,
-          isChecked: field.checked,
+          isChecked: field.value,
           isValid,
           "aria-describedby": helpText ? `${name}-helper` : undefined,
           onChange: (val, event) => {
