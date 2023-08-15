@@ -112,6 +112,7 @@ const SingleRemediatorField = ({
   onOrderChanged,
   isExpanded,
   toggleExpand,
+  isRemoveDisabled,
 }: {
   snrTemplateResult: SnrTemplateResult;
   remove: (index: number) => void;
@@ -120,13 +121,14 @@ const SingleRemediatorField = ({
   onOrderChanged: () => void;
   isExpanded: boolean;
   toggleExpand: (index: number) => void;
+  isRemoveDisabled: boolean;
 }) => {
   return (
     <Stack hasGutter>
       <StackItem>
         <WithRemoveButton
           onClick={() => remove(index)}
-          isDisabled={index === 0}
+          isDisabled={isRemoveDisabled}
           dataTest={"remove-remediator-button"}
         >
           <Flex
@@ -289,6 +291,7 @@ const RemediatorsArrayFieldContent = ({
                           [_remediator.id]: !expanded[_remediator.id],
                         })
                       }
+                      isRemoveDisabled={remediators.length === 1}
                     />
                   </Draggable>
                 )
