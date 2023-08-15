@@ -100,7 +100,7 @@ export const FormWrapper: React.FC<FormWrapperProps> = ({
 
 const RemediatorsArrayFieldWrapper = () => {
   return (
-    <FormWrapper initialValues={{ formData: {} }}>
+    <FormWrapper initialValues={{ formData: { useEscalating: true } }}>
       <RemediationTemplateField snrTemplateResult={mockSnrRemdiatorResult} />
     </FormWrapper>
   );
