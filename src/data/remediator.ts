@@ -49,10 +49,11 @@ export const getDefaultRemediator = (
     id: Math.random(),
   };
 };
-
-export const getSortedRemediators = (
-  remediators: (EscalatingRemediator | Remediator)[]
-): (EscalatingRemediator | Remediator)[] =>
+export const getSortedRemediators = <
+  R extends EscalatingRemediator | Remediator
+>(
+  remediators: R[]
+): R[] =>
   [...remediators].sort(
     (remediator1, remediator2) =>
       (remediator1.order || 0) - (remediator2.order || 0)

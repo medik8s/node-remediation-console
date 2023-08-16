@@ -63,7 +63,7 @@ const getescalatingRemediationsFormValues = (
   if (!escalatingRemediations) return [];
   const sortedescalatingRemediations = getSortedRemediators(
     escalatingRemediations
-  ) as EscalatingRemediator[];
+  );
   return sortedescalatingRemediations.map((remediator) => {
     return getRemediationTemplateFormValues(
       remediator.remediationTemplate,

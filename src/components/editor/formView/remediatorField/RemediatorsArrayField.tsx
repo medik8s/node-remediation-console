@@ -236,7 +236,7 @@ const RemediatorsArrayFieldContent = ({
   const onOrderFieldChange = (id: number) => {
     const newRemediators = getSortedRemediators(remediators);
     if (!isEqual(newRemediators, remediators)) {
-      setRemediators(getSortedRemediators(remediators) as Remediator[]);
+      setRemediators(getSortedRemediators(remediators));
       setExpanded({ ...getExpanded(remediators), [id]: true });
     }
   };
@@ -273,29 +273,27 @@ const RemediatorsArrayFieldContent = ({
         <DragDrop onDrop={onDrop}>
           <Droppable>
             <Stack hasGutter>
-              {(remediators || []).map(
-                (_remediator: Remediator, index: number) => (
-                  <Draggable key={index}>
-                    <SingleRemediatorField
-                      key={_remediator.id}
-                      index={index}
-                      remove={remove}
-                      snrTemplateResult={snrTemplateResult}
-                      fieldName={`${fieldName}[${index}]`}
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-                      onOrderChanged={() => debounce(_remediator.id)}
-                      isExpanded={expanded[_remediator.id]}
-                      toggleExpand={() =>
-                        setExpanded({
-                          ...expanded,
-                          [_remediator.id]: !expanded[_remediator.id],
-                        })
-                      }
-                      isRemoveDisabled={remediators.length === 1}
-                    />
-                  </Draggable>
-                )
-              )}
+              {remediators?.map((_remediator, index) => (
+                <Draggable key={index}>
+                  <SingleRemediatorField
+                    key={_remediator.id}
+                    index={index}
+                    remove={remove}
+                    snrTemplateResult={snrTemplateResult}
+                    fieldName={`${fieldName}[${index}]`}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                    onOrderChanged={() => debounce(_remediator.id)}
+                    isExpanded={expanded[_remediator.id]}
+                    toggleExpand={() =>
+                      setExpanded({
+                        ...expanded,
+                        [_remediator.id]: !expanded[_remediator.id],
+                      })
+                    }
+                    isRemoveDisabled={remediators.length === 1}
+                  />
+                </Draggable>
+              ))}
             </Stack>
           </Droppable>
         </DragDrop>
