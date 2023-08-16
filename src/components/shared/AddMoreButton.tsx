@@ -1,4 +1,4 @@
-import { Button } from "@patternfly/react-core/dist/esm/components";
+import { Button } from "@patternfly/react-core";
 import { PlusCircleIcon } from "@patternfly/react-icons";
 import * as React from "react";
 

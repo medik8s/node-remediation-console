@@ -45,13 +45,16 @@ export const getDefaultRemediator = (
       ? RemediatorRadioOption.SNR
       : RemediatorRadioOption.CUSTOM,
     template: snrTemplate ? snrTemplate : getEmptyRemediationTemplate(),
-    order: 0,
+    order: "",
+    id: Math.random(),
   };
 };
-
-export const getSortedRemediators = (
-  remediators: (EscalatingRemediator | Remediator)[]
-): (EscalatingRemediator | Remediator)[] =>
-  remediators.sort(
-    (remediator1, remediator2) => remediator1.order - remediator2.order
+export const getSortedRemediators = <
+  R extends EscalatingRemediator | Remediator
+>(
+  remediators: R[]
+): R[] =>
+  [...remediators].sort(
+    (remediator1, remediator2) =>
+      (remediator1.order || 0) - (remediator2.order || 0)
   );

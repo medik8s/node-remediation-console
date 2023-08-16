@@ -34,7 +34,8 @@ const getRemediationTemplateFormValues = (
     radioOption,
     template,
     timeout,
-    order,
+    order: order ?? "",
+    id: Math.random(),
   };
 };
 
@@ -62,7 +63,7 @@ const getescalatingRemediationsFormValues = (
   if (!escalatingRemediations) return [];
   const sortedescalatingRemediations = getSortedRemediators(
     escalatingRemediations
-  ) as EscalatingRemediator[];
+  );
   return sortedescalatingRemediations.map((remediator) => {
     return getRemediationTemplateFormValues(
       remediator.remediationTemplate,
@@ -117,7 +118,7 @@ export const getSpec = (
     escalatingRemediations: formViewFields.useEscalating
       ? formViewFields.escalatingRemediations?.map((remediator) => ({
           remediationTemplate: remediator.template,
-          order: remediator.order,
+          order: remediator.order === "" ? undefined : remediator.order,
           timeout: remediator.timeout,
         }))
       : undefined,

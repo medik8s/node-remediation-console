@@ -31,6 +31,7 @@ import AddMoreButton from "../../../shared/AddMoreButton";
 import NumberSpinnerField from "../../../shared/NumberSpinnerField";
 import { useDebounce } from "../../../../copiedFromConsole/hooks/useDebounce";
 import InputField from "../../../../copiedFromConsole/formik-fields/InputField";
+import { isEqual } from "lodash-es";
 
 const ToggleContent = ({
   fieldName,
@@ -86,7 +87,6 @@ const OrderField = ({
   onChange: () => void;
 }) => {
   const { t } = useNodeHealthCheckTranslation();
-
   return (
     <NumberSpinnerField
       name={fieldName}
@@ -99,7 +99,7 @@ const OrderField = ({
           )}
         />
       }
-      onChange={onChange}
+      onBlur={onChange}
     />
   );
 };
@@ -112,6 +112,7 @@ const SingleRemediatorField = ({
   onOrderChanged,
   isExpanded,
   toggleExpand,
+  isRemoveDisabled,
 }: {
   snrTemplateResult: SnrTemplateResult;
   remove: (index: number) => void;
@@ -120,13 +121,14 @@ const SingleRemediatorField = ({
   onOrderChanged: () => void;
   isExpanded: boolean;
   toggleExpand: (index: number) => void;
+  isRemoveDisabled: boolean;
 }) => {
   return (
     <Stack hasGutter>
       <StackItem>
         <WithRemoveButton
           onClick={() => remove(index)}
-          isDisabled={index === 0}
+          isDisabled={isRemoveDisabled}
           dataTest={"remove-remediator-button"}
         >
           <Flex
@@ -201,15 +203,15 @@ const reorder = (list: Remediator[], startIndex: number, endIndex: number) => {
 };
 
 const getExpanded = (
-  size: number,
+  remediators: Remediator[],
   expandLast?: boolean
 ): Record<number, boolean> => {
   const ret: Record<number, boolean> = {};
-  for (let i = 0; i < size; ++i) {
-    ret[i] = false;
+  for (let i = 0; i < remediators.length; ++i) {
+    ret[remediators[i].id] = false;
   }
   if (expandLast) {
-    ret[size - 1] = true;
+    ret[remediators[remediators.length - 1].id] = true;
   }
   return ret;
 };
@@ -228,11 +230,15 @@ const RemediatorsArrayFieldContent = ({
   const { t } = useNodeHealthCheckTranslation();
 
   const [expanded, setExpanded] = React.useState<Record<number, boolean>>(
-    getExpanded(remediators?.length || 0, remediators?.length === 1)
+    getExpanded(remediators || [], remediators?.length === 1)
   );
 
-  const onOrderFieldChange = () => {
-    setRemediators(getSortedRemediators(remediators) as Remediator[]);
+  const onOrderFieldChange = (id: number) => {
+    const newRemediators = getSortedRemediators(remediators);
+    if (!isEqual(newRemediators, remediators)) {
+      setRemediators(getSortedRemediators(remediators));
+      setExpanded({ ...getExpanded(remediators), [id]: true });
+    }
   };
 
   const debounce = useDebounce(onOrderFieldChange, 300);
@@ -254,9 +260,10 @@ const RemediatorsArrayFieldContent = ({
     const newRemediator: Remediator = {
       radioOption: RemediatorRadioOption.CUSTOM,
       template: getEmptyRemediationTemplate(),
-      order: prevRemediatorOrder ? prevRemediatorOrder + 1 : remediators.length,
+      order: (prevRemediatorOrder || 0) + 1,
+      id: Math.random(),
     };
-    setExpanded(getExpanded(remediators.length + 1, true));
+    setExpanded(getExpanded([...remediators, newRemediator], true));
     push(newRemediator);
   };
 
@@ -266,24 +273,27 @@ const RemediatorsArrayFieldContent = ({
         <DragDrop onDrop={onDrop}>
           <Droppable>
             <Stack hasGutter>
-              {(remediators || []).map(
-                (_remediator: Remediator, index: number) => (
-                  <Draggable key={index}>
-                    <SingleRemediatorField
-                      key={index}
-                      index={index}
-                      remove={remove}
-                      snrTemplateResult={snrTemplateResult}
-                      fieldName={`${fieldName}[${index}]`}
-                      onOrderChanged={debounce}
-                      isExpanded={expanded[index]}
-                      toggleExpand={(idx) =>
-                        setExpanded({ ...expanded, [idx]: !expanded[idx] })
-                      }
-                    />
-                  </Draggable>
-                )
-              )}
+              {remediators?.map((_remediator, index) => (
+                <Draggable key={index}>
+                  <SingleRemediatorField
+                    key={_remediator.id}
+                    index={index}
+                    remove={remove}
+                    snrTemplateResult={snrTemplateResult}
+                    fieldName={`${fieldName}[${index}]`}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                    onOrderChanged={() => debounce(_remediator.id)}
+                    isExpanded={expanded[_remediator.id]}
+                    toggleExpand={() =>
+                      setExpanded({
+                        ...expanded,
+                        [_remediator.id]: !expanded[_remediator.id],
+                      })
+                    }
+                    isRemoveDisabled={remediators.length === 1}
+                  />
+                </Draggable>
+              ))}
             </Stack>
           </Droppable>
         </DragDrop>

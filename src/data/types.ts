@@ -98,7 +98,8 @@ export type Remediator = {
   radioOption: RemediatorRadioOption;
   template: RemediationTemplate;
   timeout?: string;
-  order?: number;
+  order: number | "";
+  id: number;
 };
 
 export enum RemediatorMode {

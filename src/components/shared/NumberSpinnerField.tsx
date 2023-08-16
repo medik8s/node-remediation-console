@@ -7,7 +7,8 @@ import { FieldProps } from "../../copiedFromConsole/formik-fields/field-types";
 type NumberSpinnerFieldProps = FieldProps & {
   min?: number;
   max?: number;
-  onChange: () => void;
+  onChange?: () => void;
+  onBlur?: () => void;
 };
 
 const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
@@ -16,10 +17,11 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
   helpText,
   required,
   onChange,
+  onBlur,
   ...props
 }) => {
   const [field, { touched, error }, { setValue, setTouched }] = useField<
-    number | undefined
+    number | ""
   >(props.name);
 
   const isValid = !(touched && error);
@@ -29,7 +31,12 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
     const newValue = toInteger(field.value) + operation;
     setValue(newValue);
     setTouched(true);
-    onChange();
+    if (onChange) {
+      onChange();
+    }
+    if (onBlur) {
+      onBlur();
+    }
   };
 
   return (
@@ -43,20 +50,27 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
       labelIcon={labelIcon}
     >
       <NumberInput
-        {...field}
-        {...props}
+        name={props.name}
         id={props.name}
         value={field.value}
         onMinus={() => changeValueBy(-1)}
         onPlus={() => changeValueBy(1)}
         onChange={(event) => {
           const target = event.target as HTMLInputElement;
-          setValue(target.value ? parseInt(target.value) : undefined);
-          onChange();
+          setValue(target.value === "" ? target.value : +target.value);
+          if (onChange) {
+            onChange();
+          }
         }}
-        inputProps={{ ...props }}
+        onBlur={(event) => {
+          field.onBlur(event);
+          if (onBlur) {
+            onBlur();
+          }
+        }}
         minusBtnAriaLabel="Decrement"
         plusBtnAriaLabel="Increment"
+        allowEmptyInput
       />
     </FormGroup>
   );

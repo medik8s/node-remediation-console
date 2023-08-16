@@ -75,10 +75,12 @@ const RemediatorKindField_ = ({
   fieldName: string;
   snrTemplate: RemediationTemplate | undefined;
 }) => {
-  const [, , { setValue: setRemediator }] = useField<Remediator>(fieldName);
+  const [{ value }, , { setValue: setRemediator }] =
+    useField<Remediator>(fieldName);
 
   const setCustomRemediator = () => {
     setRemediator({
+      ...value,
       radioOption: RemediatorRadioOption.CUSTOM,
       template: getEmptyRemediationTemplate(),
     });
@@ -89,6 +91,7 @@ const RemediatorKindField_ = ({
       setCustomRemediator();
     } else {
       setRemediator({
+        ...value,
         radioOption: RemediatorRadioOption.SNR,
         template: snrTemplate,
       });
