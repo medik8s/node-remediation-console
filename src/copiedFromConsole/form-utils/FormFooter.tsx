@@ -10,7 +10,6 @@ import * as cx from "classnames";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { FormFooterProps } from "./form-utils-types";
 
-import "./FormFooter.scss";
 import { ButtonBar } from "../button-bar";
 import { Shadows, useScrollShadows } from "../hooks/useScrollShadows";
 import { useScrollContainer } from "../hooks/useScrollContainer";

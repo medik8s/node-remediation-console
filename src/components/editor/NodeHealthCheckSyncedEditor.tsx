@@ -71,7 +71,13 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   const yamlEditor = <YamlEditorField fieldName="yamlData" />;
 
   const formEditor = (
-    <FormBody className="co-m-pane__form">
+    <FormBody
+      style={{
+        paddingLeft: "var(--pf-c-form--GridGap)",
+        paddingTop: "var(--pf-c-form--GridGap)",
+      }}
+      className="co-m-pane__form"
+    >
       <FormSection>
         {values.formParsingError ? (
           <Alert

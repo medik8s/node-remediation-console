@@ -5,18 +5,24 @@ import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { RouteComponentProps } from "react-router";
 import NodeHealthCheckForm from "./NodeHealthCheckForm";
+import { useLocation } from "react-router";
+import { withFallback } from "../../copiedFromConsole/error";
 
-export type NodeHealthCheckEditPageProps = RouteComponentProps<{
-  name: string;
-}>;
+const getNHCNameFromUrl = (url: string) => {
+  const pathSegments = url.split("/");
+  const name = pathSegments[pathSegments.length - 2];
+  if (name) {
+    return name;
+  } else {
+    throw new Error(`URL ${url} doesn't contain the NodeHealthCheck name`);
+  }
+};
 
-const NodeHealthCheckEditPage: React.FC<NodeHealthCheckEditPageProps> = ({
-  match,
-}) => {
+const NodeHealthCheckEditPage_ = () => {
+  const location = useLocation();
+  const name = getNHCNameFromUrl(location.pathname);
   const { t } = useNodeHealthCheckTranslation();
-  const { name } = match.params;
   const [nodeHealthCheck, loaded, loadError] =
     useK8sWatchResource<NodeHealthCheck>({
       groupVersionKind: nodeHealthCheckKind,
@@ -41,5 +47,6 @@ const NodeHealthCheckEditPage: React.FC<NodeHealthCheckEditPageProps> = ({
     </StatusBox>
   );
 };
+const NodeHealthCheckEditPage = withFallback(NodeHealthCheckEditPage_);
 
 export default NodeHealthCheckEditPage;

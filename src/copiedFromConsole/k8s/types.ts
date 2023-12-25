@@ -1,5 +1,4 @@
 import { K8sResourceCommon } from "@openshift-console/dynamic-plugin-sdk";
-import { JSONSchema7 } from "json-schema";
 
 export enum K8sResourceConditionStatus {
   True = "True",
@@ -13,34 +12,6 @@ export type K8sResourceCondition = {
   reason?: string;
   message?: string;
 };
-
-export type CRDVersion = {
-  name: string;
-  served: boolean;
-  storage: boolean;
-  schema: {
-    // NOTE: Actually a subset of JSONSchema, but using this type for convenience
-    openAPIV3Schema: JSONSchema7;
-  };
-};
-
-export type CustomResourceDefinition = {
-  spec: {
-    group: string;
-    versions: CRDVersion[];
-    names: {
-      kind: string;
-      singular: string;
-      plural: string;
-      listKind: string;
-      shortNames?: string[];
-    };
-    scope: "Cluster" | "Namespaced";
-  };
-  status?: {
-    conditions?: K8sResourceCondition[];
-  };
-} & K8sResourceCommon;
 
 export type Descriptor<T = unknown> = {
   path: string;

@@ -37,12 +37,7 @@ export const useNodeHealthCheckTabs = () => {
   return tabs;
 };
 
-const NodeHealthCheckDetailsPage_ = ({
-  match,
-}: {
-  match: { params: { name: string } };
-}) => {
-  const { name } = match.params;
+const NodeHealthCheckDetailsPage_ = ({ name }: { name: string }) => {
   const navigation = useNodeHealthCheckNavigation();
   const [nodeHealthCheck, loaded, loadError] =
     useK8sWatchResource<NodeHealthCheck>({
