@@ -7,4 +7,3 @@ export { default as ErrorBoundaryPage } from "./fallbacks/ErrorBoundaryPage";
 
 // Custom fallback options
 export { default as withFallback } from "./fallbacks/withFallback";
-export { default as ErrorBoundaryFallbackPage } from "./fallbacks/ErrorBoundaryFallbackPage";

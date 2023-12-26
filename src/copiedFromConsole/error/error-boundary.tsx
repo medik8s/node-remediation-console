@@ -1,6 +1,6 @@
 import * as React from "react";
-import ErrorBoundaryFallbackPage from "./fallbacks/ErrorBoundaryFallbackPage";
 import { ErrorBoundaryFallbackProps } from "./types";
+import { ErrorBoundaryFallbackPage } from "@openshift-console/dynamic-plugin-sdk";
 
 type ErrorBoundaryProps = {
   FallbackComponent?: React.ComponentType<ErrorBoundaryFallbackProps>;

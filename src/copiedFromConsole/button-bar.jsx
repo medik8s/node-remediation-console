@@ -1,7 +1,6 @@
 import * as _ from "lodash-es";
 import * as React from "react";
 import * as classNames from "classnames";
-import * as PropTypes from "prop-types";
 import { Alert, AlertGroup } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { LoadingInline } from "./utils/status-box";
@@ -65,13 +64,4 @@ export const ButtonBar = ({
       </AlertGroup>
     </div>
   );
-};
-
-ButtonBar.propTypes = {
-  children: PropTypes.node.isRequired,
-  successMessage: PropTypes.string,
-  errorMessage: PropTypes.node,
-  infoMessage: PropTypes.string,
-  inProgress: PropTypes.bool,
-  className: PropTypes.string,
 };
