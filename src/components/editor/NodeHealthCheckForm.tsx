@@ -17,12 +17,27 @@ import { getFormValues, getNodeHealthCheck } from "data/formValues";
 import { LoadingInline } from "copiedFromConsole/utils/status-box";
 import "./nhc-form.css";
 import { useOpenShiftVersion } from "copiedFromConsole/hooks/useOpenShiftVersion";
+import useSnrTemplate from "../../apis/useSNRTemplate";
+import { range } from "lodash-es";
+import { Skeleton } from "@patternfly/react-core";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
   nodeHealthCheck: NodeHealthCheck;
   isCreateFlow: boolean;
 }
+
+const FormLoading = () => (
+  <>
+    <br />
+    {range(0, 20).map((idx) => (
+      <>
+        <Skeleton key={idx} width="50%" />
+        <br />
+      </>
+    ))}
+  </>
+);
 
 const LearnMoreLink: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
@@ -68,10 +83,13 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   isCreateFlow,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const initialValues = React.useMemo(
-    () => getFormValues(nodeHealthCheck, isCreateFlow),
-    []
-  );
+  const [snrTemplate, loaded] = useSnrTemplate();
+  const initialValues = React.useMemo(() => {
+    if (!loaded) {
+      return undefined;
+    }
+    return getFormValues(nodeHealthCheck, isCreateFlow, snrTemplate);
+  }, [isCreateFlow, loaded, nodeHealthCheck, snrTemplate]);
 
   const navigation = useNodeHealthCheckNavigation();
 
@@ -109,18 +127,23 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   return (
     <>
       <PageHeading title={title} helpText={<HelpText />} />
-      <Formik
-        enableReinitialize
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validationSchema={getValidationSchema(t)}
-        validateOnMount={true}
-      >
-        <NodeHealthCheckSyncedEditor
-          originalNodeHealthCheck={nodeHealthCheck}
-          handleCancel={() => navigation.goBack()}
-        />
-      </Formik>
+      {!loaded ? (
+        <FormLoading />
+      ) : (
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={getValidationSchema(t)}
+          validateOnMount={true}
+        >
+          <NodeHealthCheckSyncedEditor
+            originalNodeHealthCheck={nodeHealthCheck}
+            handleCancel={() => navigation.goBack()}
+            snrTemplate={snrTemplate}
+          />
+        </Formik>
+      )}
     </>
   );
 };

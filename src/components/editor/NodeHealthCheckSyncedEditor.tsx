@@ -2,7 +2,11 @@ import * as React from "react";
 
 import { useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
-import { NodeHealthCheck, NodeHealthCheckFormValues } from "../../data/types";
+import {
+  NodeHealthCheck,
+  NodeHealthCheckFormValues,
+  RemediationTemplate,
+} from "../../data/types";
 import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
 import {
   FlexForm,
@@ -18,6 +22,7 @@ import { dump } from "js-yaml";
 import { Alert, FormSection } from "@patternfly/react-core";
 import { getFormValues } from "data/formValues";
 import { isEmpty } from "lodash-es";
+
 const sanitizeToYaml = (
   values: NodeHealthCheckFormValues,
   originalNodeHealthCheck: NodeHealthCheck
@@ -40,11 +45,12 @@ const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
 type NodeHealthCheckFormSyncedEditorProps = {
   handleCancel: () => void;
   originalNodeHealthCheck: NodeHealthCheck;
+  snrTemplate: RemediationTemplate;
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
   NodeHealthCheckFormSyncedEditorProps
-> = ({ originalNodeHealthCheck, handleCancel }) => {
+> = ({ originalNodeHealthCheck, handleCancel, snrTemplate }) => {
   const {
     values,
     status,
@@ -96,7 +102,11 @@ export const NodeHealthCheckSyncedEditor: React.FC<
 
   const onReload = () => {
     const curEditorType = values.editorType;
-    const resetValues = getFormValues(originalNodeHealthCheck, false);
+    const resetValues = getFormValues(
+      originalNodeHealthCheck,
+      false,
+      snrTemplate
+    );
     resetValues.editorType = curEditorType;
     resetValues.reloadCount++;
     resetForm({ values: resetValues });
@@ -105,6 +115,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   React.useEffect(() => {
     setStatus({ submitError: null });
   }, [setStatus, values.editorType]);
+
   return (
     <>
       <FlexForm className="nhc-form">
@@ -115,11 +126,17 @@ export const NodeHealthCheckSyncedEditor: React.FC<
             editor: formEditor,
             sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
               try {
-                return formViewValues.getFormViewValues(yamlNodeHealthCheck);
+                return formViewValues.getFormViewValues(
+                  yamlNodeHealthCheck,
+                  snrTemplate
+                );
               } catch (err) {
                 //return a function so SyncedEditorField will handle the error properly
                 return () =>
-                  formViewValues.getFormViewValues(originalNodeHealthCheck);
+                  formViewValues.getFormViewValues(
+                    originalNodeHealthCheck,
+                    snrTemplate
+                  );
               }
             },
           }}
