@@ -84,7 +84,11 @@ export const getFormViewValues = (
       nodeHealthCheck.spec?.minHealthy ?? DEFAULT_MIN_HEALTHY
     ).toString(),
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
-    remediator: !useEscalating ? getRemediationTemplateFormValues() : undefined,
+    remediator: !useEscalating
+      ? getRemediationTemplateFormValues(
+          nodeHealthCheck?.spec?.remediationTemplate
+        )
+      : undefined,
     escalatingRemediations: getescalatingRemediationsFormValues(
       nodeHealthCheck.spec?.escalatingRemediations
     ),
