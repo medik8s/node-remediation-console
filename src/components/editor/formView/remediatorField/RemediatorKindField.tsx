@@ -17,21 +17,6 @@ import {
   RemediationTemplate,
 } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
-import HelpIcon from "../../../shared/HelpIcon";
-
-const SNRRadioButtonLabel: React.FC = () => {
-  const { t } = useNodeHealthCheckTranslation();
-  return (
-    <>
-      {getSNRLabel(t)}
-      <HelpIcon
-        helpText={t(
-          "Self node remediation template uses the remediation strategy 'Resource Deletion'."
-        )}
-      />
-    </>
-  );
-};
 
 const RemediatorKindRadioGroup: React.FC<{
   snrTemplatesExist: boolean;
@@ -50,7 +35,7 @@ const RemediatorKindRadioGroup: React.FC<{
       >
         <RadioButtonField
           value={RemediatorRadioOption.SNR}
-          label={<SNRRadioButtonLabel />}
+          label={getSNRLabel(t)}
           isDisabled={!snrTemplatesExist}
           aria-describedby={"SNR remediator kind"}
           name={fieldName}
