@@ -1,15 +1,4 @@
-[
-  {
-    "type": "console.flag/model",
-    "properties": {
-      "flag": "NODE_HEALTHCHECK_FLAG",
-      "model": {
-        "group": "remediation.medik8s.io",
-        "version": "v1alpha1",
-        "kind": "NodeHealthCheck"
-      }
-    }
-  },
+[ 
   {
     "type": "console.navigation/href",
     "properties": {
@@ -19,9 +8,6 @@
       "name": "%plugin__node-remediation-console-plugin~NodeHealthChecks%",
       "href": "/k8s/cluster/remediation.medik8s.io~v1alpha1~NodeHealthCheck",
       "insertAfter": "nodes"
-    },
-    "flags": {
-      "required": ["NODE_HEALTHCHECK_FLAG"]
     }
   },
   {
@@ -35,9 +21,6 @@
       "component": {
         "$codeRef": "nodeHealthCheckCreatePage.default"
       }
-    },
-    "flags": {
-      "required": ["NODE_HEALTHCHECK_FLAG"]
     }
   },
   {
@@ -51,9 +34,6 @@
       "component": {
         "$codeRef": "nodeHealthCheckListPage.default"
       }
-    },
-    "flags": {
-      "required": ["NODE_HEALTHCHECK_FLAG"]
     }
   },
   {
@@ -67,9 +47,6 @@
       "component": {
         "$codeRef": "nodeHealthCheckDetailsPage.default"
       }
-    },
-    "flags": {
-      "required": ["NODE_HEALTHCHECK_FLAG"]
     }
   },
   {
@@ -79,9 +56,6 @@
         "/k8s/cluster/remediation.medik8s.io~v1alpha1~NodeHealthCheck/:name/edit"
       ],
       "component": { "$codeRef": "nodeHealthCheckEditPage.default" }
-    },
-    "flags": {
-      "required": ["NODE_HEALTHCHECK_FLAG"]
     }
   }
 ]
