@@ -41,6 +41,9 @@ export const getNodeRoles = (node: NodeKind): string[] => {
   return reduce(
     labels,
     (acc: string[], v: string, label: string) => {
+      if (!label.startsWith(NODE_ROLE_PREFIX)) {
+        return acc;
+      }
       const role = label.slice(NODE_ROLE_PREFIX.length);
       if (!role) {
         return acc;
