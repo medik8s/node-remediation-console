@@ -47,17 +47,19 @@ const DeleteModal: React.FC<
           aria-label="delete"
           key="confirm"
           variant={ButtonVariant.danger}
-          onClick={onClickDelete}
+          onClick={() => void onClickDelete()}
           isLoading={isDeleting}
           data-test="confirm"
+          isDisabled={isDeleting}
         >
           {t("Delete")}
         </Button>,
         <Button
           key="cancel"
-          variant={ButtonVariant.link}
+          variant={ButtonVariant.secondary}
           onClick={onClose}
           aria-label="cancel"
+          isDisabled={isDeleting}
         >
           {t("Cancel")}
         </Button>,

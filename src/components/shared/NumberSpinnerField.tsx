@@ -1,8 +1,15 @@
 import * as React from "react";
-import { FormGroup, NumberInput } from "@patternfly/react-core";
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  NumberInput,
+} from "@patternfly/react-core";
 import { useField } from "formik";
 import toInteger from "lodash-es/toInteger";
 import { FieldProps } from "../../copiedFromConsole/formik-fields/field-types";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 type NumberSpinnerFieldProps = FieldProps & {
   min?: number;
@@ -39,13 +46,12 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
     }
   };
 
+  const validated = isValid ? "default" : "error";
+
   return (
     <FormGroup
       fieldId={props.name}
       label={label}
-      helperText={helpText}
-      helperTextInvalid={errorMessage}
-      validated={isValid ? "default" : "error"}
       isRequired={required}
       labelIcon={labelIcon}
     >
@@ -70,8 +76,17 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
         }}
         minusBtnAriaLabel="Decrement"
         plusBtnAriaLabel="Increment"
-        allowEmptyInput
       />
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem
+            variant={validated}
+            {...(validated === "error" && { icon: <ExclamationCircleIcon /> })}
+          >
+            {errorMessage || helpText}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
     </FormGroup>
   );
 };

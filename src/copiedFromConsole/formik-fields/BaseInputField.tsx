@@ -1,9 +1,16 @@
 import * as React from "react";
-import { FormGroup, ValidatedOptions } from "@patternfly/react-core";
+import {
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  ValidatedOptions,
+} from "@patternfly/react-core";
 import { useField } from "formik";
 import { BaseInputFieldProps } from "./field-types";
 import { useFormikValidationFix } from "../hooks/formik-validation-fix";
 import { getFieldId } from "./field-utils";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
 
 const BaseInputField: React.FC<
   BaseInputFieldProps & {
@@ -28,13 +35,12 @@ const BaseInputField: React.FC<
   const isValid = !(touched && error);
   const errorMessage = !isValid ? error : "";
   useFormikValidationFix(field.value);
+
+  const isValidated = !isValid ? ValidatedOptions.error : validated;
   return (
     <FormGroup
       fieldId={fieldId}
       label={label}
-      helperText={helpText}
-      helperTextInvalid={errorMessage || helpTextInvalid}
-      validated={!isValid ? ValidatedOptions.error : validated}
       isRequired={required}
       labelIcon={labelIcon}
     >
@@ -44,9 +50,9 @@ const BaseInputField: React.FC<
         value: field.value || "",
         id: fieldId,
         label,
-        validated: !isValid ? ValidatedOptions.error : validated,
+        validated: isValidated,
         "aria-describedby": helpText ? `${fieldId}-helper` : undefined,
-        onChange: (value, event) => {
+        onChange: (event, value) => {
           field.onChange(event);
           onChange && onChange(event);
         },
@@ -55,6 +61,20 @@ const BaseInputField: React.FC<
           onBlur && onBlur(event);
         },
       })}
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem
+            variant={isValidated}
+            {...(isValidated === "error" && {
+              icon: <ExclamationCircleIcon />,
+            })}
+          >
+            {isValidated === "error"
+              ? errorMessage || helpTextInvalid
+              : helpText}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
     </FormGroup>
   );
 };

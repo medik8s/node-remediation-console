@@ -7,16 +7,21 @@ import {
   StackItem,
   SelectGroup,
   SelectOption,
+  SelectList,
 } from "@patternfly/react-core";
 import { NodeKind } from "copiedFromConsole/types/node";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
 import { uniq, flatten } from "lodash-es";
-import useDeepCompareMemoize from "hooks/useDeepCompareMemoize";
 import { useField } from "formik";
 import MultiSelectField from "components/shared/MultiSelectField";
-import { intersection } from "lodash-es";
-import { ClusterRoleLabels, getClusterRoleLabels, Role } from "data/nodeRoles";
+import {
+  getClusterRoleLabels,
+  Role,
+  getRoleTitle,
+  getRoleLabel,
+} from "data/nodeRoles";
+import fuzzy from "fuzzysearch";
 
 const stringifyNodeLabels = (node: NodeKind): string[] => {
   if (!node.metadata?.labels) {
@@ -26,9 +31,6 @@ const stringifyNodeLabels = (node: NodeKind): string[] => {
     value ? `${key}=${value}` : key
   );
 };
-
-const getAllNodesLabels = (allNodes: NodeKind[]): string[] =>
-  uniq(flatten(allNodes.map((node) => stringifyNodeLabels(node)))).sort();
 
 const LabelSelectionField = ({
   allNodes,
@@ -41,50 +43,28 @@ const LabelSelectionField = ({
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   const [field, , { setValue }] = useField<string[]>(fieldName);
+  const [filterValue, setFilterValue] = React.useState<string>("");
 
-  const [roleLabels, setRoleLabels] = React.useState<ClusterRoleLabels>({});
-  const [selectGroups, setSelectGroups] = React.useState<JSX.Element[]>([]);
-  const memoValue = useDeepCompareMemoize<string[]>(field.value);
-  const [allLabels, setAllLabels] = React.useState<string[]>([]);
-  React.useEffect(() => {
-    if (!isLoading) {
-      let _options = uniq(
-        flatten(allNodes.map((node) => stringifyNodeLabels(node)))
-      );
-      //add value to options, needed for complex match expressions or labels that aren't currently on the nodes
-      //include previous options to not remove original match expressions
-      _options = uniq([...memoValue, ...allLabels, ..._options]).sort();
-      const _selectGroups = [];
-      const _roleLabels = getClusterRoleLabels(allNodes);
-      if (Object.keys(_roleLabels).length === 2) {
-        _selectGroups.push(
-          <SelectGroup label={t("Role")}>
-            <SelectOption value={_roleLabels[Role.CONTROL_PLANE]}>
-              {t("Control plane")}
-            </SelectOption>
-            <SelectOption value={_roleLabels[Role.WORKER]}>
-              {t("Worker")}
-            </SelectOption>
-          </SelectGroup>
-        );
-      }
-      _selectGroups.push(
-        <SelectGroup label={t("Label")}>
-          {getAllNodesLabels(allNodes).map((option) => (
-            <SelectOption value={option} key={option}>
-              {option}
-            </SelectOption>
-          ))}
-        </SelectGroup>
-      );
-      setSelectGroups(_selectGroups);
-      setRoleLabels(_roleLabels);
-      setAllLabels(_options);
-    }
-  }, [memoValue, isLoading]); // doesn't respond to allNodes, it can change every second
+  const { roleLabels, otherLabels, selectedRoleLabels } = React.useMemo(() => {
+    // add previous selections too
+    const nodeLabels = uniq([
+      ...flatten(allNodes.map((node) => stringifyNodeLabels(node))),
+      ...field.value,
+    ]).sort();
 
-  const getSelectedRoleLabels = () =>
-    intersection(field.value, Object.values(roleLabels));
+    const filteredNodeLabels = nodeLabels.filter((l) => fuzzy(filterValue, l));
+    const roleLabels = getClusterRoleLabels(t, filteredNodeLabels);
+
+    const otherLabels = filteredNodeLabels.filter(
+      (l) => !roleLabels.some(({ value }) => value === l)
+    );
+
+    const selectedRoleLabels = field.value.filter((l) =>
+      roleLabels.some(({ value }) => value === l)
+    );
+
+    return { roleLabels, otherLabels, selectedRoleLabels };
+  }, [isLoading, field.value, filterValue, t]);
 
   const onDeleteLabel = (label: string) => {
     setValue(field.value.filter((curLabel) => curLabel !== label));
@@ -94,34 +74,65 @@ const LabelSelectionField = ({
     <Stack hasGutter>
       <StackItem style={{ marginBottom: "var(--pf-global--spacer--sm)" }}>
         <MultiSelectField
-          options={selectGroups}
-          enableClear={true}
           isLoading={isLoading}
           name={fieldName}
           label={t("Nodes selection")}
           helpText={t(
             "Select the labels that will be used to find unhealthy nodes for remediation. The nodes must satisfy all selected labels."
           )}
-          isRequired={true}
-        />
+          isRequired
+          filterValue={filterValue}
+          setFilterValue={setFilterValue}
+        >
+          {!!roleLabels.length && (
+            <SelectGroup label={t("Role")}>
+              <SelectList>
+                {roleLabels.map(({ title, value }) => (
+                  <SelectOption
+                    key={value}
+                    isSelected={field.value.includes(value)}
+                    hasCheckbox
+                    value={value}
+                  >
+                    {title}
+                  </SelectOption>
+                ))}
+              </SelectList>
+            </SelectGroup>
+          )}
+          <SelectGroup label={t("Labels")}>
+            <SelectList>
+              {otherLabels.map((label) => (
+                <SelectOption
+                  key={label}
+                  isSelected={field.value.includes(label)}
+                  hasCheckbox
+                  value={label}
+                >
+                  {label}
+                </SelectOption>
+              ))}
+            </SelectList>
+          </SelectGroup>
+        </MultiSelectField>
       </StackItem>
       {!isLoading && (
         <StackItem>
           <Flex flexWrap={{ default: "nowrap" }}>
-            {getSelectedRoleLabels().length > 0 && (
+            {selectedRoleLabels.length > 0 && (
               <FlexItem>
                 <ChipGroup
                   key="roles"
-                  categoryName={"Role"}
+                  categoryName={t("Role")}
                   collapsedText={t("Show more")}
                   expandedText={t("Show less")}
-                  defaultIsOpen={true}
+                  defaultIsOpen
                 >
-                  {getSelectedRoleLabels().map((label) => (
+                  {selectedRoleLabels.map((label) => (
                     <Chip key={label} onClick={() => onDeleteLabel(label)}>
-                      {label === roleLabels[Role.CONTROL_PLANE]
-                        ? t("Control plane")
-                        : t("Worker")}
+                      {label === getRoleLabel(Role.WORKER)
+                        ? getRoleTitle(t, Role.WORKER)
+                        : getRoleTitle(t, Role.CONTROL_PLANE)}
                     </Chip>
                   ))}
                 </ChipGroup>
@@ -130,10 +141,10 @@ const LabelSelectionField = ({
             <FlexItem>
               <ChipGroup
                 key="labels"
-                categoryName={"Labels"}
+                categoryName={t("Labels")}
                 collapsedText={t("Show more")}
                 expandedText={t("Show less")}
-                defaultIsOpen={true}
+                defaultIsOpen
                 numChips={2}
               >
                 {field.value.map((label) => (

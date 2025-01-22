@@ -1,9 +1,5 @@
 import * as React from "react";
-import {
-  TextInput,
-  TextInputTypes,
-  ValidatedOptions,
-} from "@patternfly/react-core";
+import { TextInput, TextInputTypes } from "@patternfly/react-core";
 import BaseInputField from "./BaseInputField";
 import { BaseInputFieldProps } from "./field-types";
 
@@ -12,20 +8,7 @@ const InputField = (
   ref
 ) => (
   <BaseInputField type={type} {...baseProps}>
-    {(props) => (
-      <div className="oc-inputfield">
-        <TextInput ref={ref} {...props} />
-        {props.validated && props.validated !== ValidatedOptions.default ? (
-          <div
-            // pf-c-form-control is needed to load the right PatternFly variables.
-            className={`pf-c-form-control oc-inputfield__validation-icon ${props.validated}`}
-            // The BaseInputField will show an description (helper-text) below
-            // the input field that describes the validation error.
-            aria-hidden="true"
-          />
-        ) : null}
-      </div>
-    )}
+    {(props) => <TextInput ref={ref} {...props} />}
   </BaseInputField>
 );
 

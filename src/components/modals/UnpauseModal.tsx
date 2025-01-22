@@ -8,6 +8,7 @@ import {
   Stack,
   StackItem,
   TextContent,
+  Icon,
 } from "@patternfly/react-core";
 import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
 import * as React from "react";
@@ -50,17 +51,19 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
         <Button
           key="confirm"
           variant="primary"
-          onClick={onSubmit}
+          onClick={() => void onSubmit()}
           isLoading={isSubmitting}
+          isDisabled={isSubmitting}
           data-test="confirm"
         >
           {t("Unpause")}
         </Button>,
         <Button
           key="cancel"
-          variant="link"
+          variant="secondary"
           onClick={onClose}
           data-test="cancel"
+          isDisabled={isSubmitting}
         >
           {t("Cancel")}
         </Button>,
@@ -77,7 +80,9 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
         </StackItem>
         <StackItem>
           <Text>
-            <InfoCircleIcon size="sm" color={infoColor.value} />
+            <Icon size="sm" color={infoColor.value}>
+              <InfoCircleIcon />
+            </Icon>
             &nbsp;{`${infoMessage}`}
           </Text>
         </StackItem>

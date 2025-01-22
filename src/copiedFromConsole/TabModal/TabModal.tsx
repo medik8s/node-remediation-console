@@ -10,6 +10,7 @@ import {
   Form,
   Modal,
   ModalBoxFooter,
+  ModalProps,
   ModalVariant,
   Stack,
   StackItem,
@@ -29,13 +30,7 @@ type TabModalProps<T extends K8sResourceCommon = K8sResourceCommon> = {
   positionTop?: boolean;
   submitBtnVariant?: ButtonVariant;
   submitBtnType?: ButtonProps["type"];
-  titleIconVariant?:
-    | "success"
-    | "danger"
-    | "warning"
-    | "info"
-    | "default"
-    | React.ComponentType<unknown>;
+  titleIconVariant?: ModalProps["titleIconVariant"];
 };
 
 export type TabModalFC = <T extends K8sResourceCommon = K8sResourceCommon>(

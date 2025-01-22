@@ -5,11 +5,12 @@ import { Action } from "@openshift-console/dynamic-plugin-sdk";
 import {
   Dropdown,
   DropdownItem,
-  DropdownPosition,
-  DropdownToggle,
-  KebabToggle,
+  DropdownList,
+  MenuToggle,
+  MenuToggleElement,
 } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { EllipsisVIcon } from "@patternfly/react-icons";
 
 export type ActionsMenuProps = {
   actions: Action[];
@@ -30,32 +31,53 @@ const ActionsMenu: React.FC<ActionsMenuProps> = ({
     }
   };
 
+  const onToggleClick = () => setIsOpen(!isOpen);
+
   return (
     <Dropdown
       data-test-id="actions"
       isOpen={isOpen}
-      position={DropdownPosition.right}
-      isPlain={isKababToggle}
-      toggle={
+      onOpenChange={setIsOpen}
+      popperProps={{
+        position: "right",
+      }}
+      toggle={(toggleRef: React.Ref<MenuToggleElement>) =>
         isKababToggle ? (
-          <KebabToggle onToggle={setIsOpen} />
+          <MenuToggle
+            ref={toggleRef}
+            aria-label="kebab dropdown toggle"
+            variant="plain"
+            onClick={onToggleClick}
+            isExpanded={isOpen}
+          >
+            <EllipsisVIcon />
+          </MenuToggle>
         ) : (
-          <DropdownToggle onToggle={setIsOpen}>{t("Actions")}</DropdownToggle>
+          <MenuToggle
+            ref={toggleRef}
+            onClick={onToggleClick}
+            isExpanded={isOpen}
+          >
+            {t("Actions")}
+          </MenuToggle>
         )
       }
-      dropdownItems={actions?.map((action) => (
-        <DropdownItem
-          data-test-id={`${action.id}`}
-          key={action?.id}
-          onClick={() => handleClick(action)}
-          isDisabled={action?.disabled}
-          description={action?.description}
-          component="button"
-        >
-          {action?.label}
-        </DropdownItem>
-      ))}
-    />
+    >
+      <DropdownList>
+        {actions?.map((action) => (
+          <DropdownItem
+            data-test-id={`${action.id}`}
+            key={action?.id}
+            onClick={() => handleClick(action)}
+            isDisabled={action?.disabled}
+            description={action?.description}
+            component="button"
+          >
+            {action?.label}
+          </DropdownItem>
+        ))}
+      </DropdownList>
+    </Dropdown>
   );
 };
 

@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  TableComposable,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-} from "@patternfly/react-table";
+import { Table, Thead, Tr, Th, Tbody, Td } from "@patternfly/react-table";
 import { NodeHealthCheck, UnhealthyCondition } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { map } from "lodash-es";
@@ -21,7 +14,7 @@ export const UnhealthyConditionsTable: React.FC<{
     duration: t("Duration"),
   };
   return (
-    <TableComposable
+    <Table
       aria-label="Unhealthy Conditions Table"
       variant="compact"
       translate={undefined}
@@ -56,6 +49,6 @@ export const UnhealthyConditionsTable: React.FC<{
           )
         )}
       </Tbody>
-    </TableComposable>
+    </Table>
   );
 };

@@ -8,18 +8,21 @@ import {
   RemediationTemplate,
 } from "../../data/types";
 import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
-import {
-  FlexForm,
-  FormBody,
-  FormFooter,
-} from "../../copiedFromConsole/form-utils";
+import { FlexForm, FormFooter } from "../../copiedFromConsole/form-utils";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
 import YamlEditorField from "./YamlEditorField";
 import * as formViewValues from "data/formViewValues";
 import * as yamlText from "data/yamlText";
 import { dump } from "js-yaml";
-import { Alert, FormSection } from "@patternfly/react-core";
+import {
+  Alert,
+  Form,
+  Grid,
+  GridItem,
+  PageSection,
+  PageSectionVariants,
+} from "@patternfly/react-core";
 import { getFormValues } from "data/formValues";
 import { isEmpty } from "lodash-es";
 
@@ -77,27 +80,25 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   const yamlEditor = <YamlEditorField fieldName="yamlData" />;
 
   const formEditor = (
-    <FormBody
-      style={{
-        paddingLeft: "var(--pf-c-form--GridGap)",
-        paddingTop: "var(--pf-c-form--GridGap)",
-      }}
-      className="co-m-pane__form"
-    >
-      <FormSection>
-        {values.formParsingError ? (
-          <Alert
-            variant="danger"
-            title="Error parsing NodeHealthCheck"
-            isInline
-          >
-            {values.formParsingError}
-          </Alert>
-        ) : (
-          <NodeHealthCheckFormFields />
-        )}
-      </FormSection>
-    </FormBody>
+    <PageSection variant={PageSectionVariants.light}>
+      <Grid span={8}>
+        <GridItem>
+          <Form>
+            {values.formParsingError ? (
+              <Alert
+                variant="danger"
+                title="Error parsing NodeHealthCheck"
+                isInline
+              >
+                {values.formParsingError}
+              </Alert>
+            ) : (
+              <NodeHealthCheckFormFields />
+            )}
+          </Form>
+        </GridItem>
+      </Grid>
+    </PageSection>
   );
 
   const onReload = () => {

@@ -76,7 +76,7 @@ export const LabelsModal: React.FC<LabelsModalProps> = React.memo(
           className={"co-label tag-item-content".concat(labelClassName || "")}
           key={key}
           onClose={() => onRemove(key)}
-          isTruncated
+          textMaxWidth="16ch"
         >
           {getTagDisplayValue(tag)}
         </PFLabel>

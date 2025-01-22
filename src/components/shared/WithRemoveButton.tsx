@@ -11,7 +11,7 @@ export const WithRemoveButton = ({
   dataTest,
   ariaLabel,
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   isDisabled: boolean;
   grow?: boolean;
   direction?: "column" | "columnReverse" | "row" | "rowReverse";

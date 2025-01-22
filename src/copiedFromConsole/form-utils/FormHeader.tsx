@@ -30,10 +30,7 @@ const FormHeader: React.FC<FormHeaderProps> = ({
       <Title headingLevel="h1" size="2xl">
         {title}
       </Title>
-      <FormHelperText
-        isHidden={false}
-        style={{ marginTop: "var(--pf-global--spacer--xs)" }}
-      >
+      <FormHelperText style={{ marginTop: "var(--pf-global--spacer--xs)" }}>
         {helpText}
       </FormHelperText>
     </div>

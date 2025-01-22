@@ -87,9 +87,7 @@ export const UnhealthyConditionArray: React.FC<{
                     onClick={() => remove(idx)}
                     isDisabled={value.length === 1}
                     dataTest="remove-unhealthy-condition"
-                  >
-                    {null}
-                  </WithRemoveButton>
+                  />
                   <UnhealthyConditionItem
                     key={getArrayItemName(fieldName, idx)}
                     fieldName={getArrayItemName(fieldName, idx)}

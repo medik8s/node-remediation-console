@@ -43,7 +43,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
         isInline
         variant="info"
         title={t(
-          `Note: Some fields may not be represented in this form view. Please select "YAML view" for full control`
+          `Some fields may not be represented in this form view. Please select "YAML view" for full control`
         )}
         id="info-inline-alert"
       />

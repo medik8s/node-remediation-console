@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
-  ActionGroup,
+  ActionList,
+  ActionListItem,
   Alert,
   Button,
   ButtonVariant,
@@ -69,51 +70,59 @@ const FormFooter: React.FC<FormFooterProps> = ({
               )}
           </Alert>
         )}
-        <ActionGroup className="pf-c-form pf-c-form__group--no-top-margin">
+        <ActionList>
           {!hideSubmit && (
-            <Button
-              {...(handleSubmit && { onClick: handleSubmit })}
-              variant={ButtonVariant.primary}
-              isDisabled={disableSubmit}
-              data-test-id="submit-button"
-              data-test="save-changes"
-            >
-              {submitLabel || t("Save")}
-            </Button>
+            <ActionListItem>
+              <Button
+                {...(handleSubmit && { onClick: handleSubmit })}
+                variant={ButtonVariant.primary}
+                isDisabled={disableSubmit}
+                data-test-id="submit-button"
+                data-test="save-changes"
+              >
+                {submitLabel || t("Save")}
+              </Button>
+            </ActionListItem>
           )}
           {handleReset && (
-            <Button
-              type="button"
-              data-test-id="reset-button"
-              variant={ButtonVariant.secondary}
-              onClick={handleReset}
-            >
-              {resetLabel || t("Reload")}
-            </Button>
+            <ActionListItem>
+              <Button
+                type="button"
+                data-test-id="reset-button"
+                variant={ButtonVariant.secondary}
+                onClick={handleReset}
+              >
+                {resetLabel || t("Reload")}
+              </Button>
+            </ActionListItem>
           )}
           {handleCancel && (
-            <Button
-              type="button"
-              data-test-id="cancel-button"
-              variant={ButtonVariant.secondary}
-              onClick={handleCancel}
-            >
-              {cancelLabel || t("Cancel")}
-            </Button>
+            <ActionListItem>
+              <Button
+                type="button"
+                data-test-id="cancel-button"
+                variant={ButtonVariant.secondary}
+                onClick={handleCancel}
+              >
+                {cancelLabel || t("Cancel")}
+              </Button>
+            </ActionListItem>
           )}
           {handleDownload && (
-            <Button
-              type="button"
-              data-test-id="download-button"
-              variant={ButtonVariant.secondary}
-              className="pf-c-button--align-right hidden-sm hidden-xs"
-              onClick={handleDownload}
-              icon={<DownloadIcon />}
-            >
-              {t("Download")}
-            </Button>
+            <ActionListItem>
+              <Button
+                type="button"
+                data-test-id="download-button"
+                variant={ButtonVariant.secondary}
+                className="pf-c-button--align-right hidden-sm hidden-xs"
+                onClick={handleDownload}
+                icon={<DownloadIcon />}
+              >
+                {t("Download")}
+              </Button>
+            </ActionListItem>
           )}
-        </ActionGroup>
+        </ActionList>
       </ButtonBar>
     </div>
   );
