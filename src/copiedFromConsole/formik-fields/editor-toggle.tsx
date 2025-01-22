@@ -13,10 +13,7 @@ export const EditorToggle: React.FC<EditorToggleProps> = ({
   onChange,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const handleChange = (
-    _checked: boolean,
-    event: React.FormEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     onChange(event?.currentTarget?.value as EditorType);
   };
   return (

@@ -19,6 +19,8 @@
 .nhc-form .ocs-synced-editor-field__editor-toggle {
   border-top: none;
   padding-bottom: var(--pf-global--spacer--sm);
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .nhc-form .ocs-synced-editor-field__editor-toggle .pf-c-form__group-label {

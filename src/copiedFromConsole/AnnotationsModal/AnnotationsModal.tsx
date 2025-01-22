@@ -121,10 +121,9 @@ export const AnnotationsModal: React.FC<{
         ))}
         <div className="co-toolbar__group co-toolbar__group--left">
           <Button
-            isSmall
             className="pf-m-link--align-left"
             variant="link"
-            onClick={() => onAnnotationAdd()}
+            onClick={onAnnotationAdd}
             icon={<PlusCircleIcon />}
           >
             {t("Add more")}

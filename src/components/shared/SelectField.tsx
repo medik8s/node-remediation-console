@@ -1,14 +1,14 @@
 import * as React from "react";
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
   FormGroup,
+  MenuToggle,
+  MenuToggleElement,
+  Select,
+  SelectList,
+  SelectOption,
 } from "@patternfly/react-core";
 import { useField } from "formik";
 import { getFieldId } from "../../copiedFromConsole/formik-fields/field-utils";
-
-import "./DropdownField.css";
 
 export type SelectItem = {
   label: string;
@@ -21,7 +21,7 @@ const isReactElement = (
   return "props" in item;
 };
 
-export type DropdownFieldProps = {
+export type SelectFieldProps = {
   name: string;
   label?: string;
   isRequired?: boolean;
@@ -29,7 +29,7 @@ export type DropdownFieldProps = {
   isDisabled?: boolean;
 };
 
-const DropdownField: React.FC<DropdownFieldProps> = ({
+const SelectField: React.FC<SelectFieldProps> = ({
   name,
   label,
   isRequired = false,
@@ -40,27 +40,28 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const fieldId = getFieldId(name, "dropdown");
 
-  const onToggle = (isOpen: boolean) => {
-    setIsOpen(isOpen);
+  const onToggle = () => {
+    setIsOpen(!isOpen);
   };
 
-  const onSelect = () => {
+  const onSelect = (e, value) => {
     setIsOpen(false);
+    setValue(value);
   };
 
-  const getDropdownItems = () => {
+  const getSelectItems = () => {
     return items.map((item, idx) => {
       if (isReactElement(item)) {
         return item;
       }
       return (
-        <DropdownItem
+        <SelectOption
           key={idx}
-          onClick={() => setValue(item.value)}
           data-test={`select-${item.label}`}
+          value={item.value}
         >
           {item.label}
-        </DropdownItem>
+        </SelectOption>
       );
     });
   };
@@ -76,29 +77,31 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
   };
 
   return (
-    <FormGroup
-      fieldId={fieldId}
-      label={label}
-      isRequired={isRequired}
-      className="dropdown-field"
-    >
-      <Dropdown
-        toggle={
-          <DropdownToggle
-            onToggle={onToggle}
+    <FormGroup fieldId={fieldId} label={label} isRequired={isRequired}>
+      <Select
+        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          <MenuToggle
+            ref={toggleRef}
+            data-test={`toggle-${label}-select`}
+            onClick={onToggle}
             isDisabled={isDisabled}
-            data-test={`toggle-${label}-dropdown`}
+            isExpanded={isOpen}
+            style={{
+              width: "200px",
+            }}
           >
             {getToggleLabel()}
-          </DropdownToggle>
-        }
+          </MenuToggle>
+        )}
+        onOpenChange={setIsOpen}
         onSelect={onSelect}
         isOpen={isOpen}
-        dropdownItems={getDropdownItems()}
         readOnly={isDisabled}
-      />
+      >
+        <SelectList>{getSelectItems()}</SelectList>
+      </Select>
     </FormGroup>
   );
 };
 
-export default DropdownField;
+export default SelectField;

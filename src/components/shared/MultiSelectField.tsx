@@ -1,124 +1,146 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as React from "react";
 import { useField } from "formik";
 import {
   FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  MenuToggle,
+  MenuToggleElement,
   Select,
   SelectProps,
-  SelectVariant,
+  Spinner,
+  TextInputGroup,
+  TextInputGroupMain,
 } from "@patternfly/react-core";
 
-import fuzzy from "fuzzysearch";
 import { getFieldId } from "../../copiedFromConsole/formik-fields/field-utils";
 import { FieldProps } from "../../copiedFromConsole/formik-fields/field-types";
 import { useFormikValidationFix } from "../../copiedFromConsole/hooks/formik-validation-fix";
+import { ExclamationCircleIcon } from "@patternfly/react-icons";
+import { useNodeHealthCheckTranslation } from "../../localization/useNodeHealthCheckTranslation";
+
 export interface MultiSelectFieldProps extends FieldProps {
-  options: JSX.Element[];
   placeholderText?: string;
-  onChange?: (val: string[]) => void;
-  getHelperText?: (value: string) => React.ReactNode | undefined;
-  enableClear: boolean;
   isLoading: boolean;
   isRequired: boolean;
+  label: string;
+  filterValue: string;
+  setFilterValue: (filterValue: string) => void;
+  children: SelectProps["children"];
 }
 
-// Field value is a string[]
 const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   label,
-  options,
   helpText,
-  getHelperText,
-  onChange,
   labelIcon,
-  enableClear,
-  isLoading,
   isRequired,
+  filterValue,
+  setFilterValue,
+  isLoading,
+  children,
   ...props
 }) => {
+  const { t } = useNodeHealthCheckTranslation();
   const [isOpen, setOpen] = React.useState(false);
-  const [field, { touched, error }, { setValue }] = useField(props.name);
+  const [field, { touched, error }, { setValue }] = useField<string[]>(
+    props.name
+  );
+  const textInputRef = React.useRef<HTMLInputElement>();
   const fieldId = getFieldId(props.name, "multiinput");
   const isValid = !(touched && error);
   const errorMessage = !isValid ? error : "";
-  const hText = getHelperText ? getHelperText(field.value) : helpText;
   useFormikValidationFix(field.value);
 
   const onToggle = (isOpen: boolean) => setOpen(isOpen);
   const onClearSelection = () => {
-    // onChange && onChange(event);
     setValue([]);
-    onChange && onChange([]);
     setOpen(false);
   };
 
   const onSelect: SelectProps["onSelect"] = (event, selection) => {
-    // already selected
-    const selected = field.value;
-    const selectionValue = selection;
-    let newValue;
-    if (selected.includes(selectionValue)) {
-      newValue = selected.filter((sel: string) => sel !== selectionValue);
+    let newValue: string[];
+    if (field.value.includes(selection as string)) {
+      newValue = field.value.filter((sel: string) => sel !== selection);
     } else {
-      newValue = [...field.value, selectionValue];
+      newValue = [...field.value, selection as string];
     }
     setValue(newValue);
   };
 
-  const onFilter = (_, textInput) => {
-    if (textInput === "") {
-      return options;
-    } else {
-      const filteredGroups = options
-        .map((group) => {
-          const filteredGroup = React.cloneElement(group, {
-            children: group.props.children.filter((item) => {
-              return fuzzy(textInput, item.props.value);
-            }),
-          });
-          if (filteredGroup.props.children.length > 0) return filteredGroup;
-        })
-        .filter((newGroup) => newGroup);
-      return filteredGroups;
-    }
-  };
+  const validated = isValid ? "default" : "error";
+
+  const formContent = isLoading ? (
+    <Spinner size="md" />
+  ) : (
+    <>
+      <Select
+        {...field}
+        {...props}
+        id={fieldId}
+        validated={isValid ? "default" : "error"}
+        aria-describedby={`${fieldId}-helper`}
+        placeholderText={t("Filter by label")}
+        isOpen={isOpen}
+        onToggle={onToggle}
+        onSelect={onSelect}
+        selections={field.value}
+        onClear={onClearSelection}
+        maxHeight={400}
+        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          <MenuToggle
+            variant="typeahead"
+            ref={toggleRef}
+            onClick={() => setOpen(!isOpen)}
+            isExpanded={isOpen}
+            style={{
+              width: "200px",
+            }}
+          >
+            <TextInputGroup isPlain>
+              <TextInputGroupMain
+                value={filterValue}
+                onClick={() => onToggle(!isOpen)}
+                onChange={(_, val) => setFilterValue(val)}
+                onKeyDown={() => onToggle(true)}
+                id="multi-typeahead-select-checkbox-input"
+                autoComplete="off"
+                innerRef={textInputRef}
+                placeholder={t("Filter by label")}
+                role="combobox"
+                isExpanded={isOpen}
+                aria-controls="select-multi-typeahead-checkbox-listbox"
+              />
+            </TextInputGroup>
+          </MenuToggle>
+        )}
+        maxMenuHeight="25rem"
+        isScrollable
+      >
+        {children}
+      </Select>
+      <FormHelperText>
+        <HelperText>
+          <HelperTextItem
+            variant={validated}
+            {...(validated === "error" && { icon: <ExclamationCircleIcon /> })}
+          >
+            {errorMessage || helpText}
+          </HelperTextItem>
+        </HelperText>
+      </FormHelperText>
+    </>
+  );
 
   return (
     <FormGroup
       fieldId={fieldId}
       label={label}
-      helperText={hText}
-      helperTextInvalid={errorMessage}
-      validated={isValid ? "default" : "error"}
       isRequired={isRequired}
       labelIcon={labelIcon}
       data-test={`multi-select-${label}`}
     >
-      <Select
-        {...field}
-        {...props}
-        id={fieldId}
-        variant={SelectVariant.checkbox}
-        typeAheadAriaLabel="Select a label"
-        validated={isValid ? "default" : "error"}
-        aria-describedby={`${fieldId}-helper`}
-        isCreatable={false}
-        placeholderText="Filter by label"
-        isOpen={isOpen}
-        onToggle={onToggle}
-        onSelect={onSelect}
-        selections={field.value}
-        onClear={enableClear ? onClearSelection : null}
-        loadingVariant={isLoading ? "spinner" : undefined}
-        isGrouped
-        hasInlineFilter
-        onFilter={onFilter}
-        maxHeight={400}
-      >
-        {options}
-      </Select>
+      {formContent}
     </FormGroup>
   );
 };

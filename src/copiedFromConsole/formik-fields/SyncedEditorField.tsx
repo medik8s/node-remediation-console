@@ -211,7 +211,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
       )}
       {disabledFormAlert && (
         <Alert
-          variant="default"
+          variant="info"
           title={t(
             "Form view is disabled for this chart because the schema is not available"
           )}

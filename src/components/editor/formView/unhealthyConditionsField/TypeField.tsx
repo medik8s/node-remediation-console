@@ -1,10 +1,8 @@
 import * as React from "react";
 import CustomTypeModal from "./CustomTypeModal";
-import DropdownField, {
-  DropdownFieldProps,
-} from "components/shared/DropdownField";
+import SelectField, { SelectFieldProps } from "components/shared/SelectField";
 import { UnhealthyConditionFieldProps } from "./propTypes";
-import { DropdownItem, DropdownSeparator } from "@patternfly/react-core";
+import { Divider, SelectOption } from "@patternfly/react-core";
 import { TFunction } from "i18next";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
@@ -36,21 +34,21 @@ const TypeSelectField: React.FC<UnhealthyConditionFieldProps> = ({ name }) => {
   const [customTypeModalOpen, setCustomTypeModalOpen] =
     React.useState<boolean>(false);
 
-  const dropdownItems: DropdownFieldProps["items"] = getOptions(t);
-  dropdownItems.push(<DropdownSeparator key="type-field-separator" />);
+  const dropdownItems: SelectFieldProps["items"] = getOptions(t);
+  dropdownItems.push(<Divider key="type-field-separator" component="li" />);
   dropdownItems.push(
-    <DropdownItem
+    <SelectOption
       key="use-custom-type"
       onClick={() => setCustomTypeModalOpen(true)}
     >
-      Use custom type
-    </DropdownItem>
+      {t("Use custom type")}
+    </SelectOption>
   );
   return (
     <>
-      <DropdownField
+      <SelectField
         name={name}
-        label={"Type"}
+        label={t("Type")}
         isRequired
         items={dropdownItems}
       />

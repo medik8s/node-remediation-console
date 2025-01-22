@@ -12,9 +12,8 @@ const HelpIcon: React.FC<PopoverIconProps> = ({ helpText }) => (
       variant="plain"
       onClick={(e) => e.preventDefault()}
       className={classNames("nhc-form__help-icon")}
-    >
-      <OutlinedQuestionCircleIcon noVerticalAlign={false} />
-    </Button>
+      icon={<OutlinedQuestionCircleIcon />}
+    />
   </Popover>
 );
 

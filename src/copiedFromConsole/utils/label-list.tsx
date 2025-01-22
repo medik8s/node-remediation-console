@@ -19,7 +19,7 @@ export const Label: React.FC<LabelProps> = ({ kind, name, value, expand }) => {
 
   return (
     <>
-      <PfLabel className={klass} isTruncated>
+      <PfLabel className={klass} textMaxWidth="16ch">
         <Link className="pf-c-label__content" to={href}>
           <span className="co-label__key" data-test="label-key">
             {name}

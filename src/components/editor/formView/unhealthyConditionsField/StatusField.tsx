@@ -1,4 +1,3 @@
-import DropdownField, { SelectItem } from "components/shared/DropdownField";
 import { UnhealthyConditionStatus, UnhealtyConditionType } from "data/types";
 import { useField } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
@@ -6,6 +5,8 @@ import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTr
 import * as React from "react";
 import { UnhealthyConditionFieldProps } from "./propTypes";
 import { find } from "lodash-es";
+import SelectField, { SelectItem } from "../../../shared/SelectField";
+
 const getStatuses = (
   type: UnhealtyConditionType
 ): UnhealthyConditionStatus[] => {
@@ -52,7 +53,7 @@ const StatusField: React.FC<
   }, [type, status]);
 
   return (
-    <DropdownField
+    <SelectField
       name={name}
       label={t("Status")}
       isRequired
