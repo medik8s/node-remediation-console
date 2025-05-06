@@ -1,39 +1,56 @@
+import { TFunction } from "i18next";
 import { NodeKind } from "../copiedFromConsole/types/node";
-import { get, reduce, flatten, uniq } from "lodash-es";
+import { get, reduce, uniq } from "lodash-es";
 
 const NODE_ROLE_PREFIX = "node-role.kubernetes.io/";
 
-const getRoleLabel = (roleText: string) => `${NODE_ROLE_PREFIX}${roleText}`;
+export const getRoleLabel = (roleText: string) =>
+  `${NODE_ROLE_PREFIX}${roleText}`;
 const masterLabel = getRoleLabel("master");
+
+export const getRoleTitle = (t: TFunction, role: Role): string => {
+  if (role === Role.WORKER) {
+    return t("Worker");
+  }
+  return t("Control plane");
+};
 
 export enum Role {
   WORKER = "worker",
   CONTROL_PLANE = "control-plane",
 }
 
-export type ClusterRoleLabels = {
-  [Role.CONTROL_PLANE]?: string;
-  [Role.WORKER]?: string;
-};
+export type ClusterRoleLabels = Array<{
+  title: string;
+  value: string;
+}>;
 
 export const getClusterRoleLabels = (
-  allNodes: NodeKind[]
+  t: TFunction,
+  nodeLabels: string[]
 ): ClusterRoleLabels => {
-  const res: ClusterRoleLabels = {};
-  const masterLabel = getRoleLabel("master");
-  const allLabels = flatten(
-    allNodes.map((node) => Object.keys(node.metadata?.labels || {}))
-  );
+  const roleLabels: ClusterRoleLabels = [];
+
   for (const role of Object.values(Role)) {
     const label = getRoleLabel(role);
-    if (allLabels.includes(label)) {
-      res[role] = label;
+    if (nodeLabels.includes(label)) {
+      roleLabels.push({
+        value: label,
+        title: getRoleTitle(t, role),
+      });
     }
   }
-  if (!res[Role.CONTROL_PLANE] && allLabels.includes(masterLabel)) {
-    res[Role.CONTROL_PLANE] = masterLabel;
+  if (
+    !nodeLabels.includes(getRoleLabel(Role.CONTROL_PLANE)) &&
+    nodeLabels.includes(masterLabel)
+  ) {
+    roleLabels.push({
+      value: masterLabel,
+      title: getRoleTitle(t, Role.CONTROL_PLANE),
+    });
   }
-  return res;
+
+  return roleLabels;
 };
 
 export const getNodeRoles = (node: NodeKind): string[] => {
@@ -55,17 +72,6 @@ export const getNodeRoles = (node: NodeKind): string[] => {
     },
     []
   );
-};
-export const getClusterLabelOfRole = (allNodes: NodeKind[], role: Role) => {
-  const masterLabel = `${NODE_ROLE_PREFIX}/master`;
-  const allLabels = flatten(
-    allNodes.map((node) => Object.keys(node.metadata?.labels || {}))
-  );
-  if (allLabels.includes(`${NODE_ROLE_PREFIX}/${role}`)) {
-    return `${NODE_ROLE_PREFIX}/${role}`;
-  } else if (allLabels.includes(masterLabel)) {
-    return masterLabel;
-  }
 };
 
 export const getNodeRolesText = (node: NodeKind): string => {

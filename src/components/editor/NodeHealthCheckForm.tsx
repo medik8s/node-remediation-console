@@ -45,7 +45,7 @@ const LearnMoreLink: React.FC = () => {
   React.useEffect(() => {
     if (error) {
       console.error(
-        `${t("Failed to retrive OCP version for LearnMore link: ")} ${error}`
+        `Failed to retrive OCP version for LearnMore link: ${error}`
       );
     }
   }, [error]);
@@ -98,25 +98,22 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
     actions: FormikHelpers<NodeHealthCheckFormValues>
   ) => {
     try {
-      let resourceCall;
-
-      const updatedNodeHealthCheck: NodeHealthCheck = getNodeHealthCheck(
+      const updatedNodeHealthCheck = getNodeHealthCheck(
         nodeHealthCheck,
         values
       );
       if (isCreateFlow) {
-        resourceCall = k8sCreate({
+        await k8sCreate({
           model: NodeHealthCheckModel,
           data: updatedNodeHealthCheck,
         });
       } else {
-        resourceCall = k8sUpdate({
+        await k8sUpdate({
           model: NodeHealthCheckModel,
           data: updatedNodeHealthCheck,
           name,
         });
       }
-      await resourceCall;
       navigation.gotoDetails(updatedNodeHealthCheck?.metadata?.name);
       return true;
     } catch (e) {

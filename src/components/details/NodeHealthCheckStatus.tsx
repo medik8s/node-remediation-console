@@ -9,6 +9,7 @@ import {
   Stack,
   StackItem,
   TextList,
+  PopoverProps,
 } from "@patternfly/react-core";
 import {
   ExclamationCircleIcon,
@@ -200,14 +201,15 @@ const NodeHealthCheckStatus: React.FC<{
       </a>
     </span>
   );
-  const onShouldClose = (tip, hideFunction, event) => {
+  const onShouldClose: PopoverProps["shouldClose"] = (event) => {
     //the condition is a workaround for a bug in patternfly
     //Clickin on an svg icon in the popover triggers onShouldClose
     //this causes the pause popover to close when user click on the "show more" angle icon
     //the condition checks the event target and the parent, because the id doesn't propogate to the svg child path element
     if (
-      event?.target?.id !== SHOW_MORE_BUTTON_ID &&
-      event?.target?.parentNode?.id !== SHOW_MORE_BUTTON_ID
+      (event.target as unknown as { id: string }).id !== SHOW_MORE_BUTTON_ID &&
+      (event.target as unknown as { parentNode?: { id: string } }).parentNode
+        ?.id !== SHOW_MORE_BUTTON_ID
     ) {
       setPopoverVisible(false);
     }

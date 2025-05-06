@@ -1,4 +1,4 @@
-import { FormGroup, Tooltip } from "@patternfly/react-core";
+import { FormGroup, Split, SplitItem, Tooltip } from "@patternfly/react-core";
 
 import { useField } from "formik";
 
@@ -27,28 +27,34 @@ const RemediatorKindRadioGroup: React.FC<{
   const fieldId = getFieldId(fieldName, "radiogroup");
   return (
     <FormGroup fieldId={fieldId} label={"Remediator"} isInline={true}>
-      <Tooltip
-        content={t(
-          "Self node remediation is disabled because its templates can't be found. Please reinstall the Self Node Remediation Operator."
-        )}
-        hidden={snrTemplatesExist}
-      >
-        <RadioButtonField
-          value={RemediatorRadioOption.SNR}
-          label={getSNRLabel(t)}
-          isDisabled={!snrTemplatesExist}
-          aria-describedby={"SNR remediator kind"}
-          name={fieldName}
-          onChange={onChange}
-        />
-      </Tooltip>
-      <RadioButtonField
-        value={RemediatorRadioOption.CUSTOM}
-        label={t("Other")}
-        aria-describedby={"CUSTOM remediator kind"}
-        name={fieldName}
-        onChange={onChange}
-      />
+      <Split hasGutter>
+        <SplitItem>
+          <Tooltip
+            content={t(
+              "Self node remediation is disabled because its templates can't be found. Please reinstall the Self Node Remediation Operator."
+            )}
+            hidden={snrTemplatesExist}
+          >
+            <RadioButtonField
+              value={RemediatorRadioOption.SNR}
+              label={getSNRLabel(t)}
+              isDisabled={!snrTemplatesExist}
+              aria-describedby={"SNR remediator kind"}
+              name={fieldName}
+              onChange={onChange}
+            />
+          </Tooltip>
+        </SplitItem>
+        <SplitItem>
+          <RadioButtonField
+            value={RemediatorRadioOption.CUSTOM}
+            label={t("Other")}
+            aria-describedby={"CUSTOM remediator kind"}
+            name={fieldName}
+            onChange={onChange}
+          />
+        </SplitItem>
+      </Split>
     </FormGroup>
   );
 };

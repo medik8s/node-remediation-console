@@ -22,7 +22,7 @@ export const AnnotationsModalRow: React.FC<{
           isRequired
           type="text"
           value={annotation.key}
-          onChange={(newKey) => onChange({ ...annotation, key: newKey })}
+          onChange={(_, newKey) => onChange({ ...annotation, key: newKey })}
           aria-label={t("annotation key")}
         />
       </GridItem>
@@ -34,7 +34,9 @@ export const AnnotationsModalRow: React.FC<{
           isRequired
           type="text"
           value={annotation.value}
-          onChange={(newValue) => onChange({ ...annotation, value: newValue })}
+          onChange={(_, newValue) =>
+            onChange({ ...annotation, value: newValue })
+          }
           aria-label={t("annotation value")}
         />
       </GridItem>
