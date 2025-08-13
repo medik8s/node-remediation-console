@@ -2,6 +2,7 @@
   "name": "node-remediation-console-plugin",
   "version": "0.0.1",
   "private": true,
+  "license": "Apache-2.0",
   "repository": "git@github.com/medik8s/node-remediation-console.git",
   "scripts": {
     "clean": "rm -rf dist",
