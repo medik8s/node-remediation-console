@@ -3,8 +3,6 @@ import {
   ChipGroup,
   Flex,
   FlexItem,
-  Stack,
-  StackItem,
   SelectGroup,
   SelectOption,
   SelectList,
@@ -71,93 +69,89 @@ const LabelSelectionField = ({
   };
 
   return (
-    <Stack hasGutter>
-      <StackItem style={{ marginBottom: "var(--pf-global--spacer--sm)" }}>
-        <MultiSelectField
-          isLoading={isLoading}
-          name={fieldName}
-          label={t("Nodes selection")}
-          helpText={t(
-            "Select the labels that will be used to find unhealthy nodes for remediation. The nodes must satisfy all selected labels."
-          )}
-          isRequired
-          filterValue={filterValue}
-          setFilterValue={setFilterValue}
-        >
-          {!!roleLabels.length && (
-            <SelectGroup label={t("Role")}>
-              <SelectList>
-                {roleLabels.map(({ title, value }) => (
-                  <SelectOption
-                    key={value}
-                    isSelected={field.value.includes(value)}
-                    hasCheckbox
-                    value={value}
-                  >
-                    {title}
-                  </SelectOption>
-                ))}
-              </SelectList>
-            </SelectGroup>
-          )}
-          <SelectGroup label={t("Labels")}>
+    <>
+      <MultiSelectField
+        isLoading={isLoading}
+        name={fieldName}
+        label={t("Selector labels")}
+        helpText={t(
+          "Select the labels that will be used to find unhealthy nodes for remediation. The nodes must satisfy all selected labels."
+        )}
+        isRequired
+        filterValue={filterValue}
+        setFilterValue={setFilterValue}
+      >
+        {!!roleLabels.length && (
+          <SelectGroup label={t("Role")}>
             <SelectList>
-              {otherLabels.map((label) => (
+              {roleLabels.map(({ title, value }) => (
                 <SelectOption
-                  key={label}
-                  isSelected={field.value.includes(label)}
+                  key={value}
+                  isSelected={field.value.includes(value)}
                   hasCheckbox
-                  value={label}
+                  value={value}
                 >
-                  {label}
+                  {title}
                 </SelectOption>
               ))}
             </SelectList>
           </SelectGroup>
-        </MultiSelectField>
-      </StackItem>
+        )}
+        <SelectGroup label={t("Labels")}>
+          <SelectList>
+            {otherLabels.map((label) => (
+              <SelectOption
+                key={label}
+                isSelected={field.value.includes(label)}
+                hasCheckbox
+                value={label}
+              >
+                {label}
+              </SelectOption>
+            ))}
+          </SelectList>
+        </SelectGroup>
+      </MultiSelectField>
       {!isLoading && (
-        <StackItem>
-          <Flex flexWrap={{ default: "nowrap" }}>
-            {selectedRoleLabels.length > 0 && (
-              <FlexItem>
-                <ChipGroup
-                  key="roles"
-                  categoryName={t("Role")}
-                  collapsedText={t("Show more")}
-                  expandedText={t("Show less")}
-                  defaultIsOpen
-                >
-                  {selectedRoleLabels.map((label) => (
-                    <Chip key={label} onClick={() => onDeleteLabel(label)}>
-                      {label === getRoleLabel(Role.WORKER)
-                        ? getRoleTitle(t, Role.WORKER)
-                        : getRoleTitle(t, Role.CONTROL_PLANE)}
-                    </Chip>
-                  ))}
-                </ChipGroup>
-              </FlexItem>
-            )}
+        <Flex flexWrap={{ default: "nowrap" }}>
+          {selectedRoleLabels.length > 0 && (
             <FlexItem>
               <ChipGroup
-                key="labels"
-                categoryName={t("Labels")}
+                key="roles"
+                categoryName={t("Role")}
                 collapsedText={t("Show more")}
                 expandedText={t("Show less")}
                 defaultIsOpen
-                numChips={2}
               >
-                {field.value.map((label) => (
+                {selectedRoleLabels.map((label) => (
                   <Chip key={label} onClick={() => onDeleteLabel(label)}>
-                    {label}
+                    {label === getRoleLabel(Role.WORKER)
+                      ? getRoleTitle(t, Role.WORKER)
+                      : getRoleTitle(t, Role.CONTROL_PLANE)}
                   </Chip>
                 ))}
               </ChipGroup>
             </FlexItem>
-          </Flex>
-        </StackItem>
+          )}
+          <FlexItem>
+            <ChipGroup
+              key="labels"
+              categoryName={t("Labels")}
+              collapsedText={t("Show more")}
+              expandedText={t("Show less")}
+              defaultIsOpen
+              numChips={2}
+            >
+              {field.value.map((label) => (
+                <Chip key={label} onClick={() => onDeleteLabel(label)}>
+                  {label}
+                </Chip>
+              ))}
+            </ChipGroup>
+          </FlexItem>
+        </Flex>
       )}
-    </Stack>
+    </>
   );
 };
 

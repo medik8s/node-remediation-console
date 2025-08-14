@@ -5,20 +5,23 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
-  Popover,
-  Split,
-  SplitItem,
+  Flex,
+  FlexItem,
+  DescriptionListGroup,
+  DescriptionListTerm,
+  DescriptionListDescription,
 } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { K8sResourceKind } from "../k8s/types";
 import * as classnames from "classnames";
-import { LinkifyExternal } from "./link";
+import "./details-item.css";
+
 import { toPath, isEmpty, get } from "lodash-es";
 
 export const PropertyPath = ({ kind, path }) => {
   const pathArray: string[] = toPath(path);
   return (
-    <Breadcrumb className="co-breadcrumb">
+    <Breadcrumb>
       <BreadcrumbItem>{kind}</BreadcrumbItem>
       {pathArray.map((property, i) => {
         const isLast = i === pathArray.length - 1;
@@ -45,8 +48,7 @@ const EditButton: React.FC<EditButtonProps> = (props) => {
           : "details-item__edit-button"
       }
     >
-      {props.children}
-      <PencilAltIcon className="co-icon-space-l pf-c-button-icon--plain" />
+      {props.children} <PencilAltIcon />
     </Button>
   );
 };
@@ -54,7 +56,6 @@ const EditButton: React.FC<EditButtonProps> = (props) => {
 export const DetailsItem: React.FC<DetailsItemProps> = ({
   children,
   defaultValue = "-",
-  description,
   editAsGroup,
   hideEmpty,
   label,
@@ -62,7 +63,6 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   onEdit,
   canEdit = true,
   path,
-  resourceKind,
   valueClassName,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
@@ -70,58 +70,28 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
   const value: React.ReactNode = children ?? get(obj, path, defaultValue);
   const editable = onEdit && canEdit;
   return hide ? null : (
-    <>
-      <dt
-        className="details-item__label"
+    <DescriptionListGroup>
+      <DescriptionListTerm
+        className="nhc-details-term"
         data-test-selector={`details-item-label__${label}`}
       >
-        <Split>
-          <SplitItem>
-            {description || path ? (
-              <Popover
-                headerContent={<div>{label}</div>}
-                {...(description && {
-                  bodyContent: (
-                    <LinkifyExternal>
-                      <div className="co-pre-line">{description}</div>
-                    </LinkifyExternal>
-                  ),
-                })}
-                {...(path && {
-                  footerContent: (
-                    <PropertyPath kind={resourceKind} path={path} />
-                  ),
-                })}
-                maxWidth="30rem"
-              >
-                <Button
-                  data-test={label}
-                  variant="plain"
-                  className="details-item__popover-button"
-                >
-                  {label}
-                </Button>
-              </Popover>
-            ) : (
-              label
-            )}
-          </SplitItem>
+        <Flex
+          fullWidth={{ default: "fullWidth" }}
+          justifyContent={{ default: "justifyContentSpaceBetween" }}
+          alignItems={{ default: "alignItemsCenter" }}
+        >
+          <FlexItem>{label}</FlexItem>
           {editable && editAsGroup && (
-            <>
-              <SplitItem isFilled />
-              <SplitItem>
-                <EditButton testId={label} onClick={onEdit}>
-                  {t("Edit")}
-                </EditButton>
-              </SplitItem>
-            </>
+            <FlexItem>
+              <EditButton testId={label} onClick={onEdit}>
+                {t("Edit")}
+              </EditButton>
+            </FlexItem>
           )}
-        </Split>
-      </dt>
-      <dd
-        className={classnames("details-item__value", valueClassName, {
-          "details-item__value--group": editable && editAsGroup,
-        })}
+        </Flex>
+      </DescriptionListTerm>
+      <DescriptionListDescription
+        className={classnames(valueClassName)}
         data-test-selector={`details-item-value__${label}`}
       >
         {editable && !editAsGroup ? (
@@ -131,15 +101,14 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
         ) : (
           value
         )}
-      </dd>
-    </>
+      </DescriptionListDescription>
+    </DescriptionListGroup>
   );
 };
 
 export type DetailsItemProps = {
   canEdit?: boolean;
   defaultValue?: React.ReactNode;
-  description?: string;
   editAsGroup?: boolean;
   hideEmpty?: boolean;
   label: string;
@@ -148,7 +117,6 @@ export type DetailsItemProps = {
   onEdit?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   path?: string | string[];
   valueClassName?: string;
-  resourceKind: string;
 };
 
 type EditButtonProps = {

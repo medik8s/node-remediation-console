@@ -1,7 +1,13 @@
 import * as _ from "lodash-es";
 import * as React from "react";
 import * as classNames from "classnames";
-import { Alert, Button } from "@patternfly/react-core";
+import {
+  Alert,
+  Button,
+  Spinner,
+  PageSection,
+  Title,
+} from "@patternfly/react-core";
 import { Trans } from "react-i18next";
 
 import { IncompleteDataError, TimeoutError } from "./error/http-error";
@@ -51,20 +57,11 @@ export const LoadError: React.FC<LoadErrorProps> = ({
 LoadError.displayName = "LoadError";
 
 export const Loading: React.FC<LoadingProps> = ({ className }) => (
-  <div
-    className={classNames("co-m-loader co-an-fade-in-out", className)}
-    data-test="loading-indicator"
-  >
-    <div className="co-m-loader-dot__one" />
-    <div className="co-m-loader-dot__two" />
-    <div className="co-m-loader-dot__three" />
-  </div>
+  <Spinner size="lg" className={className} data-test="loading-indicator" />
 );
 Loading.displayName = "Loading";
 
-export const LoadingInline: React.FC<{}> = () => (
-  <Loading className="co-m-loader--inline" />
-);
+export const LoadingInline: React.FC<{}> = () => <Spinner size="md" />;
 LoadingInline.displayName = "LoadingInline";
 
 export const LoadingBox: React.FC<LoadingBoxProps> = ({
@@ -133,12 +130,7 @@ export const AccessDenied: React.FC<AccessDeniedProps> = ({ message }) => {
         />
       </Box>
       {isString(message) && (
-        <Alert
-          isInline
-          className="co-alert"
-          variant="danger"
-          title={t("Error details")}
-        >
+        <Alert isInline variant="danger" title={t("Error details")}>
           {message}
         </Alert>
       )}
@@ -189,11 +181,9 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
     const status = get(loadError, "response.status");
     if (status === 404) {
       return (
-        <div className="co-m-pane__body">
-          <h1 className="co-m-pane__heading co-m-pane__heading--center">
-            {t("404: Not Found")}
-          </h1>
-        </div>
+        <PageSection variant="light">
+          <Title headingLevel="h1">{t("404: Not Found")}</Title>
+        </PageSection>
       );
     }
     if (status === 403) {
@@ -221,7 +211,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
     if (loaded && loadError instanceof TimeoutError) {
       return (
         <Data data={data} {...dataProps}>
-          <div className="co-m-timeout-error text-muted">
+          <div className="pf-v5-u-color-200">
             {t("Timed out fetching new data. The data below is stale.")}
           </div>
           {props.children}
@@ -298,9 +288,7 @@ type StatusBoxProps = {
   loadError?: any;
   loaded?: boolean;
   data?: any;
-  unfilteredData?: any;
   skeleton?: React.ReactNode;
-  NoDataEmptyMsg?: React.ComponentType;
-  EmptyMsg?: React.ComponentType;
+  unfilteredData?: any;
   children?: React.ReactNode;
 };

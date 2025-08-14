@@ -1,10 +1,4 @@
-import {
-  FormGroup,
-  Skeleton,
-  Stack,
-  StackItem,
-  Text,
-} from "@patternfly/react-core";
+import { FormSection, Skeleton, Text, FormGroup } from "@patternfly/react-core";
 import { useFormikContext } from "formik";
 import { range } from "lodash";
 import * as React from "react";
@@ -67,52 +61,28 @@ const RemediationTemplateField = ({
     snrTemplate,
   ]);
   return (
-    <Stack hasGutter>
-      <StackItem style={{ marginBottom: "unset" }}>
-        <FormGroup
-          label={t("Remediation template")}
-          isRequired
-          fieldId="remediation-template"
-        />
-      </StackItem>
-      <StackItem>
-        <Text>
-          {t(
-            "By default we use the single remediation template. Select 'Use escalating remediations' for creating a list of remediation templates with execution order and timeout."
-          )}
-        </Text>
-      </StackItem>
-      <StackItem>
+    <FormSection title={t("Remediation")} titleElement="h2">
+      <FormGroup>
         <UseEscalatingField />
-      </StackItem>
-      {!loaded && (
-        <StackItem>
-          <Loading />
-        </StackItem>
-      )}
-      {loaded && !values.formData.useEscalating && (
-        <StackItem>
+        {!loaded && <Loading />}
+        {loaded && !values.formData.useEscalating && (
           <RemediatorField
             fieldName={"formData.remediator"}
             snrTemplate={snrTemplate}
           />
-        </StackItem>
-      )}
-      {loaded && values.formData.useEscalating && (
-        <>
-          <StackItem>
+        )}
+        {loaded && values.formData.useEscalating && (
+          <>
             <Text>
               {t(
                 "Rearrange the templates using drag and drop or by editing the ‘Order’ field. The remediations will be executed in the specified order."
               )}
             </Text>
-          </StackItem>
-          <StackItem>
             <RemediatorsArrayField snrTemplateResult={snrTemplateResult} />
-          </StackItem>
-        </>
-      )}
-    </Stack>
+          </>
+        )}
+      </FormGroup>
+    </FormSection>
   );
 };
 

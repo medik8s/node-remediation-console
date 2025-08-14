@@ -23,13 +23,10 @@ const Requirement: React.FC<RequirementProps> = ({
     : `/search/all-namespaces?kind=${kind}&q=${requirementAsUrlEncodedString}`;
 
   return (
-    <div className="co-m-requirement">
-      <Link
-        className={`co-m-requirement__link co-text-${kind.toLowerCase()}`}
-        to={to}
-      >
-        <SearchIcon className="co-m-requirement__icon co-icon-flex-child" />
-        <span className="co-m-requirement__label">
+    <div>
+      <Link to={to}>
+        <SearchIcon />
+        <span style={{ marginLeft: 4 }}>
           {requirementAsString.replace(/,/g, ", ")}
         </span>
       </Link>
@@ -45,7 +42,7 @@ export const Selector: React.FC<SelectorProps> = ({
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   return (
-    <div className="co-m-selector">
+    <div>
       {isEmpty(selector) ? (
         <p className="text-muted">{t("No selector")}</p>
       ) : (

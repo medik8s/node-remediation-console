@@ -26,7 +26,11 @@ const RemediatorKindRadioGroup: React.FC<{
   const { t } = useNodeHealthCheckTranslation();
   const fieldId = getFieldId(fieldName, "radiogroup");
   return (
-    <FormGroup fieldId={fieldId} label={"Remediator"} isInline={true}>
+    <FormGroup
+      fieldId={fieldId}
+      label={t("Remediation template")}
+      isInline={true}
+    >
       <Split hasGutter>
         <SplitItem>
           <Tooltip

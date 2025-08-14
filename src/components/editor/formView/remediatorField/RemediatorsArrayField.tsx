@@ -5,8 +5,6 @@ import {
   Flex,
   FlexItem,
   Label,
-  Stack,
-  StackItem,
 } from "@patternfly/react-core";
 
 import { FieldArray, FieldArrayRenderProps, useField } from "formik";
@@ -124,68 +122,55 @@ const SingleRemediatorField = ({
   isRemoveDisabled: boolean;
 }) => {
   return (
-    <Stack hasGutter>
-      <StackItem>
-        <WithRemoveButton
-          onClick={() => remove(index)}
-          isDisabled={isRemoveDisabled}
-          dataTest={"remove-remediator-button"}
+    <>
+      <WithRemoveButton
+        onClick={() => remove(index)}
+        isDisabled={isRemoveDisabled}
+        dataTest={"remove-remediator-button"}
+      >
+        <Flex
+          alignItems={{ default: "alignItemsFlexStart" }}
+          flexWrap={{ default: "nowrap" }}
         >
-          <Flex
-            alignItems={{ default: "alignItemsFlexStart" }}
-            flexWrap={{ default: "nowrap" }}
+          <FlexItem
+            spacer={{ default: "spacerSm" }}
+            className="pf-c-expandable-section"
           >
-            <FlexItem
-              spacer={{ default: "spacerSm" }}
-              className="pf-c-expandable-section"
+            <Button
+              icon={<GripVerticalIcon />}
+              style={{
+                padding:
+                  "var(--pf-c-expandable-section__toggle--PaddingTop) 0 var(--pf-c-expandable-section__toggle--PaddingBottom) 0",
+              }}
+              variant="plain"
+            />
+          </FlexItem>
+          <FlexItem grow={{ default: "grow" }}>
+            <ExpandableSection
+              toggleContent={
+                <ToggleContent fieldName={fieldName} isExpanded={isExpanded} />
+              }
+              isIndented
+              isExpanded={isExpanded}
+              onToggle={() => toggleExpand(index)}
             >
-              <Button
-                icon={<GripVerticalIcon />}
-                style={{
-                  padding:
-                    "var(--pf-c-expandable-section__toggle--PaddingTop) 0 var(--pf-c-expandable-section__toggle--PaddingBottom) 0",
-                }}
-                variant="plain"
-              />
-            </FlexItem>
-            <FlexItem grow={{ default: "grow" }}>
-              <ExpandableSection
-                toggleContent={
-                  <ToggleContent
-                    fieldName={fieldName}
-                    isExpanded={isExpanded}
-                  />
-                }
-                isIndented
-                isExpanded={isExpanded}
-                onToggle={() => toggleExpand(index)}
-              >
-                <Stack hasGutter>
-                  <StackItem>
-                    <RemediatorField
-                      fieldName={`${fieldName}`}
-                      snrTemplate={snrTemplateResult[0]}
-                    />
-                  </StackItem>
-                  <StackItem>
-                    <TimeoutField fieldName={`${fieldName}.timeout`} />
-                  </StackItem>
-                  <StackItem>
-                    <OrderField
-                      fieldName={`${fieldName}.order`}
-                      onChange={onOrderChanged}
-                    />
-                  </StackItem>
-                </Stack>
-              </ExpandableSection>
-            </FlexItem>
-          </Flex>
-        </WithRemoveButton>
-      </StackItem>
-      <StackItem>
-        <Divider />
-      </StackItem>
-    </Stack>
+              <>
+                <RemediatorField
+                  fieldName={`${fieldName}`}
+                  snrTemplate={snrTemplateResult[0]}
+                />
+                <TimeoutField fieldName={`${fieldName}.timeout`} />
+                <OrderField
+                  fieldName={`${fieldName}.order`}
+                  onChange={onOrderChanged}
+                />
+              </>
+            </ExpandableSection>
+          </FlexItem>
+        </Flex>
+      </WithRemoveButton>
+      <Divider />
+    </>
   );
 };
 
@@ -268,42 +253,38 @@ const RemediatorsArrayFieldContent = ({
   };
 
   return (
-    <Stack hasGutter>
-      <StackItem>
-        <DragDrop onDrop={onDrop}>
-          <Droppable>
-            <Stack hasGutter>
-              {remediators?.map((_remediator, index) => (
-                <Draggable key={index}>
-                  <SingleRemediatorField
-                    key={_remediator.id}
-                    index={index}
-                    remove={remove}
-                    snrTemplateResult={snrTemplateResult}
-                    fieldName={`${fieldName}[${index}]`}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-                    onOrderChanged={() => debounce(_remediator.id)}
-                    isExpanded={expanded[_remediator.id]}
-                    toggleExpand={() =>
-                      setExpanded({
-                        ...expanded,
-                        [_remediator.id]: !expanded[_remediator.id],
-                      })
-                    }
-                    isRemoveDisabled={remediators.length === 1}
-                  />
-                </Draggable>
-              ))}
-            </Stack>
-          </Droppable>
-        </DragDrop>
-      </StackItem>
-      <StackItem>
-        <AddMoreButton onClick={onAdd} dataTest="add-remediator-button">
-          {t("Add more")}
-        </AddMoreButton>
-      </StackItem>
-    </Stack>
+    <>
+      <DragDrop onDrop={onDrop}>
+        <Droppable>
+          <>
+            {remediators?.map((_remediator, index) => (
+              <Draggable key={index}>
+                <SingleRemediatorField
+                  key={_remediator.id}
+                  index={index}
+                  remove={remove}
+                  snrTemplateResult={snrTemplateResult}
+                  fieldName={`${fieldName}[${index}]`}
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                  onOrderChanged={() => debounce(_remediator.id)}
+                  isExpanded={expanded[_remediator.id]}
+                  toggleExpand={() =>
+                    setExpanded({
+                      ...expanded,
+                      [_remediator.id]: !expanded[_remediator.id],
+                    })
+                  }
+                  isRemoveDisabled={remediators.length === 1}
+                />
+              </Draggable>
+            ))}
+          </>
+        </Droppable>
+      </DragDrop>
+      <AddMoreButton onClick={onAdd} dataTest="add-remediator-button">
+        {t("Add more")}
+      </AddMoreButton>
+    </>
   );
 };
 

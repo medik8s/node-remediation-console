@@ -2,7 +2,7 @@ import {
   PageComponentProps,
   useAccessReview,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { Grid, GridItem } from "@patternfly/react-core";
+import { Grid, GridItem, PageSection } from "@patternfly/react-core";
 import { SectionHeading } from "copiedFromConsole/utils/headings";
 import { Loading } from "copiedFromConsole/utils/status-box";
 import { NodeHealthCheckModel } from "data/model";
@@ -29,8 +29,8 @@ const NodeHealthCheckDetailsTab: React.FC<
   }
   return (
     <>
-      <div className="co-m-pane__body">
-        <Grid>
+      <PageSection variant="light">
+        <Grid hasGutter>
           <SectionHeading text={t("NodeHealthCheck details")} />
           <GridItem span={5}>
             <DetailsLeftPane
@@ -43,11 +43,11 @@ const NodeHealthCheckDetailsTab: React.FC<
             <DetailsRightPane nodeHealthCheck={nodeHealthCheck} />
           </GridItem>
         </Grid>
-      </div>
-      <div className="co-m-pane__body">
+      </PageSection>
+      <PageSection variant="light">
         <SectionHeading text={t("Unhealthy Conditions")} />
         <UnhealthyConditionsTable nodeHealthCheck={nodeHealthCheck} />
-      </div>
+      </PageSection>
     </>
   );
 };

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useFormikContext } from "formik";
-import { Alert, TextInputTypes } from "@patternfly/react-core";
+import { Alert, Form, TextInputTypes } from "@patternfly/react-core";
 import InputField from "../../../copiedFromConsole/formik-fields/InputField";
 import NodeSelectionField from "./nodeSelectionField/NodeSelectionField";
 import { FormViewFieldProps } from "./propTypes";
@@ -12,6 +12,7 @@ import { NodeHealthCheckFormValues } from "../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
 import useSnrTemplate from "../../../apis/useSNRTemplate";
 import RemediationTemplateField from "./remediatorField/RemediationTemplateField";
+import "../../editor/nhc-form.css";
 
 const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();
@@ -38,7 +39,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
   const formViewFieldName = "formData";
   const snrTemplateResult = useSnrTemplate();
   return (
-    <>
+    <Form className="nhc-form-fields">
       <Alert
         isInline
         variant="info"
@@ -70,7 +71,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
           "unhealthyConditions",
         ])}
       />
-    </>
+    </Form>
   );
 };
 

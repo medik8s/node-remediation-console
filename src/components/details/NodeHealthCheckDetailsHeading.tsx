@@ -32,7 +32,6 @@ const NodeHealthCheckDetailsHeading: React.FC<{
       menuActions={actions}
       statusIcon={getIcon(phase)}
       statusText={phase}
-      abbr={NodeHealthCheckModel.abbr}
       kind={NodeHealthCheckModel.kind}
       detail={true}
     />

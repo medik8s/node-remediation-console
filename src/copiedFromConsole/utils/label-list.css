@@ -1,0 +1,5 @@
+.nhc-label-list {
+  border: 1px solid var(--pf-v5-global--BorderColor--100);
+  border-radius: var(--pf-v5-global--BorderRadius--sm);
+  padding: var(--pf-v5-global--spacer--sm);
+} 

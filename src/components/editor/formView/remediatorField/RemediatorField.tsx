@@ -13,7 +13,7 @@ import {
   Remediator,
   RemediatorRadioOption,
 } from "../../../../data/types";
-import { Stack, StackItem } from "@patternfly/react-core";
+import { Flex, FlexItem } from "@patternfly/react-core";
 const sentenceCase = (string: string) => {
   return capitalize(startCase(string));
 };
@@ -21,7 +21,10 @@ const sentenceCase = (string: string) => {
 const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => {
   const [{ value }] = useField<Remediator>(fieldName);
   return (
-    <Stack hasGutter>
+    <Flex
+      direction={{ default: "column" }}
+      spaceItems={{ default: "spaceItemsSm" }}
+    >
       {["apiVersion", "kind", "name", "namespace"].map((subFieldName) => {
         const inputFieldName = getObjectItemFieldName([
           fieldName,
@@ -29,17 +32,17 @@ const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => {
           subFieldName,
         ]);
         return (
-          <StackItem key={inputFieldName}>
+          <FlexItem key={inputFieldName}>
             <InputField
               required
               name={inputFieldName}
               label={sentenceCase(subFieldName)}
               isDisabled={value?.radioOption === RemediatorRadioOption.SNR}
             />
-          </StackItem>
+          </FlexItem>
         );
       })}
-    </Stack>
+    </Flex>
   );
 };
 
@@ -50,14 +53,17 @@ export const RemediatorField: React.FC<{
   const [value] = useField<Remediator>(fieldName);
   useFormikValidationFix(value);
   return (
-    <Stack hasGutter>
-      <StackItem>
+    <Flex
+      direction={{ default: "column" }}
+      spaceItems={{ default: "spaceItemsSm" }}
+    >
+      <FlexItem>
         <RemediatorKindField fieldName={fieldName} snrTemplate={snrTemplate} />
-      </StackItem>
-      <StackItem>
+      </FlexItem>
+      <FlexItem>
         <CustomRemediatorField fieldName={fieldName} />
-      </StackItem>
-    </Stack>
+      </FlexItem>
+    </Flex>
   );
 };
 

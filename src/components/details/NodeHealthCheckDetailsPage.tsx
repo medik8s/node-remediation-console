@@ -14,6 +14,7 @@ import NodeHealthCheckYAMLTab from "./NodeHealthCheckYamlTab";
 import { useNodeHealthCheckNavigation } from "navigation/useNodeHealthCheckNavigation";
 import { withFallback } from "copiedFromConsole/error";
 import { StatusBox } from "copiedFromConsole/utils/status-box";
+import { PageSection } from "@patternfly/react-core";
 
 export const useNodeHealthCheckTabs = () => {
   const { t } = useNodeHealthCheckTranslation();
@@ -27,7 +28,7 @@ export const useNodeHealthCheckTabs = () => {
       },
       {
         href: "yaml",
-        name: t("Yaml"),
+        name: t("YAML"),
         component: NodeHealthCheckYAMLTab,
       },
     ],
@@ -48,7 +49,9 @@ const NodeHealthCheckDetailsPage_ = ({ name }: { name: string }) => {
   return (
     <StatusBox loadError={loadError} data={nodeHealthCheck} loaded={loaded}>
       <ModalsContextProvider>
-        <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
+        <PageSection variant="light">
+          <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
+        </PageSection>
         <HorizontalNav pages={tabs} resource={nodeHealthCheck} />
         <Modals onDelete={() => navigation.gotoList()} />
       </ModalsContextProvider>

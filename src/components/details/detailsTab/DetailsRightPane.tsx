@@ -1,61 +1,41 @@
 import { DetailsItem } from "copiedFromConsole/utils/details-item";
-import { nodeHealthCheckKind } from "data/model";
 import { getRemediatorLabel } from "data/remediator";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
-import { usePropertyDescriptions } from "propertyDescriptions/usePropertyDescriptions";
 import * as React from "react";
 import NodeHealthCheckStatus from "../NodeHealthCheckStatus";
+import { DescriptionList } from "@patternfly/react-core";
 
 export const DetailsRightPane: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
 }> = ({ nodeHealthCheck }) => {
   const { t } = useNodeHealthCheckTranslation();
-  const descriptions = usePropertyDescriptions();
   return (
-    <dl className="co-m-pane__details">
-      <DetailsItem
-        label={t("Remediator")}
-        obj={nodeHealthCheck}
-        resourceKind={nodeHealthCheckKind.kind}
-      >
+    <DescriptionList aria-label={t("NodeHealthCheck summary")}>
+      <DetailsItem label={t("Remediator")} obj={nodeHealthCheck}>
         {getRemediatorLabel(nodeHealthCheck, t)}
       </DetailsItem>
       <DetailsItem
         label={t("Min healthy")}
         obj={nodeHealthCheck}
         path="spec.minHealthy"
-        description={descriptions.minHealthy}
-        resourceKind={nodeHealthCheckKind.kind}
       />
 
-      <DetailsItem
-        label={t("Observed nodes")}
-        obj={nodeHealthCheck}
-        resourceKind={nodeHealthCheckKind.kind}
-      >
+      <DetailsItem label={t("Observed nodes")} obj={nodeHealthCheck}>
         {nodeHealthCheck.status?.observedNodes}
       </DetailsItem>
 
-      <DetailsItem
-        label={t("Healthy nodes")}
-        obj={nodeHealthCheck}
-        resourceKind={nodeHealthCheckKind.kind}
-      >
+      <DetailsItem label={t("Healthy nodes")} obj={nodeHealthCheck}>
         {nodeHealthCheck.status?.healthyNodes}
       </DetailsItem>
 
-      <DetailsItem
-        label={t("Status")}
-        obj={nodeHealthCheck}
-        resourceKind={nodeHealthCheckKind.kind}
-      >
+      <DetailsItem label={t("Status")} obj={nodeHealthCheck}>
         <NodeHealthCheckStatus
           nodeHealthCheck={nodeHealthCheck}
           withPopover={true}
         />
       </DetailsItem>
-    </dl>
+    </DescriptionList>
   );
 };

@@ -1,7 +1,7 @@
 import { useUserSettings } from "@openshift-console/dynamic-plugin-sdk-internal";
 import * as React from "react";
 
-import { EditorType } from "./editor-toggle";
+import { EditorType } from "data/types";
 import {
   PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST,
   usePreferredCreateEditMethod,

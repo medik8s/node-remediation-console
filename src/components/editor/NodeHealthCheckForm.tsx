@@ -19,7 +19,7 @@ import "./nhc-form.css";
 import { useOpenShiftVersion } from "copiedFromConsole/hooks/useOpenShiftVersion";
 import useSnrTemplate from "../../apis/useSNRTemplate";
 import { range } from "lodash-es";
-import { Skeleton } from "@patternfly/react-core";
+import { Flex, FlexItem, PageSection, Skeleton } from "@patternfly/react-core";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
@@ -122,26 +122,38 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   };
 
   return (
-    <>
-      <PageHeading title={title} helpText={<HelpText />} />
-      {!loaded ? (
-        <FormLoading />
-      ) : (
-        <Formik
-          enableReinitialize
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={getValidationSchema(t)}
-          validateOnMount={true}
-        >
-          <NodeHealthCheckSyncedEditor
-            originalNodeHealthCheck={nodeHealthCheck}
-            handleCancel={() => navigation.goBack()}
-            snrTemplate={snrTemplate}
-          />
-        </Formik>
-      )}
-    </>
+    <PageSection variant="light">
+      <Flex
+        direction={{ default: "column" }}
+        spaceItems={{ default: "spaceItemsSm" }}
+        style={{
+          height: "100%",
+        }}
+      >
+        <FlexItem>
+          <PageHeading title={title} helpText={<HelpText />} />
+        </FlexItem>
+        <FlexItem grow={{ default: "grow" }}>
+          {!loaded ? (
+            <FormLoading />
+          ) : (
+            <Formik
+              enableReinitialize
+              initialValues={initialValues}
+              onSubmit={handleSubmit}
+              validationSchema={getValidationSchema(t)}
+              validateOnMount={true}
+            >
+              <NodeHealthCheckSyncedEditor
+                originalNodeHealthCheck={nodeHealthCheck}
+                handleCancel={() => navigation.goBack()}
+                snrTemplate={snrTemplate}
+              />
+            </Formik>
+          )}
+        </FlexItem>
+      </Flex>
+    </PageSection>
   );
 };
 
