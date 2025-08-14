@@ -1,4 +1,4 @@
-import { EditorType } from "copiedFromConsole/synced-editor/editor-toggle";
+import { EditorType } from "data/types";
 import { getFormViewValues } from "./formViewValues";
 import {
   FormViewValues,

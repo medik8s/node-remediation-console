@@ -10,13 +10,16 @@ export const ResourceIcon: React.SFC<ResourceIconProps> = ({
   kindStr,
 }) => {
   const backgroundColor = color;
-  const klass = classNames(`co-m-resource-icon`, className);
   const iconLabel = abbr;
 
   const rendered = (
     <>
       <span className="sr-only">{kindStr}</span>
-      <span className={klass} title={kindStr} style={{ backgroundColor }}>
+      <span
+        title={kindStr}
+        style={{ backgroundColor }}
+        className={classNames(className)}
+      >
         {iconLabel}
       </span>
     </>

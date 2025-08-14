@@ -21,7 +21,13 @@
   "[graphql]": {
     "editor.formatOnSave": true
   },
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json"
+  ],
   "javascript.validate.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
@@ -49,7 +55,7 @@
     "**dist": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "editor.quickSuggestions": {
     "comments": "on",

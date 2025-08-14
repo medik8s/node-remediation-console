@@ -8,6 +8,7 @@ import { nodeKind } from "data/model";
 import { useK8sWatchResource } from "@openshift-console/dynamic-plugin-sdk";
 import { LoadError } from "copiedFromConsole/utils/status-box";
 import LabelSelectionField from "./LabelSelectionField";
+import { FormSection } from "@patternfly/react-core";
 
 const NodeSelectionField: React.FC<{
   fieldName: string;
@@ -27,7 +28,7 @@ const NodeSelectionField: React.FC<{
     );
   }
   return (
-    <>
+    <FormSection title={t("Selector")}>
       <LabelSelectionField
         isLoading={!loaded}
         allNodes={allNodes}
@@ -36,7 +37,7 @@ const NodeSelectionField: React.FC<{
       <div className="nhc-form-node-list" data-test="node-selector-list">
         <NodeList fieldName={fieldName} />
       </div>
-    </>
+    </FormSection>
   );
 };
 

@@ -3,26 +3,19 @@ import * as React from "react";
 import { useFormikContext } from "formik";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import {
+  EditorType,
   NodeHealthCheck,
   NodeHealthCheckFormValues,
   RemediationTemplate,
 } from "../../data/types";
-import { EditorType } from "../../copiedFromConsole/synced-editor/editor-toggle";
-import { FlexForm, FormFooter } from "../../copiedFromConsole/form-utils";
+import { FormFooter } from "../../copiedFromConsole/form-utils";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
 import SyncedEditorField from "copiedFromConsole/formik-fields/SyncedEditorField";
 import YamlEditorField from "./YamlEditorField";
 import * as formViewValues from "data/formViewValues";
 import * as yamlText from "data/yamlText";
 import { dump } from "js-yaml";
-import {
-  Alert,
-  Form,
-  Grid,
-  GridItem,
-  PageSection,
-  PageSectionVariants,
-} from "@patternfly/react-core";
+import { Alert } from "@patternfly/react-core";
 import { getFormValues } from "data/formValues";
 import { isEmpty } from "lodash-es";
 
@@ -80,25 +73,15 @@ export const NodeHealthCheckSyncedEditor: React.FC<
   const yamlEditor = <YamlEditorField fieldName="yamlData" />;
 
   const formEditor = (
-    <PageSection variant={PageSectionVariants.light}>
-      <Grid span={8}>
-        <GridItem>
-          <Form>
-            {values.formParsingError ? (
-              <Alert
-                variant="danger"
-                title="Error parsing NodeHealthCheck"
-                isInline
-              >
-                {values.formParsingError}
-              </Alert>
-            ) : (
-              <NodeHealthCheckFormFields />
-            )}
-          </Form>
-        </GridItem>
-      </Grid>
-    </PageSection>
+    <>
+      {values.formParsingError ? (
+        <Alert variant="danger" title="Error parsing NodeHealthCheck" isInline>
+          {values.formParsingError}
+        </Alert>
+      ) : (
+        <NodeHealthCheckFormFields />
+      )}
+    </>
   );
 
   const onReload = () => {
@@ -119,52 +102,50 @@ export const NodeHealthCheckSyncedEditor: React.FC<
 
   return (
     <>
-      <FlexForm className="nhc-form">
-        <SyncedEditorField
-          name="editorType"
-          formContext={{
-            name: "formData",
-            editor: formEditor,
-            sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
-              try {
-                return formViewValues.getFormViewValues(
-                  yamlNodeHealthCheck,
+      <SyncedEditorField
+        name="editorType"
+        formContext={{
+          name: "formData",
+          editor: formEditor,
+          sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
+            try {
+              return formViewValues.getFormViewValues(
+                yamlNodeHealthCheck,
+                snrTemplate
+              );
+            } catch (err) {
+              //return a function so SyncedEditorField will handle the error properly
+              return () =>
+                formViewValues.getFormViewValues(
+                  originalNodeHealthCheck,
                   snrTemplate
                 );
-              } catch (err) {
-                //return a function so SyncedEditorField will handle the error properly
-                return () =>
-                  formViewValues.getFormViewValues(
-                    originalNodeHealthCheck,
-                    snrTemplate
-                  );
-              }
-            },
-          }}
-          yamlContext={{
-            name: "yamlData",
-            editor: yamlEditor,
-            sanitizeTo: () => sanitizeToYaml(values, originalNodeHealthCheck),
-          }}
-          lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
-          noMargin
-        />
+            }
+          },
+        }}
+        yamlContext={{
+          name: "yamlData",
+          editor: yamlEditor,
+          sanitizeTo: () => sanitizeToYaml(values, originalNodeHealthCheck),
+        }}
+        lastViewUserSettingKey={LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY}
+        noMargin
+      />
 
-        <FormFooter
-          handleSubmit={handleSubmit}
-          handleReset={values.isCreateFlow ? null : onReload}
-          errorMessage={status?.submitError}
-          successMessage={status?.submitSuccess}
-          infoTitle={t("This object has been updated.")}
-          infoMessage={t("Click reload to see the new version.")}
-          isSubmitting={isSubmitting}
-          submitLabel={values.isCreateFlow ? t("Create") : t("Save")}
-          disableSubmit={disableSubmit}
-          handleCancel={handleCancel}
-          showAlert={isStale}
-          sticky
-        />
-      </FlexForm>
+      <FormFooter
+        handleSubmit={handleSubmit}
+        handleReset={values.isCreateFlow ? null : onReload}
+        errorMessage={status?.submitError}
+        successMessage={status?.submitSuccess}
+        infoTitle={t("This object has been updated.")}
+        infoMessage={t("Click reload to see the new version.")}
+        isSubmitting={isSubmitting}
+        submitLabel={values.isCreateFlow ? t("Create") : t("Save")}
+        disableSubmit={disableSubmit}
+        handleCancel={handleCancel}
+        showAlert={isStale}
+        sticky
+      />
     </>
   );
 };

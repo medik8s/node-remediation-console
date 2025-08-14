@@ -52,6 +52,8 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const errorMessage = !isValid ? error : "";
   useFormikValidationFix(field.value);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
   const onToggle = (isOpen: boolean) => setOpen(isOpen);
   const onClearSelection = () => {
     setValue([]);
@@ -73,7 +75,20 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const formContent = isLoading ? (
     <Spinner size="md" />
   ) : (
-    <>
+    <div
+      ref={containerRef}
+      onBlur={(e) => {
+        const next = (e.relatedTarget as Node) || null;
+        if (
+          next &&
+          containerRef.current &&
+          containerRef.current.contains(next)
+        ) {
+          return;
+        }
+        setOpen(false);
+      }}
+    >
       <Select
         {...field}
         {...props}
@@ -116,6 +131,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         )}
         maxMenuHeight="25rem"
         isScrollable
+        appendTo={() => containerRef.current || document.body}
       >
         {children}
       </Select>
@@ -129,7 +145,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
           </HelperTextItem>
         </HelperText>
       </FormHelperText>
-    </>
+    </div>
   );
 
   return (

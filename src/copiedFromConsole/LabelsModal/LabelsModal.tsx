@@ -73,7 +73,7 @@ export const LabelsModal: React.FC<LabelsModalProps> = React.memo(
     const renderTag = ({ tag, key, onRemove, getTagDisplayValue }) => {
       return (
         <PFLabel
-          className={"co-label tag-item-content".concat(labelClassName || "")}
+          className={"tag-item-content".concat(labelClassName || "")}
           key={key}
           onClose={() => onRemove(key)}
           textMaxWidth="16ch"

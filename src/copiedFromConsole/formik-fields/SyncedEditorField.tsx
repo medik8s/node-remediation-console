@@ -1,9 +1,15 @@
 import * as React from "react";
-import { Alert, Button, AlertActionCloseButton } from "@patternfly/react-core";
-import cx from "classnames";
+import {
+  Alert,
+  Button,
+  AlertActionCloseButton,
+  Form,
+  Flex,
+  FlexItem,
+} from "@patternfly/react-core";
 import { useField, useFormikContext, FormikValues } from "formik";
 
-import { EditorType } from "../synced-editor/editor-toggle";
+import { EditorType } from "data/types";
 import { useEditorType } from "../synced-editor/useEditorType";
 import RadioGroupField from "./RadioGroupField";
 import { load, dump } from "js-yaml";
@@ -166,67 +172,76 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
   ]);
 
   return loaded ? (
-    <>
-      <div
-        className={cx("ocs-synced-editor-field__editor-toggle", {
-          margin: !noMargin,
-        })}
-        data-test="synced-editor-field"
-      >
-        <RadioGroupField
-          label={t("Configure via:")}
-          name={name}
-          options={[
-            {
-              label: formContext.label || t("Form view"),
-              value: EditorType.Form,
-              isDisabled: formContext.isDisabled,
-            },
-            {
-              label: yamlContext.label || t("YAML view"),
-              value: EditorType.YAML,
-              isDisabled: yamlContext.isDisabled,
-            },
-          ]}
-          onChange={(val: string) => onChangeType(val as EditorType)}
-          isInline
-        />
-      </div>
+    <Flex
+      direction={{ default: "column" }}
+      spaceItems={{ default: "spaceItemsMd" }}
+      style={{ height: "100%" }}
+    >
+      <FlexItem>
+        <Form>
+          <RadioGroupField
+            label={t("Configure via:")}
+            name={name}
+            options={[
+              {
+                label: formContext.label || t("Form view"),
+                value: EditorType.Form,
+                isDisabled: formContext.isDisabled,
+              },
+              {
+                label: yamlContext.label || t("YAML view"),
+                value: EditorType.YAML,
+                isDisabled: yamlContext.isDisabled,
+              },
+            ]}
+            onChange={(val: string) => onChangeType(val as EditorType)}
+            isInline
+          />
+        </Form>
+      </FlexItem>
+
       {yamlWarning && (
-        <Alert
-          className="co-synced-editor__yaml-warning"
-          variant="danger"
-          isInline
-          title={t("Invalid YAML cannot be persisted")}
-        >
-          <p>{t("Switching to form view will delete any invalid YAML.")}</p>
-          <Button variant="danger" onClick={onClickYAMLWarningConfirm}>
-            {t("Switch and delete")}
-          </Button>
-          &nbsp;
-          <Button variant="secondary" onClick={onClickYAMLWarningCancel}>
-            {t("Cancel")}
-          </Button>
-        </Alert>
+        <FlexItem>
+          <Alert
+            variant="danger"
+            isInline
+            title={t("Invalid YAML cannot be persisted")}
+          >
+            <p>{t("Switching to form view will delete any invalid YAML.")}</p>
+            <Button variant="danger" onClick={onClickYAMLWarningConfirm}>
+              {t("Switch and delete")}
+            </Button>
+            &nbsp;
+            <Button variant="secondary" onClick={onClickYAMLWarningCancel}>
+              {t("Cancel")}
+            </Button>
+          </Alert>
+        </FlexItem>
       )}
+
       {disabledFormAlert && (
-        <Alert
-          variant="info"
-          title={t(
-            "Form view is disabled for this chart because the schema is not available"
-          )}
-          actionClose={
-            <AlertActionCloseButton
-              onClose={() => setDisabledFormAlert(false)}
-            />
-          }
-          isInline
-        />
+        <FlexItem>
+          <Alert
+            variant="info"
+            title={t(
+              "Form view is disabled for this chart because the schema is not available"
+            )}
+            actionClose={
+              <AlertActionCloseButton
+                onClose={() => setDisabledFormAlert(false)}
+              />
+            }
+            isInline
+          />
+        </FlexItem>
       )}
-      {editorType === EditorType.Form && !disabledFormAlert
-        ? formContext.editor
-        : yamlContext.editor}
-    </>
+
+      <FlexItem grow={{ default: "grow" }}>
+        {editorType === EditorType.Form && !disabledFormAlert
+          ? formContext.editor
+          : yamlContext.editor}
+      </FlexItem>
+    </Flex>
   ) : (
     <LoadingBox />
   );

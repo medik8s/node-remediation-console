@@ -1,12 +1,10 @@
 import * as React from "react";
 import {
-  TextVariants,
-  Text,
-  TextContent,
-  Form,
-  Stack,
-  StackItem,
   Divider,
+  Flex,
+  FlexItem,
+  FormGroup,
+  FormSection,
 } from "@patternfly/react-core";
 import { ArrayHelpers, FieldArray, useField } from "formik";
 import {
@@ -15,7 +13,7 @@ import {
 } from "components/shared/formik-utils";
 import { FormViewFieldProps } from "../propTypes";
 import {
-  UnhealthyCondition as UnhealthyConditionItem,
+  UnhealthyCondition,
   UnhealthyConditionStatus,
   UnhealtyConditionType,
 } from "data/types";
@@ -48,27 +46,33 @@ const UnhealthyConditionItem: React.FC<{
   fieldName: string;
   onRemove: () => void;
   idx: number;
-}> = ({ fieldName, idx }) => {
+}> = ({ fieldName }) => {
   const typeFieldName = getObjectItemFieldName([fieldName, "type"]);
   const [{ value: type }] = useField<UnhealtyConditionType>(typeFieldName);
   return (
-    <Form data-test="unhealthy-condition" data-index={idx}>
-      <TypeSelectField name={typeFieldName} />
-      <StatusField
-        name={getObjectItemFieldName([fieldName, "status"])}
-        type={type}
-      />
-      <DurationField
-        name={`${getObjectItemFieldName([fieldName, "duration"])}`}
-      />
-    </Form>
+    <>
+      <FlexItem>
+        <TypeSelectField name={typeFieldName} />
+      </FlexItem>
+      <FlexItem>
+        <StatusField
+          name={getObjectItemFieldName([fieldName, "status"])}
+          type={type}
+        />
+      </FlexItem>
+      <FlexItem>
+        <DurationField
+          name={`${getObjectItemFieldName([fieldName, "duration"])}`}
+        />
+      </FlexItem>
+    </>
   );
 };
 
 export const UnhealthyConditionArray: React.FC<{
   fieldName: string;
 }> = ({ fieldName }) => {
-  const [{ value }] = useField<UnhealthyConditionItem[]>(fieldName);
+  const [{ value }] = useField<UnhealthyCondition[]>(fieldName);
   useFormikValidationFix(value ? value.length : value);
   if (!value) {
     return null;
@@ -78,11 +82,18 @@ export const UnhealthyConditionArray: React.FC<{
       name={fieldName}
       validateOnChange={false}
       render={({ push, remove }) => (
-        <Stack hasGutter>
-          {value.map((currentValue, idx) => {
-            return (
-              <React.Fragment key={idx}>
-                <StackItem>
+        <Flex
+          direction={{ default: "column" }}
+          spaceItems={{ default: "spaceItemsSm" }}
+        >
+          <FlexItem>
+            {value.map((currentValue, idx) => {
+              return (
+                <Flex
+                  key={idx}
+                  direction={{ default: "column" }}
+                  spaceItems={{ default: "spaceItemsSm" }}
+                >
                   <WithRemoveButton
                     onClick={() => remove(idx)}
                     isDisabled={value.length === 1}
@@ -94,17 +105,17 @@ export const UnhealthyConditionArray: React.FC<{
                     onRemove={() => remove(idx)}
                     idx={idx}
                   />
-                </StackItem>
-                <StackItem>
-                  <Divider />
-                </StackItem>
-              </React.Fragment>
-            );
-          })}
-          <StackItem>
+                  <FlexItem>
+                    <Divider />
+                  </FlexItem>
+                </Flex>
+              );
+            })}
+          </FlexItem>
+          <FlexItem>
             <AddUnhealthyCondition onPush={push} />
-          </StackItem>
-        </Stack>
+          </FlexItem>
+        </Flex>
       )}
     />
   );
@@ -113,18 +124,11 @@ export const UnhealthyConditionArray: React.FC<{
 const UnhealthyConditionsField = ({ fieldName }: FormViewFieldProps) => {
   const { t } = useNodeHealthCheckTranslation();
   return (
-    <Stack>
-      <TextContent>
-        <Text component={TextVariants.h3}>Unhealthy conditions</Text>
-        <Text component={TextVariants.small}>
-          {t(
-            "Nodes that meet any of these conditions for the given duration will be remediated."
-          )}
-        </Text>
-      </TextContent>
-
-      <UnhealthyConditionArray fieldName={fieldName} />
-    </Stack>
+    <FormSection title={t("Unhealthy conditions")} titleElement="h2">
+      <FormGroup>
+        <UnhealthyConditionArray fieldName={fieldName} />
+      </FormGroup>
+    </FormSection>
   );
 };
 

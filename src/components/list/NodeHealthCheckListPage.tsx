@@ -53,7 +53,7 @@ const NodeHealthCheckCreate: React.FC<{ isDisabled: boolean }> = ({
   const { t } = useNodeHealthCheckTranslation();
   const label = t("Create NodeHealthCheck");
   return isDisabled ? (
-    <div className="co-m-primary-action">
+    <div>
       <Button variant="primary" isDisabled>
         {label}
       </Button>

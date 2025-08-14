@@ -3,7 +3,11 @@ import {
   ObjectMetadata,
   Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
-import { EditorType } from "../copiedFromConsole/synced-editor/editor-toggle";
+
+export enum EditorType {
+  Form = "form",
+  YAML = "yaml",
+}
 
 export enum UnhealthyConditionStatus {
   False = "False",

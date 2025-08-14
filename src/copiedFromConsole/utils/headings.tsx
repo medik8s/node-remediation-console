@@ -1,5 +1,6 @@
 import {
   Action,
+  ResourceIcon,
   ResourceStatus,
   StatusIconAndText,
 } from "@openshift-console/dynamic-plugin-sdk";
@@ -14,12 +15,16 @@ import {
   Text,
   TextContent,
   TextVariants,
+  Title,
+  Flex,
+  FlexItem,
+  Grid,
+  GridItem,
 } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
-import * as classNames from "classnames";
 import ActionsMenu from "./ActionsMenu";
-import { ResourceIcon } from "./resource-icon";
 import { isEmpty } from "lodash-es";
+import { nodeHealthCheckKind } from "../../data/model";
 
 export type BreadCrumbsProps = {
   breadcrumbs: { name: string; path: string }[];
@@ -36,13 +41,12 @@ export type PageHeadingProps = {
   obj?: K8sResourceKind;
   statusIcon?: React.ReactElement;
   statusText?: string;
-  abbr?: string;
   kind?: string;
   detail?: boolean;
 };
 
 export const BreadCrumbs: React.SFC<BreadCrumbsProps> = ({ breadcrumbs }) => (
-  <Breadcrumb className="co-breadcrumb">
+  <Breadcrumb>
     {breadcrumbs.map((crumb, i, { length }) => {
       const isLast = i === length - 1;
 
@@ -75,77 +79,64 @@ export const PageHeading: React.FC<PageHeadingProps> = (
     helpText,
     statusIcon,
     statusText,
-    abbr,
     kind,
-    detail = true,
   } = props;
 
   const hasMenuActions = !isEmpty(menuActions);
   const showBreadcrumbs = breadcrumbs;
   return (
     <>
-      {showBreadcrumbs && (
-        <div className="pf-c-page__main-breadcrumb">
-          <Split style={{ alignItems: "baseline" }}>
-            <SplitItem isFilled>
-              <BreadCrumbs breadcrumbs={breadcrumbs} />
-            </SplitItem>
-          </Split>
-        </div>
-      )}
-      <div
-        className={classNames(
-          "co-m-nav-title",
-          { "co-m-nav-title--detail": detail },
-          { "co-m-nav-title--logo": props.icon },
-          { "co-m-nav-title--breadcrumbs": showBreadcrumbs }
-        )}
-      >
-        <Text
-          component={TextVariants.h1}
-          className={classNames("co-m-pane__heading", {
-            "co-m-pane__heading--logo": props.icon,
-            "co-m-pane__heading--with-help-text": helpText,
-          })}
-        >
-          <div className="co-m-pane__name co-resource-item">
-            {kind && (
-              <ResourceIcon
-                abbr={abbr}
-                kindStr={kind}
-                className="co-m-resource-icon--lg"
-              />
-            )}
-            <span
-              data-test-id="resource-title"
-              className="co-resource-item__resource-name"
-            >
-              {title}
-            </span>
-            {!!statusIcon && (
-              <ResourceStatus additionalClassNames="hidden-xs">
-                <StatusIconAndText title={statusText} icon={statusIcon} />
-              </ResourceStatus>
-            )}
-          </div>
-          {hasMenuActions && (
-            <div className="co-actions" data-test-id="details-actions">
-              <ActionsMenu actions={menuActions} isKababToggle={false} />
-            </div>
+      <Grid hasGutter>
+        <GridItem>
+          {showBreadcrumbs && (
+            <Split style={{ alignItems: "baseline" }}>
+              <SplitItem isFilled>
+                <BreadCrumbs breadcrumbs={breadcrumbs} />
+              </SplitItem>
+            </Split>
           )}
-        </Text>
-        {helpText && (
-          <TextContent>
-            <Text
-              component={TextVariants.p}
-              className="help-block co-m-pane__heading-help-text"
-            >
-              {helpText}
-            </Text>
-          </TextContent>
-        )}
-        {props.children}
-      </div>
+        </GridItem>
+
+        <GridItem>
+          <Flex
+            alignItems={{ default: "alignItemsCenter" }}
+            justifyContent={{ default: "justifyContentSpaceBetween" }}
+          >
+            <FlexItem>
+              <Flex
+                alignItems={{ default: "alignItemsCenter" }}
+                spaceItems={{ default: "spaceItemsSm" }}
+              >
+                {kind && (
+                  <ResourceIcon groupVersionKind={nodeHealthCheckKind} />
+                )}
+                <Title
+                  headingLevel="h1"
+                  size="xl"
+                  data-test-id="resource-title"
+                >
+                  {title}
+                </Title>
+                {!!statusIcon && (
+                  <ResourceStatus>
+                    <StatusIconAndText title={statusText} icon={statusIcon} />
+                  </ResourceStatus>
+                )}
+              </Flex>
+              {helpText && (
+                <TextContent>
+                  <Text component={TextVariants.p}>{helpText}</Text>
+                </TextContent>
+              )}
+            </FlexItem>
+            {hasMenuActions && (
+              <FlexItem>
+                <ActionsMenu actions={menuActions} isKababToggle={false} />
+              </FlexItem>
+            )}
+          </Flex>
+        </GridItem>
+      </Grid>
     </>
   );
 };
@@ -157,21 +148,11 @@ export const SectionHeading: React.SFC<SectionHeadingProps> = ({
   required,
   id,
 }) => (
-  <h2
-    className="co-section-heading"
-    style={style}
-    data-test-section-heading={text}
-    id={id}
-  >
-    <span
-      className={classNames({
-        "co-required": required,
-      })}
-    >
-      {text}
-    </span>
+  <Title headingLevel="h2" id={id} style={style}>
+    {text}
+    {required && <span aria-hidden="true"> *</span>}
     {children}
-  </h2>
+  </Title>
 );
 
 export type SectionHeadingProps = {
