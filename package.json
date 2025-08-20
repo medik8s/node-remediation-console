@@ -86,8 +86,8 @@
     "ts-node": "5.0.1",
     "typescript": "^4.7.4",
     "webpack": "^5.97.1",
-    "webpack-dev-server": "^5.0.2",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.2"
   },
   "consolePlugin": {
     "name": "node-remediation-console-plugin",
@@ -121,5 +121,5 @@
       "plugin:storybook/recommended"
     ]
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.9.2"
 }
