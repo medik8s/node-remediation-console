@@ -1,5 +1,3 @@
 node_modules
-cypress
 dist
-cypress.config.ts
 yarn-error.log

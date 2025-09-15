@@ -9,7 +9,7 @@
     "strict": false,
     "noUnusedLocals": true,
     "skipLibCheck": true,
-    "types": ["node", "cypress"]
+    "types": ["node"]
   },
-  "include": ["src", "cypress"]
+  "include": ["src"]
 }
