@@ -92,7 +92,7 @@
     "formik": "2.2.9",
     "fuzzysearch": "^1.0.3",
     "i18next": "^21.8.14",
-    "js-yaml": "4.1.0",
+    "js-yaml": "4.1.1",
     "lodash-es": "4.17.21",
     "react-linkify": "^1.0.0-alpha",
     "react-tagsinput": "^3.19.0",
