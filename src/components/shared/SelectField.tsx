@@ -86,9 +86,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
             onClick={onToggle}
             isDisabled={isDisabled}
             isExpanded={isOpen}
-            style={{
-              width: "200px",
-            }}
+            isFullWidth
           >
             {getToggleLabel()}
           </MenuToggle>

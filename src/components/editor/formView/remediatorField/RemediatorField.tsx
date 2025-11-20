@@ -1,67 +1,101 @@
 import * as React from "react";
 
-import { FormViewFieldProps } from "../propTypes";
-
-import RemediatorKindField from "./RemediatorKindField";
 import { useField } from "formik";
-import { capitalize, startCase } from "lodash-es";
-import { getObjectItemFieldName } from "../../../shared/formik-utils";
-import InputField from "../../../../copiedFromConsole/formik-fields/InputField";
 import { useFormikValidationFix } from "../../../../copiedFromConsole/hooks/formik-validation-fix";
-import {
-  RemediationTemplate,
-  Remediator,
-  RemediatorRadioOption,
-} from "../../../../data/types";
+import { Remediator } from "../../../../data/types";
 import { Flex, FlexItem } from "@patternfly/react-core";
-const sentenceCase = (string: string) => {
-  return capitalize(startCase(string));
+import { Alert } from "@patternfly/react-core";
+import { ExternalLinkAltIcon } from "@patternfly/react-icons";
+import { RemediationTemplateKindField } from "./RemediationTemplateKindField";
+
+import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
+import {
+  getKindInfo,
+  getOperatorDetailsItem,
+} from "../../../../data/remediationTemplateKinds";
+import { useRemediationTemplateInstances } from "../../../../apis/useRemediationTemplateInstances";
+import { RemediationTemplateField } from "./RemediationTemplateInstanceField";
+
+const getOperatorHubInstallUrl = (operatorDetailsItem: string): string => {
+  return `${window.location.origin}/operatorhub/all-namespaces?details-item=${operatorDetailsItem}`;
 };
 
-const CustomRemediatorField = ({ fieldName }: FormViewFieldProps) => {
-  const [{ value }] = useField<Remediator>(fieldName);
+const OperatorInstallAlert = ({ kind }: { kind: string }) => {
+  const { t } = useNodeHealthCheckTranslation();
+
+  const predefinedKindInfo = React.useMemo(() => getKindInfo(kind), [kind]);
+
+  const installUrl = React.useMemo(() => {
+    return predefinedKindInfo
+      ? getOperatorHubInstallUrl(getOperatorDetailsItem(predefinedKindInfo))
+      : undefined;
+  }, [predefinedKindInfo]);
+
+  const actionLink =
+    installUrl && predefinedKindInfo ? (
+      <a href={installUrl} target="_blank" rel="noopener noreferrer">
+        {t("Install {{operatorName}}", {
+          operatorName: predefinedKindInfo.operatorName,
+        })}{" "}
+        <ExternalLinkAltIcon />
+      </a>
+    ) : undefined;
+
   return (
-    <Flex
-      direction={{ default: "column" }}
-      spaceItems={{ default: "spaceItemsSm" }}
+    <Alert
+      variant="danger"
+      title={t("CustomResourceDefinition not available")}
+      isInline
+      actionLinks={actionLink}
     >
-      {["apiVersion", "kind", "name", "namespace"].map((subFieldName) => {
-        const inputFieldName = getObjectItemFieldName([
-          fieldName,
-          "template",
-          subFieldName,
-        ]);
-        return (
-          <FlexItem key={inputFieldName}>
-            <InputField
-              required
-              name={inputFieldName}
-              label={sentenceCase(subFieldName)}
-              isDisabled={value?.radioOption === RemediatorRadioOption.SNR}
-            />
-          </FlexItem>
-        );
-      })}
-    </Flex>
+      {t(
+        "The required CustomResourceDefinition for {{kind}} is missing. Install the corresponding operator to add this CustomResourceDefinition.",
+        {
+          kind,
+        }
+      )}
+    </Alert>
   );
 };
 
 export const RemediatorField: React.FC<{
   fieldName: string;
-  snrTemplate: RemediationTemplate | undefined;
-}> = ({ fieldName, snrTemplate }) => {
-  const [value] = useField<Remediator>(fieldName);
-  useFormikValidationFix(value);
+}> = ({ fieldName }) => {
+  const [remediatorValue] = useField<Remediator>(fieldName);
+  const [kindValue] = useField<string>(`${fieldName}.template.kind`);
+  const [apiVersionValue] = useField<string>(
+    `${fieldName}.template.apiVersion`
+  );
+  useFormikValidationFix(remediatorValue);
+
+  const kind = kindValue.value || "";
+  const apiVersion = apiVersionValue.value || "";
+
+  const [instances, loaded, error, autoSelectInstance] =
+    useRemediationTemplateInstances(kind, apiVersion);
+
   return (
     <Flex
       direction={{ default: "column" }}
       spaceItems={{ default: "spaceItemsSm" }}
     >
       <FlexItem>
-        <RemediatorKindField fieldName={fieldName} snrTemplate={snrTemplate} />
+        {kind && apiVersion && loaded && error && (
+          <OperatorInstallAlert kind={kind} />
+        )}
       </FlexItem>
       <FlexItem>
-        <CustomRemediatorField fieldName={fieldName} />
+        <RemediationTemplateKindField fieldName={fieldName} />
+      </FlexItem>
+      <FlexItem>
+        <RemediationTemplateField
+          fieldName={fieldName}
+          kind={kind}
+          instances={instances}
+          loaded={loaded}
+          error={error}
+          autoSelectInstance={autoSelectInstance}
+        />
       </FlexItem>
     </Flex>
   );

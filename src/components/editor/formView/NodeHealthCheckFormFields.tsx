@@ -10,7 +10,6 @@ import HelpIcon from "components/shared/HelpIcon";
 import { getObjectItemFieldName } from "../../shared/formik-utils";
 import { NodeHealthCheckFormValues } from "../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
-import useSnrTemplate from "../../../apis/useSNRTemplate";
 import RemediationTemplateField from "./remediatorField/RemediationTemplateField";
 import "../../editor/nhc-form.css";
 
@@ -37,7 +36,6 @@ const NodeHealthCheckFormFields_: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
   const { values } = useFormikContext<NodeHealthCheckFormValues>();
   const formViewFieldName = "formData";
-  const snrTemplateResult = useSnrTemplate();
   return (
     <Form className="nhc-form-fields">
       <Alert
@@ -57,7 +55,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
         data-test="NodeHealthCheck-name"
         helpText={t("A unique name for the NodeHealthCheck")}
       />
-      <RemediationTemplateField snrTemplateResult={snrTemplateResult} />
+      <RemediationTemplateField />
 
       <NodeSelectionField
         fieldName={getObjectItemFieldName([formViewFieldName, "nodeSelector"])}

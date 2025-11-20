@@ -1,5 +1,4 @@
 import {
-  K8sResourceCommon,
   ObjectMetadata,
   Selector,
 } from "@openshift-console/dynamic-plugin-sdk";
@@ -35,6 +34,11 @@ export type RemediationTemplate = {
   name: string;
   namespace: string;
 };
+
+export interface OperatorInfo {
+  name: string;
+  isInstalled: boolean;
+}
 
 export type EscalatingRemediator = {
   remediationTemplate: RemediationTemplate;
@@ -93,13 +97,7 @@ export enum TimeUnit {
   MilliSecond = "ms",
 }
 
-export enum RemediatorRadioOption {
-  SNR = "snr",
-  CUSTOM = "custom",
-}
-
 export type Remediator = {
-  radioOption: RemediatorRadioOption;
   template: RemediationTemplate;
   timeout?: string;
   order: number | "";
@@ -130,27 +128,3 @@ export type NodeHealthCheckFormValues = {
   resourceVersion: string;
   reloadCount: number;
 };
-export type MachineHealthCondition = {
-  type: string;
-  status: string;
-  timeout: string;
-};
-
-export type MachineHealthCheckKind = K8sResourceCommon & {
-  spec: {
-    selector: Selector;
-    unhealthyConditions: MachineHealthCondition[];
-  };
-};
-
-export type SelfNodeRemediationTemplate = K8sResourceCommon & {
-  spec?: {
-    template?: {
-      spec?: {
-        remediationStrategy: string;
-      };
-    };
-  };
-};
-
-export type SnrTemplateResult = [RemediationTemplate | undefined, boolean];

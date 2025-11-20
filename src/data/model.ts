@@ -4,11 +4,59 @@ import {
   K8sModel,
 } from "@openshift-console/dynamic-plugin-sdk";
 
-const getStringKind = (groupVersionKind: ExtensionK8sModel) =>
+export const getStringKind = (groupVersionKind: ExtensionK8sModel) =>
   `${groupVersionKind.group}~${groupVersionKind.version}~${groupVersionKind.kind}`;
 
-const getApiVersion = (groupVersionKind: ExtensionK8sModel) =>
+export const getApiVersion = (groupVersionKind: ExtensionK8sModel) =>
   `${groupVersionKind.group}/${groupVersionKind.version}`;
+
+/**
+ * Parses an apiVersion string (format: "group/version") into its components
+ * @param apiVersion - The apiVersion in format "group/version"
+ * @returns Object with group and version, or undefined if invalid
+ */
+export const parseApiVersion = (
+  apiVersion: string
+): { group: string; version: string } | undefined => {
+  if (!apiVersion) return undefined;
+  const parts = apiVersion.split("/");
+  if (parts.length === 2 && parts[0] && parts[1]) {
+    return { group: parts[0], version: parts[1] };
+  }
+  return undefined;
+};
+
+/**
+ * Converts an apiVersion string and kind into a GroupVersionKind object
+ * @param apiVersion - The apiVersion in format "group/version"
+ * @param kind - The resource kind
+ * @returns ExtensionK8sModel or undefined if invalid
+ */
+export const apiVersionToGroupVersionKind = (
+  apiVersion: string,
+  kind: string
+): ExtensionK8sModel | undefined => {
+  if (!apiVersion || !kind) return undefined;
+  const parsed = parseApiVersion(apiVersion);
+  if (!parsed) return undefined;
+  return { group: parsed.group, version: parsed.version, kind };
+};
+
+/**
+ * Constructs a URL for creating a new Kubernetes resource instance
+ * @param apiVersion - The apiVersion in format "group/version"
+ * @param kind - The resource kind
+ * @returns URL in format "/k8s/cluster/{group}~{version}~{kind}/~new"
+ */
+export const getCreateInstanceUrl = (
+  apiVersion: string,
+  kind: string
+): string | undefined => {
+  if (!apiVersion || !kind) return undefined;
+  const parsed = parseApiVersion(apiVersion);
+  if (!parsed) return undefined;
+  return `/k8s/cluster/${parsed.group}~${parsed.version}~${kind}/~new`;
+};
 
 export const nodeKind: ExtensionK8sKindVersionModel = {
   kind: "Node",

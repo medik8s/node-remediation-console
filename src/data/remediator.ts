@@ -3,12 +3,13 @@ import {
   NodeHealthCheck,
   RemediationTemplate,
   Remediator,
-  RemediatorRadioOption,
 } from "./types";
-import { snrTemplateKind } from "./model";
 import { TFunction } from "i18next";
-
-export const getSNRLabel = (t: TFunction) => t("Self node remediation");
+import {
+  PREDEFINED_REMEDIATION_TEMPLATE_KINDS,
+  getKindInfo,
+} from "./remediationTemplateKinds";
+import { getApiVersion } from "./model";
 
 export const getEmptyRemediationTemplate = (): RemediationTemplate => ({
   apiVersion: "",
@@ -32,19 +33,23 @@ export const getRemediatorLabel = (
     return t("Escalating remediations");
   }
   const remediationTemplate = nodeHealthCheck.spec.remediationTemplate;
-  return remediationTemplate.kind === snrTemplateKind.kind
-    ? getSNRLabel(t)
-    : remediationTemplate.kind;
+  return remediationTemplate?.kind;
 };
 
-export const getDefaultRemediator = (
-  snrTemplate: RemediationTemplate | undefined
-): Remediator => {
+export const getDefaultRemediator = (): Remediator => {
+  const defaultKind = PREDEFINED_REMEDIATION_TEMPLATE_KINDS[0];
+  const kindInfo = getKindInfo(defaultKind);
+  const defaultApiVersion = kindInfo
+    ? getApiVersion(kindInfo.groupVersionKind)
+    : "";
+
   return {
-    radioOption: snrTemplate
-      ? RemediatorRadioOption.SNR
-      : RemediatorRadioOption.CUSTOM,
-    template: snrTemplate ? snrTemplate : getEmptyRemediationTemplate(),
+    template: {
+      apiVersion: defaultApiVersion,
+      kind: defaultKind,
+      name: "",
+      namespace: "",
+    },
     order: "",
     id: Math.random(),
   };
@@ -58,3 +63,14 @@ export const getSortedRemediators = <
     (remediator1, remediator2) =>
       (remediator1.order || 0) - (remediator2.order || 0)
   );
+
+/**
+ * Checks if a remediation template has both name and namespace (is fully selected)
+ * @param template - The remediation template
+ * @returns true if template has both name and namespace
+ */
+export const isRemediationTemplateSelected = (
+  template: RemediationTemplate | undefined
+): boolean => {
+  return !!template?.name;
+};

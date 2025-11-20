@@ -108,9 +108,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
             ref={toggleRef}
             onClick={() => setOpen(!isOpen)}
             isExpanded={isOpen}
-            style={{
-              width: "200px",
-            }}
+            isFullWidth
           >
             <TextInputGroup isPlain>
               <TextInputGroupMain

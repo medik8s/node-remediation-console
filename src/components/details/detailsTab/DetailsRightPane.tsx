@@ -1,11 +1,11 @@
 import { DetailsItem } from "copiedFromConsole/utils/details-item";
-import { getRemediatorLabel } from "data/remediator";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 
 import * as React from "react";
 import NodeHealthCheckStatus from "../NodeHealthCheckStatus";
 import { DescriptionList } from "@patternfly/react-core";
+import { RemediationTemplateLink } from "../../shared/RemediationTemplateLink";
 
 export const DetailsRightPane: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
@@ -14,7 +14,7 @@ export const DetailsRightPane: React.FC<{
   return (
     <DescriptionList aria-label={t("NodeHealthCheck summary")}>
       <DetailsItem label={t("Remediator")} obj={nodeHealthCheck}>
-        {getRemediatorLabel(nodeHealthCheck, t)}
+        <RemediationTemplateLink nodeHealthCheck={nodeHealthCheck} t={t} />
       </DetailsItem>
       <DetailsItem
         label={t("Min healthy")}
