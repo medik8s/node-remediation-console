@@ -1,9 +1,9 @@
-import useSnrTemplate from "apis/useSNRTemplate";
 import * as React from "react";
 import { getNodeHealthCheckApiVersion, nodeHealthCheckKind } from "./model";
-import { getEmptyRemediationTemplate } from "./remediator";
+import { getDefaultRemediator } from "./remediator";
 import {
   InitialNodeHealthCheck,
+  RemediationTemplate,
   UnhealthyConditions,
   UnhealthyConditionStatus,
 } from "./types";
@@ -27,16 +27,11 @@ export const useDefaultNodeHealthCheck = (): [
   InitialNodeHealthCheck | undefined,
   boolean
 ] => {
-  const [snrTemplate, loaded] = useSnrTemplate();
   const defaultNodeHealthCheck = React.useMemo<
     InitialNodeHealthCheck | undefined
   >(() => {
-    if (!loaded) {
-      return undefined;
-    }
-    const defaultRemediator = snrTemplate
-      ? snrTemplate
-      : getEmptyRemediationTemplate();
+    const defaultRemediator: RemediationTemplate =
+      getDefaultRemediator().template;
     return {
       apiVersion: getNodeHealthCheckApiVersion(),
       kind: nodeHealthCheckKind.kind,
@@ -50,6 +45,6 @@ export const useDefaultNodeHealthCheck = (): [
         selector: {},
       },
     };
-  }, [snrTemplate, loaded]);
-  return [defaultNodeHealthCheck, loaded];
+  }, []);
+  return [defaultNodeHealthCheck, true];
 };

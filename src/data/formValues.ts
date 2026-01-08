@@ -4,7 +4,6 @@ import {
   FormViewValues,
   NodeHealthCheck,
   NodeHealthCheckFormValues,
-  RemediationTemplate,
 } from "./types";
 import { dump } from "js-yaml";
 import { isParseError } from "./parseErrors";
@@ -14,8 +13,7 @@ import * as yamlText from "./yamlText";
 
 export const getFormValues = (
   nodeHealthCheck: NodeHealthCheck,
-  isCreateFlow: boolean,
-  snrTemplate: RemediationTemplate | undefined
+  isCreateFlow: boolean
 ): NodeHealthCheckFormValues => {
   const yamlData = dump(nodeHealthCheck, {
     skipInvalid: true,
@@ -24,7 +22,7 @@ export const getFormValues = (
   let formData: FormViewValues | null = null;
   let editorType = EditorType.YAML;
   try {
-    formData = getFormViewValues(nodeHealthCheck, snrTemplate);
+    formData = getFormViewValues(nodeHealthCheck);
     editorType = EditorType.Form;
   } catch (err) {
     if (isParseError(err)) {

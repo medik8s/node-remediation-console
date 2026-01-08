@@ -20,6 +20,7 @@ import { getRemediatorLabel } from "data/remediator";
 import { EmptyBox } from "copiedFromConsole/utils/status-box";
 import { TFunction } from "i18next";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
+import { RemediationTemplateLink } from "../shared/RemediationTemplateLink";
 
 import "./nhc-list.css";
 
@@ -77,7 +78,11 @@ const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
   if (!remediatorLabel) {
     return <NotAvailable />;
   }
-  return <span data-test="remediator-label">{remediatorLabel}</span>;
+  return (
+    <span data-test="remediator-label">
+      <RemediationTemplateLink nodeHealthCheck={obj} />
+    </span>
+  );
 };
 
 const getNodeHealthCheckRowComponent = (

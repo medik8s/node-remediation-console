@@ -13,11 +13,7 @@ import {
   getEmptyRemediationTemplate,
   getSortedRemediators,
 } from "../../../../data/remediator";
-import {
-  Remediator,
-  RemediatorRadioOption,
-  SnrTemplateResult,
-} from "../../../../data/types";
+import { Remediator } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import RemediatorField from "./RemediatorField";
 import { DragDrop, Draggable, Droppable } from "@patternfly/react-core";
@@ -103,7 +99,6 @@ const OrderField = ({
 };
 
 const SingleRemediatorField = ({
-  snrTemplateResult,
   index,
   remove,
   fieldName,
@@ -112,7 +107,6 @@ const SingleRemediatorField = ({
   toggleExpand,
   isRemoveDisabled,
 }: {
-  snrTemplateResult: SnrTemplateResult;
   remove: (index: number) => void;
   index: number;
   fieldName: string;
@@ -155,10 +149,7 @@ const SingleRemediatorField = ({
               onToggle={() => toggleExpand(index)}
             >
               <>
-                <RemediatorField
-                  fieldName={`${fieldName}`}
-                  snrTemplate={snrTemplateResult[0]}
-                />
+                <RemediatorField fieldName={`${fieldName}`} />
                 <TimeoutField fieldName={`${fieldName}.timeout`} />
                 <OrderField
                   fieldName={`${fieldName}.order`}
@@ -204,10 +195,8 @@ const getExpanded = (
 const RemediatorsArrayFieldContent = ({
   push,
   remove,
-  snrTemplateResult,
   fieldName,
 }: FieldArrayRenderProps & {
-  snrTemplateResult: SnrTemplateResult;
   fieldName: string;
 }) => {
   const [{ value: remediators }, , { setValue: setRemediators }] =
@@ -243,7 +232,6 @@ const RemediatorsArrayFieldContent = ({
   const onAdd = () => {
     const prevRemediatorOrder = remediators[remediators.length - 1]?.order;
     const newRemediator: Remediator = {
-      radioOption: RemediatorRadioOption.CUSTOM,
       template: getEmptyRemediationTemplate(),
       order: (prevRemediatorOrder || 0) + 1,
       id: Math.random(),
@@ -263,7 +251,6 @@ const RemediatorsArrayFieldContent = ({
                   key={_remediator.id}
                   index={index}
                   remove={remove}
-                  snrTemplateResult={snrTemplateResult}
                   fieldName={`${fieldName}[${index}]`}
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                   onOrderChanged={() => debounce(_remediator.id)}
@@ -288,21 +275,13 @@ const RemediatorsArrayFieldContent = ({
   );
 };
 
-const RemediatorsArrayField = ({
-  snrTemplateResult,
-}: {
-  snrTemplateResult: SnrTemplateResult;
-}) => {
+const RemediatorsArrayField = () => {
   const fieldName = "formData.escalatingRemediations";
   return (
     <FieldArray name={fieldName} validateOnChange={false}>
       {(props) => {
         return (
-          <RemediatorsArrayFieldContent
-            fieldName={fieldName}
-            snrTemplateResult={snrTemplateResult}
-            {...props}
-          />
+          <RemediatorsArrayFieldContent fieldName={fieldName} {...props} />
         );
       }}
     </FieldArray>

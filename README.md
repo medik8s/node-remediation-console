@@ -57,9 +57,3 @@ oc process -f template.yaml \
   -p IMAGE=quay.io/my-repository/node-remediation-console-plugin:latest \
   | oc create -f -
 ```
-# Tests
-
-Currently the tests run on development environment
-
-1. Setup Local development
-2. On a new terminal run `oc login` and `yarn test` 

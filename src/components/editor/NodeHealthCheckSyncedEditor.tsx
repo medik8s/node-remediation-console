@@ -6,7 +6,6 @@ import {
   EditorType,
   NodeHealthCheck,
   NodeHealthCheckFormValues,
-  RemediationTemplate,
 } from "../../data/types";
 import { FormFooter } from "../../copiedFromConsole/form-utils";
 import NodeHealthCheckFormFields from "./formView/NodeHealthCheckFormFields";
@@ -41,12 +40,11 @@ const LAST_VIEWED_EDITOR_TYPE_USERSETTING_KEY =
 type NodeHealthCheckFormSyncedEditorProps = {
   handleCancel: () => void;
   originalNodeHealthCheck: NodeHealthCheck;
-  snrTemplate: RemediationTemplate;
 };
 
 export const NodeHealthCheckSyncedEditor: React.FC<
   NodeHealthCheckFormSyncedEditorProps
-> = ({ originalNodeHealthCheck, handleCancel, snrTemplate }) => {
+> = ({ originalNodeHealthCheck, handleCancel }) => {
   const {
     values,
     status,
@@ -86,11 +84,7 @@ export const NodeHealthCheckSyncedEditor: React.FC<
 
   const onReload = () => {
     const curEditorType = values.editorType;
-    const resetValues = getFormValues(
-      originalNodeHealthCheck,
-      false,
-      snrTemplate
-    );
+    const resetValues = getFormValues(originalNodeHealthCheck, false);
     resetValues.editorType = curEditorType;
     resetValues.reloadCount++;
     resetForm({ values: resetValues });
@@ -109,17 +103,11 @@ export const NodeHealthCheckSyncedEditor: React.FC<
           editor: formEditor,
           sanitizeTo: (yamlNodeHealthCheck: NodeHealthCheck) => {
             try {
-              return formViewValues.getFormViewValues(
-                yamlNodeHealthCheck,
-                snrTemplate
-              );
+              return formViewValues.getFormViewValues(yamlNodeHealthCheck);
             } catch (err) {
               //return a function so SyncedEditorField will handle the error properly
               return () =>
-                formViewValues.getFormViewValues(
-                  originalNodeHealthCheck,
-                  snrTemplate
-                );
+                formViewValues.getFormViewValues(originalNodeHealthCheck);
             }
           },
         }}
