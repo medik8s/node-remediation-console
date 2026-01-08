@@ -33,6 +33,7 @@ export interface RadioButtonFieldProps extends FieldProps {
 
 export interface RadioGroupFieldProps extends FieldProps {
   isInline?: boolean;
+  labelPosition?: "inline" | "stacked";
   options: RadioGroupOption[];
   onChange?: (value: React.ReactText) => void;
 }

@@ -11,35 +11,57 @@ const RadioGroupField: React.FC<RadioGroupFieldProps> = ({
   helpText,
   required,
   isInline,
+  labelPosition = "inline",
   onChange,
+  className,
   ...props
 }) => {
   const [field] = useField(props.name);
   const fieldId = getFieldId(props.name, "radiogroup");
 
+  const radioButtons = options.map((option) => (
+    <RadioButtonField
+      key={option.value}
+      {...field}
+      {...props}
+      value={option.value}
+      label={option.label}
+      isDisabled={option.isDisabled}
+      aria-describedby={helpText ? `${fieldId}-helper` : undefined}
+      onChange={onChange}
+    />
+  ));
+
+  if (labelPosition === "stacked") {
+    // Standard PatternFly layout: label on top, radio buttons inline below
+    return (
+      <FormGroup
+        fieldId={fieldId}
+        label={label}
+        isRequired={required}
+        className={className}
+      >
+        <Flex>
+          {radioButtons.map((radioButton, index) => (
+            <FlexItem key={options[index].value}>{radioButton}</FlexItem>
+          ))}
+        </Flex>
+      </FormGroup>
+    );
+  }
+
+  // Inline layout: label on left, radio buttons inline on right (for synced editor)
   return (
-    <FormGroup fieldId={fieldId} className="nhc-form-synced-editor-field">
+    <FormGroup fieldId={fieldId} className={className}>
       <Flex alignContent={{ default: "alignContentCenter" }}>
         <FlexItem>
           <label className="pf-v5-c-form__label" id={fieldId}>
             <span className="pf-v5-c-form__label-text">{label}</span>
           </label>
         </FlexItem>
-        {options.map((option) => {
-          return (
-            <FlexItem key={option.value}>
-              <RadioButtonField
-                {...field}
-                {...props}
-                value={option.value}
-                label={option.label}
-                isDisabled={option.isDisabled}
-                aria-describedby={helpText ? `${fieldId}-helper` : undefined}
-                onChange={onChange}
-              />
-            </FlexItem>
-          );
-        })}
+        {radioButtons.map((radioButton, index) => (
+          <FlexItem key={options[index].value}>{radioButton}</FlexItem>
+        ))}
       </Flex>
     </FormGroup>
   );

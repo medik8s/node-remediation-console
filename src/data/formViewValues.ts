@@ -14,7 +14,7 @@ import {
   NodeHealthCheckSpec,
   EscalatingRemediator,
 } from "./types";
-import { MIN_HEALTHY_REGEX } from "./validationSchema";
+import { HEALTH_THRESHOLD_REGEX } from "./validationSchema";
 
 const getRemediationTemplateFormValues = (
   template?: RemediationTemplate,
@@ -70,12 +70,24 @@ export const getFormViewValues = (
   nodeHealthCheck: NodeHealthCheck
 ): FormViewValues => {
   const useEscalating = !!nodeHealthCheck.spec?.escalatingRemediations;
+  const spec = nodeHealthCheck.spec;
+
+  // Determine mode and value based on existing spec
+  let healthThresholdMode: "minHealthy" | "maxUnhealthy";
+  let healthThresholdValue: string;
+
+  if (spec?.maxUnhealthy !== undefined) {
+    healthThresholdMode = "maxUnhealthy";
+    healthThresholdValue = spec.maxUnhealthy.toString();
+  } else {
+    healthThresholdMode = "minHealthy";
+    healthThresholdValue = (spec?.minHealthy ?? DEFAULT_MIN_HEALTHY).toString();
+  }
   return {
     name: nodeHealthCheck.metadata?.name,
-    nodeSelector: selectorToStringArray(nodeHealthCheck.spec?.selector || {}),
-    minHealthy: (
-      nodeHealthCheck.spec?.minHealthy ?? DEFAULT_MIN_HEALTHY
-    ).toString(),
+    nodeSelector: selectorToStringArray(spec?.selector || {}),
+    healthThresholdMode,
+    healthThresholdValue,
     unhealthyConditions: getUnhealthyConditionsValue(nodeHealthCheck),
     remediator: !useEscalating
       ? getRemediationTemplateFormValues(
@@ -89,26 +101,35 @@ export const getFormViewValues = (
   };
 };
 
-export const getNodeHealthCheckMinHealthy = (minHealthy: string) => {
-  let minHealthyVal: string | number = minHealthy;
+export const getNodeHealthCheckThresholdValue = (
+  thresholdValue: string
+): string | number => {
+  let thresholdVal: string | number = thresholdValue;
   if (
-    minHealthy &&
-    minHealthy.match(MIN_HEALTHY_REGEX) &&
-    !minHealthy.endsWith("%")
+    thresholdValue &&
+    thresholdValue.match(HEALTH_THRESHOLD_REGEX) &&
+    !thresholdValue.endsWith("%")
   ) {
-    minHealthyVal = parseInt(minHealthy);
+    thresholdVal = parseInt(thresholdValue);
   }
-  return minHealthyVal;
+  return thresholdVal;
 };
 
 export const getSpec = (
   formViewFields: FormViewValues
 ): NodeHealthCheckSpec => {
-  const { nodeSelector, minHealthy, unhealthyConditions } = formViewFields;
-  return {
+  const {
+    nodeSelector,
+    healthThresholdMode,
+    healthThresholdValue,
+    unhealthyConditions,
+  } = formViewFields;
+
+  const thresholdValue = getNodeHealthCheckThresholdValue(healthThresholdValue);
+
+  const spec: NodeHealthCheckSpec = {
     selector: selectorFromStringArray(nodeSelector),
     unhealthyConditions,
-    minHealthy: getNodeHealthCheckMinHealthy(minHealthy),
     remediationTemplate: !formViewFields.useEscalating
       ? formViewFields.remediator?.template
       : undefined,
@@ -120,6 +141,15 @@ export const getSpec = (
         }))
       : undefined,
   };
+
+  // Only include the threshold field matching the selected mode
+  if (healthThresholdMode === "minHealthy") {
+    spec.minHealthy = thresholdValue;
+  } else {
+    spec.maxUnhealthy = thresholdValue;
+  }
+
+  return spec;
 };
 
 export const getNodeHealthCheck = (
@@ -138,5 +168,13 @@ export const getNodeHealthCheck = (
       ...formViewSpec,
     },
   };
+
+  // Explicitly remove the opposite threshold field to ensure mutual exclusivity
+  if (formViewValues.healthThresholdMode === "minHealthy") {
+    delete merged.spec.maxUnhealthy;
+  } else {
+    delete merged.spec.minHealthy;
+  }
+
   return merged;
 };

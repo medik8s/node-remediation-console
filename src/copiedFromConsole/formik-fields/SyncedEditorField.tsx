@@ -182,6 +182,7 @@ const SyncedEditorField: React.FC<SyncedEditorFieldProps> = ({
           <RadioGroupField
             label={t("Configure via:")}
             name={name}
+            className="nhc-form-synced-editor-field"
             options={[
               {
                 label: formContext.label || t("Form view"),

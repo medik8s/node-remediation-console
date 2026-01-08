@@ -3,7 +3,7 @@ import { EditorType } from "data/types";
 import { TFunction } from "i18next";
 
 const DURATION_REGEX = /^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$/;
-export const MIN_HEALTHY_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
+export const HEALTH_THRESHOLD_REGEX = /^((100|[0-9]{1,2})%|[0-9]+)$/;
 const NAME_START_END_REGEX = /^[a-z0-9]$/;
 const NAME_MAX_LENGTH = 253;
 
@@ -60,8 +60,8 @@ export const nameSchema = (t: TFunction) => {
 const getFormDataSchema = (t: TFunction) =>
   yup.object({
     name: requiredSchema.concat(nameSchema(t)),
-    minHealthy: requiredSchema.concat(
-      yup.string().matches(new RegExp(MIN_HEALTHY_REGEX), {
+    healthThresholdValue: requiredSchema.concat(
+      yup.string().matches(new RegExp(HEALTH_THRESHOLD_REGEX), {
         message: t(
           `Expected value is a percentage or a number. For example: 25 or 70%`
         ),

@@ -16,11 +16,19 @@ export const DetailsRightPane: React.FC<{
       <DetailsItem label={t("Remediator")} obj={nodeHealthCheck}>
         <RemediationTemplateLink nodeHealthCheck={nodeHealthCheck} />
       </DetailsItem>
-      <DetailsItem
-        label={t("Min healthy")}
-        obj={nodeHealthCheck}
-        path="spec.minHealthy"
-      />
+      {nodeHealthCheck.spec?.maxUnhealthy !== undefined ? (
+        <DetailsItem
+          label={t("Max unhealthy")}
+          obj={nodeHealthCheck}
+          path="spec.maxUnhealthy"
+        />
+      ) : (
+        <DetailsItem
+          label={t("Min healthy")}
+          obj={nodeHealthCheck}
+          path="spec.minHealthy"
+        />
+      )}
 
       <DetailsItem label={t("Observed nodes")} obj={nodeHealthCheck}>
         {nodeHealthCheck.status?.observedNodes}

@@ -52,6 +52,7 @@ export type NodeHealthCheckSpec = {
   selector?: Selector;
   remediationTemplate?: RemediationTemplate;
   minHealthy?: string | number;
+  maxUnhealthy?: string | number;
   unhealthyConditions?: UnhealthyConditions;
   pauseRequests?: string[];
   escalatingRemediations?: EscalatingRemediator[];
@@ -66,7 +67,7 @@ export type BasicResourceInfo = {
 export type InitialNodeHealthCheck = {
   spec: Omit<
     Required<NodeHealthCheckSpec>,
-    "pauseRequests" | "escalatingRemediations"
+    "pauseRequests" | "escalatingRemediations" | "maxUnhealthy"
   >;
 } & BasicResourceInfo;
 
@@ -112,7 +113,8 @@ export enum RemediatorMode {
 export type FormViewValues = {
   name: string;
   nodeSelector: string[];
-  minHealthy: string;
+  healthThresholdMode: "minHealthy" | "maxUnhealthy";
+  healthThresholdValue: string;
   unhealthyConditions: UnhealthyCondition[];
   remediator?: Remediator;
   escalatingRemediations?: Remediator[];
