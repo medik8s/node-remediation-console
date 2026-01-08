@@ -14,7 +14,7 @@ export const DetailsRightPane: React.FC<{
   return (
     <DescriptionList aria-label={t("NodeHealthCheck summary")}>
       <DetailsItem label={t("Remediator")} obj={nodeHealthCheck}>
-        <RemediationTemplateLink nodeHealthCheck={nodeHealthCheck} t={t} />
+        <RemediationTemplateLink nodeHealthCheck={nodeHealthCheck} />
       </DetailsItem>
       <DetailsItem
         label={t("Min healthy")}

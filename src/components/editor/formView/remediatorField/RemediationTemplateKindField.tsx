@@ -117,11 +117,12 @@ export const RemediationTemplateKindField: React.FC<
           </HelperText>
         </FormHelperText>
       </FormGroup>
-      <CustomKindModal
-        fieldName={`${fieldName}.template`}
-        onClose={() => setCustomKindModalOpen(false)}
-        isOpen={customKindModalOpen}
-      />
+      {customKindModalOpen && (
+        <CustomKindModal
+          fieldName={`${fieldName}.template`}
+          onClose={() => setCustomKindModalOpen(false)}
+        />
+      )}
     </>
   );
 };

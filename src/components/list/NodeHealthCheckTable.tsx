@@ -80,7 +80,7 @@ const Remediator = ({ obj }: { obj: NodeHealthCheck }) => {
   }
   return (
     <span data-test="remediator-label">
-      <RemediationTemplateLink nodeHealthCheck={obj} t={t} />
+      <RemediationTemplateLink nodeHealthCheck={obj} />
     </span>
   );
 };

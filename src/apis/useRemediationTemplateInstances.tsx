@@ -30,14 +30,10 @@ export function useRemediationTemplateInstances(
     }));
   }, [resources, kind]);
 
-  const autoSelectInstance = React.useMemo<
-    RemediationTemplate | undefined
-  >(() => {
-    if (instances.length === 1) {
-      return instances[0];
-    }
-    return undefined;
-  }, [instances]);
-
-  return [instances, loaded, error, autoSelectInstance];
+  return [
+    instances,
+    loaded,
+    error,
+    instances.length === 1 ? instances[0] : undefined,
+  ];
 }

@@ -24,3 +24,10 @@ Font sizes and layout dimensions (heights, widths, padding, margins) that affect
 
 ## II. Modern UI Framework Standards
 All UI components MUST be responsive and accessible. Native HTML tags like `div`, `p`, and `span` should be avoided when possible in favor of patternfly components. Usually text can be directly embedded in the components instead of wrapped in html tags.
+
+## III. useMemo Usage Guidelines
+Do NOT use `useMemo` for functions or operations with O(1) complexity. `useMemo` adds overhead for memoization checks that can outweigh the benefits for simple, fast-executing operations. Only use `useMemo` when:
+- The computation is expensive (e.g., complex calculations, large array transformations)
+- The operation has O(n) or higher complexity
+- Profiling shows that memoization actually improves performance
+For O(1) operations and simple functions, the default behavior without memoization is sufficient and more efficient.

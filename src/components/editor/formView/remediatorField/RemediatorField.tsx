@@ -25,11 +25,9 @@ const OperatorInstallAlert = ({ kind }: { kind: string }) => {
 
   const predefinedKindInfo = React.useMemo(() => getKindInfo(kind), [kind]);
 
-  const installUrl = React.useMemo(() => {
-    return predefinedKindInfo
-      ? getOperatorHubInstallUrl(getOperatorDetailsItem(predefinedKindInfo))
-      : undefined;
-  }, [predefinedKindInfo]);
+  const installUrl = predefinedKindInfo
+    ? getOperatorHubInstallUrl(getOperatorDetailsItem(predefinedKindInfo))
+    : undefined;
 
   const actionLink =
     installUrl && predefinedKindInfo ? (

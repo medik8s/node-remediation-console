@@ -18,12 +18,10 @@ import { useRemediationTemplateCRDs } from "../../../../apis/useRemediationTempl
 
 type CustomKindModalProps = {
   onClose(): void;
-  isOpen: boolean;
   fieldName: string;
 };
 
 type CustomKindModalContentProps = {
-  isOpen: boolean;
   selectedCRD: string | undefined;
   onCRDSelect: (value: string | undefined) => void;
   crds: ReturnType<typeof useRemediationTemplateCRDs>[0];
@@ -32,7 +30,6 @@ type CustomKindModalContentProps = {
 };
 
 const CustomKindModalContent: React.FC<CustomKindModalContentProps> = ({
-  isOpen,
   selectedCRD,
   onCRDSelect,
   crds,
@@ -41,13 +38,6 @@ const CustomKindModalContent: React.FC<CustomKindModalContentProps> = ({
 }) => {
   const { t } = useNodeHealthCheckTranslation();
   const [isCRDSelectOpen, setIsCRDSelectOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!isOpen) {
-      onCRDSelect(undefined);
-      setIsCRDSelectOpen(false);
-    }
-  }, [isOpen, onCRDSelect]);
 
   const getCRDToggleLabel = () => {
     if (!crdsLoaded) {
@@ -132,7 +122,6 @@ const CustomKindModalContent: React.FC<CustomKindModalContentProps> = ({
 
 const CustomKindModal: React.FC<CustomKindModalProps> = ({
   fieldName,
-  isOpen,
   onClose,
 }) => {
   const { t } = useNodeHealthCheckTranslation();
@@ -144,12 +133,6 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
     undefined
   );
   const [crds, crdsLoaded, crdsError] = useRemediationTemplateCRDs();
-
-  React.useEffect(() => {
-    if (!isOpen) {
-      setSelectedCRD(undefined);
-    }
-  }, [isOpen]);
 
   const selectedCRDObj = React.useMemo(() => {
     if (!selectedCRD) return undefined;
@@ -165,19 +148,12 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
     onClose();
   };
 
-  const canProceed = React.useMemo(() => {
-    // Can proceed if:
-    // 1. CRDs are loaded and at least one is available, AND
-    // 2. A CRD is selected
-    if (!crdsLoaded) return false;
-    if (crdsError) return false;
-    if (crds.length === 0) return false;
-    return selectedCRD !== undefined;
-  }, [crdsLoaded, crdsError, crds.length, selectedCRD]);
+  const canProceed =
+    crdsLoaded && !crdsError && crds.length > 0 && selectedCRD !== undefined;
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={true}
       onClose={onClose}
       variant={ModalVariant.small}
       title={t("Use custom kind")}
@@ -207,7 +183,6 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
       ]}
     >
       <CustomKindModalContent
-        isOpen={isOpen}
         selectedCRD={selectedCRD}
         onCRDSelect={setSelectedCRD}
         crds={crds}

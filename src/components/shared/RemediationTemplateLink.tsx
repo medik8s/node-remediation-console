@@ -2,13 +2,13 @@ import { ResourceLink } from "@openshift-console/dynamic-plugin-sdk";
 import * as React from "react";
 import { NodeHealthCheck } from "../../data/types";
 import { getRemediatorLabel } from "../../data/remediator";
-import { TFunction } from "i18next";
 import { apiVersionToGroupVersionKind } from "../../data/model";
+import { useNodeHealthCheckTranslation } from "../../localization/useNodeHealthCheckTranslation";
 
 export const RemediationTemplateLink: React.FC<{
   nodeHealthCheck: NodeHealthCheck;
-  t: TFunction;
-}> = ({ nodeHealthCheck, t }) => {
+}> = ({ nodeHealthCheck }) => {
+  const { t } = useNodeHealthCheckTranslation();
   const label = getRemediatorLabel(nodeHealthCheck, t);
   if (!label) {
     return null;

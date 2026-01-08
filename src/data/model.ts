@@ -88,30 +88,3 @@ export const NodeHealthCheckModel: K8sModel = {
 export const getNodeHealthCheckApiVersion = () => {
   return getApiVersion(nodeHealthCheckKind);
 };
-
-export const machineHealthCheckKind: ExtensionK8sModel = {
-  kind: "MachineHealthCheck",
-  group: "machine.openshift.io",
-  version: "v1beta1",
-};
-
-export const namespaceKind: ExtensionK8sKindVersionModel = {
-  kind: "Namespace",
-  version: "v1",
-};
-
-export const snrTemplateKind: ExtensionK8sModel = {
-  kind: "SelfNodeRemediationTemplate",
-  group: "self-node-remediation.medik8s.io",
-  version: "v1alpha1",
-};
-
-export const snrTemplateStringKind = getStringKind(snrTemplateKind);
-
-export const getSnrTemplateApiVersion = () => getApiVersion(snrTemplateKind);
-
-export const clusterVersionKind: ExtensionK8sModel = {
-  group: "config.openshift.io",
-  version: "v1",
-  kind: "ClusterVersion",
-};
