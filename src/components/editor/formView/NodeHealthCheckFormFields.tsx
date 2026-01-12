@@ -3,34 +3,14 @@ import { useFormikContext } from "formik";
 import { Alert, Form, TextInputTypes } from "@patternfly/react-core";
 import InputField from "../../../copiedFromConsole/formik-fields/InputField";
 import NodeSelectionField from "./nodeSelectionField/NodeSelectionField";
-import { FormViewFieldProps } from "./propTypes";
 import UnhealthyConditionsField from "./unhealthyConditionsField/UnhealthyConditionsField";
 import { withFallback } from "copiedFromConsole/error";
-import HelpIcon from "components/shared/HelpIcon";
 import { getObjectItemFieldName } from "../../shared/formik-utils";
 import { NodeHealthCheckFormValues } from "../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../localization/useNodeHealthCheckTranslation";
 import RemediationTemplateField from "./remediatorField/RemediationTemplateField";
+import HealthThresholdSection from "./healthThresholdField/HealthThresholdSection";
 import "../../editor/nhc-form.css";
-
-const MinHealthyField = ({ fieldName }: FormViewFieldProps) => {
-  const { t } = useNodeHealthCheckTranslation();
-  return (
-    <InputField
-      required
-      label={t("Min healthy")}
-      labelIcon={
-        <HelpIcon
-          helpText={t(
-            "The minimum percentage or number of nodes that has to be healthy for the remediation to start."
-          )}
-        />
-      }
-      name={fieldName}
-      data-test="min-healthy"
-    />
-  );
-};
 
 const NodeHealthCheckFormFields_: React.FC = () => {
   const { t } = useNodeHealthCheckTranslation();
@@ -60,9 +40,7 @@ const NodeHealthCheckFormFields_: React.FC = () => {
       <NodeSelectionField
         fieldName={getObjectItemFieldName([formViewFieldName, "nodeSelector"])}
       />
-      <MinHealthyField
-        fieldName={getObjectItemFieldName([formViewFieldName, "minHealthy"])}
-      />
+      <HealthThresholdSection fieldNamePrefix={formViewFieldName} />
       <UnhealthyConditionsField
         fieldName={getObjectItemFieldName([
           formViewFieldName,
