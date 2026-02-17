@@ -17,7 +17,7 @@ import { useRemediationTemplateInstances } from "../../../../apis/useRemediation
 import { RemediationTemplateField } from "./RemediationTemplateInstanceField";
 
 const getOperatorHubInstallUrl = (operatorDetailsItem: string): string => {
-  return `${window.location.origin}/operatorhub/all-namespaces?details-item=${operatorDetailsItem}`;
+  return `${window.location.origin}/catalog/all-namespaces?selectedId=${operatorDetailsItem}`;
 };
 
 const OperatorInstallAlert = ({ kind }: { kind: string }) => {
