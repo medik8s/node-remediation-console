@@ -6,6 +6,9 @@ import {
   FlexItem,
   Label,
 } from "@patternfly/react-core";
+import type { DragEndEvent } from "@dnd-kit/core";
+import { DragDropSort } from "@patternfly/react-drag-drop";
+import type { DraggableObject } from "@patternfly/react-drag-drop/dist/esm/components/DragDrop/DragDropContainer";
 
 import { FieldArray, FieldArrayRenderProps, useField } from "formik";
 import * as React from "react";
@@ -16,7 +19,6 @@ import {
 import { Remediator } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import RemediatorField from "./RemediatorField";
-import { DragDrop, Draggable, Droppable } from "@patternfly/react-core";
 import { WithRemoveButton } from "../../../shared/WithRemoveButton";
 import { GripVerticalIcon, InfoCircleIcon } from "@patternfly/react-icons";
 import { getDurationHelptext } from "../../../../copiedFromConsole/utils/durationUtils";
@@ -65,7 +67,7 @@ const TimeoutField = ({ fieldName }: { fieldName: string }) => {
       labelIcon={
         <HelpIcon
           helpText={t(
-            "The timeout field determines when the next remediation template is invoked."
+            "The timeout field determines when the next remediation template is invoked.",
           )}
         />
       }
@@ -89,7 +91,7 @@ const OrderField = ({
       labelIcon={
         <HelpIcon
           helpText={t(
-            "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier."
+            "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier.",
           )}
         />
       }
@@ -128,7 +130,7 @@ const SingleRemediatorField = ({
         >
           <FlexItem
             spacer={{ default: "spacerSm" }}
-            className="pf-c-expandable-section"
+            className="pf-v6-c-expandable-section"
           >
             <Button
               icon={<GripVerticalIcon />}
@@ -165,22 +167,9 @@ const SingleRemediatorField = ({
   );
 };
 
-interface SourceType {
-  droppableId: string;
-  index: number;
-}
-type DestinationType = SourceType;
-
-const reorder = (list: Remediator[], startIndex: number, endIndex: number) => {
-  const result = list;
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-
 const getExpanded = (
   remediators: Remediator[],
-  expandLast?: boolean
+  expandLast?: boolean,
 ): Record<number, boolean> => {
   const ret: Record<number, boolean> = {};
   for (let i = 0; i < remediators.length; ++i) {
@@ -204,7 +193,7 @@ const RemediatorsArrayFieldContent = ({
   const { t } = useNodeHealthCheckTranslation();
 
   const [expanded, setExpanded] = React.useState<Record<number, boolean>>(
-    getExpanded(remediators || [], remediators?.length === 1)
+    getExpanded(remediators || [], remediators?.length === 1),
   );
 
   const onOrderFieldChange = (id: number) => {
@@ -217,16 +206,18 @@ const RemediatorsArrayFieldContent = ({
 
   const debounce = useDebounce(onOrderFieldChange, 300);
 
-  const onDrop = (source: SourceType, dest: DestinationType) => {
+  const onSortDrop = (_event: DragEndEvent, newItems: DraggableObject[]) => {
     debounce.cancel();
-    if (dest) {
-      const newItems = reorder(remediators, source.index, dest.index).map(
-        (r, idx) => ({ ...r, order: idx })
-      );
-      setRemediators(newItems);
-      return true;
+    const newRemediators: Remediator[] = [];
+    for (let idx = 0; idx < newItems.length; idx++) {
+      const item = newItems[idx];
+      const id = typeof item.id === "string" ? Number(item.id) : item.id;
+      const r = remediators.find((x) => x.id === id);
+      if (r) {
+        newRemediators.push({ ...r, order: idx });
+      }
     }
-    return false;
+    setRemediators(newRemediators);
   };
 
   const onAdd = () => {
@@ -240,34 +231,32 @@ const RemediatorsArrayFieldContent = ({
     push(newRemediator);
   };
 
+  const sortableItems = remediators.map((_remediator, index) => ({
+    id: _remediator.id,
+    props: { useDragButton: false as const },
+    content: (
+      <SingleRemediatorField
+        key={_remediator.id}
+        index={index}
+        remove={remove}
+        fieldName={`${fieldName}[${index}]`}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        onOrderChanged={() => debounce(_remediator.id)}
+        isExpanded={expanded[_remediator.id]}
+        toggleExpand={() =>
+          setExpanded({
+            ...expanded,
+            [_remediator.id]: !expanded[_remediator.id],
+          })
+        }
+        isRemoveDisabled={remediators.length === 1}
+      />
+    ),
+  }));
+
   return (
     <>
-      <DragDrop onDrop={onDrop}>
-        <Droppable>
-          <>
-            {remediators?.map((_remediator, index) => (
-              <Draggable key={index}>
-                <SingleRemediatorField
-                  key={_remediator.id}
-                  index={index}
-                  remove={remove}
-                  fieldName={`${fieldName}[${index}]`}
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-                  onOrderChanged={() => debounce(_remediator.id)}
-                  isExpanded={expanded[_remediator.id]}
-                  toggleExpand={() =>
-                    setExpanded({
-                      ...expanded,
-                      [_remediator.id]: !expanded[_remediator.id],
-                    })
-                  }
-                  isRemoveDisabled={remediators.length === 1}
-                />
-              </Draggable>
-            ))}
-          </>
-        </Droppable>
-      </DragDrop>
+      <DragDropSort items={sortableItems} onDrop={onSortDrop} />
       <AddMoreButton onClick={onAdd} dataTest="add-remediator-button">
         {t("Add more")}
       </AddMoreButton>

@@ -12,9 +12,8 @@ import {
   BreadcrumbItem,
   Split,
   SplitItem,
-  Text,
-  TextContent,
-  TextVariants,
+  Content,
+  ContentVariants,
   Title,
   Flex,
   FlexItem,
@@ -124,9 +123,7 @@ export const PageHeading: React.FC<PageHeadingProps> = (
                 )}
               </Flex>
               {helpText && (
-                <TextContent>
-                  <Text component={TextVariants.p}>{helpText}</Text>
-                </TextContent>
+                <Content component={ContentVariants.p}>{helpText}</Content>
               )}
             </FlexItem>
             {hasMenuActions && (

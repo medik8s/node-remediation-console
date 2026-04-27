@@ -34,6 +34,6 @@ export const useNodeHealthCheckNavigation = (): NavigationApi => {
       goBack: () => history.goBack(),
       gotoMachineHealthChecks: () => history.push(MACHINE_HEALTHCHECKS_URL),
     }),
-    [history]
+    [history],
   );
 };

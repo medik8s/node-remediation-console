@@ -1,12 +1,11 @@
 import {
+  Button,
   FormGroup,
+  MenuFooter,
   MenuToggle,
-  MenuToggleElement,
   Select,
   SelectList,
   SelectOption,
-  MenuFooter,
-  Button,
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { useField, useFormikContext } from "formik";
@@ -46,7 +45,7 @@ export const RemediationTemplateField: React.FC<
       return undefined;
     }
     return instances.find(
-      (i) => i.name === nameField.value && i.namespace === namespaceField.value
+      (i) => i.name === nameField.value && i.namespace === namespaceField.value,
     );
   }, [instances, nameField.value, namespaceField.value]);
 
@@ -83,12 +82,12 @@ export const RemediationTemplateField: React.FC<
 
   const createInstanceUrl = React.useMemo(
     () => getCreateInstanceUrl(apiVersionField.value, kind),
-    [apiVersionField.value, kind]
+    [apiVersionField.value, kind],
   );
 
   const onSelect = (_event: unknown, selection: string | number) => {
     const instance = instances.find(
-      (i) => `${i.namespace}/${i.name}` === selection
+      (i) => `${i.namespace}/${i.name}` === selection,
     );
     if (instance) {
       setFieldValue(nameFieldName, instance.name);
@@ -129,8 +128,8 @@ export const RemediationTemplateField: React.FC<
         onOpenChange={setIsOpen}
         onOpenChangeKeys={["Escape"]}
         onSelect={onSelect}
-        selections={selectedValue}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        selected={selectedValue}
+        toggle={(toggleRef: React.RefObject<HTMLButtonElement | null>) => (
           <MenuToggle
             ref={toggleRef}
             onClick={onToggle}
@@ -166,7 +165,7 @@ export const RemediationTemplateField: React.FC<
               isInline
               onClick={onCreateNewInstanceClick}
               icon={<ExternalLinkAltIcon />}
-              iconPosition="right"
+              iconPosition="end"
             >
               {t("Create new instance")}
             </Button>

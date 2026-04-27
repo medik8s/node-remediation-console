@@ -49,7 +49,7 @@ const NodeHealthCheckDetailsPage_ = ({ name }: { name: string }) => {
   return (
     <StatusBox loadError={loadError} data={nodeHealthCheck} loaded={loaded}>
       <ModalsContextProvider>
-        <PageSection variant="light">
+        <PageSection>
           <NodeHealthCheckDetailsHeading nodeHealthCheck={nodeHealthCheck} />
         </PageSection>
         <HorizontalNav pages={tabs} resource={nodeHealthCheck} />

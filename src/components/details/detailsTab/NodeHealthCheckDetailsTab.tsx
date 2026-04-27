@@ -29,7 +29,7 @@ const NodeHealthCheckDetailsTab: React.FC<
   }
   return (
     <>
-      <PageSection variant="light">
+      <PageSection>
         <Grid hasGutter>
           <SectionHeading text={t("NodeHealthCheck details")} />
           <GridItem span={5}>
@@ -44,7 +44,7 @@ const NodeHealthCheckDetailsTab: React.FC<
           </GridItem>
         </Grid>
       </PageSection>
-      <PageSection variant="light">
+      <PageSection>
         <SectionHeading text={t("Unhealthy Conditions")} />
         <UnhealthyConditionsTable nodeHealthCheck={nodeHealthCheck} />
       </PageSection>

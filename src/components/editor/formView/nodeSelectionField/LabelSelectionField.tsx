@@ -1,8 +1,8 @@
 import {
-  Chip,
-  ChipGroup,
   Flex,
   FlexItem,
+  Label,
+  LabelGroup,
   SelectGroup,
   SelectOption,
   SelectList,
@@ -116,7 +116,7 @@ const LabelSelectionField = ({
         <Flex flexWrap={{ default: "nowrap" }}>
           {selectedRoleLabels.length > 0 && (
             <FlexItem>
-              <ChipGroup
+              <LabelGroup
                 key="roles"
                 categoryName={t("Role")}
                 collapsedText={t("Show more")}
@@ -124,30 +124,38 @@ const LabelSelectionField = ({
                 defaultIsOpen
               >
                 {selectedRoleLabels.map((label) => (
-                  <Chip key={label} onClick={() => onDeleteLabel(label)}>
+                  <Label
+                    key={label}
+                    onClose={() => onDeleteLabel(label)}
+                    textMaxWidth="100%"
+                  >
                     {label === getRoleLabel(Role.WORKER)
                       ? getRoleTitle(t, Role.WORKER)
                       : getRoleTitle(t, Role.CONTROL_PLANE)}
-                  </Chip>
+                  </Label>
                 ))}
-              </ChipGroup>
+              </LabelGroup>
             </FlexItem>
           )}
           <FlexItem>
-            <ChipGroup
+            <LabelGroup
               key="labels"
               categoryName={t("Labels")}
               collapsedText={t("Show more")}
               expandedText={t("Show less")}
               defaultIsOpen
-              numChips={2}
+              numLabels={2}
             >
               {field.value.map((label) => (
-                <Chip key={label} onClick={() => onDeleteLabel(label)}>
+                <Label
+                  key={label}
+                  onClose={() => onDeleteLabel(label)}
+                  textMaxWidth="100%"
+                >
                   {label}
-                </Chip>
+                </Label>
               ))}
-            </ChipGroup>
+            </LabelGroup>
           </FlexItem>
         </Flex>
       )}

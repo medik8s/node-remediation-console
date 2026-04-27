@@ -104,7 +104,7 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
   };
 
   return (
-    <PageSection variant="light">
+    <PageSection>
       <Flex
         direction={{ default: "column" }}
         spaceItems={{ default: "spaceItemsSm" }}

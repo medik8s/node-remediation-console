@@ -181,7 +181,7 @@ export const StatusBox: React.FC<StatusBoxProps> = (props) => {
     const status = get(loadError, "response.status");
     if (status === 404) {
       return (
-        <PageSection variant="light">
+        <PageSection>
           <Title headingLevel="h1">{t("404: Not Found")}</Title>
         </PageSection>
       );

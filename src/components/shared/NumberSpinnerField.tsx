@@ -53,7 +53,7 @@ const NumberSpinnerField: React.FC<NumberSpinnerFieldProps> = ({
       fieldId={props.name}
       label={label}
       isRequired={required}
-      labelIcon={labelIcon}
+      labelHelp={labelIcon}
     >
       <NumberInput
         name={props.name}
