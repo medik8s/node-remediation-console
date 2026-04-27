@@ -4,8 +4,10 @@ import {
   Form,
   FormGroup,
   MenuToggle,
-  MenuToggleElement,
   Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   ModalVariant,
   Select,
   SelectList,
@@ -87,7 +89,7 @@ const CustomKindModalContent: React.FC<CustomKindModalContentProps> = ({
             setIsCRDSelectOpen(false);
           }}
           onOpenChange={setIsCRDSelectOpen}
-          toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+          toggle={(toggleRef: React.RefObject<HTMLButtonElement | null>) => (
             <MenuToggle
               ref={toggleRef}
               onClick={() => setIsCRDSelectOpen(!isCRDSelectOpen)}
@@ -156,12 +158,24 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
       isOpen={true}
       onClose={onClose}
       variant={ModalVariant.small}
-      title={t("Use custom kind")}
-      description={t(
-        "Select from CustomResourceDefinitions that have the spec.template.spec field structure and are not the officially supported remediation template kinds."
-      )}
       data-test="use-custom-kind-modal"
-      actions={[
+    >
+      <ModalHeader
+        title={t("Use custom kind")}
+        description={t(
+          "Select from CustomResourceDefinitions that have the spec.template.spec field structure and are not the officially supported remediation template kinds."
+        )}
+      />
+      <ModalBody>
+        <CustomKindModalContent
+          selectedCRD={selectedCRD}
+          onCRDSelect={setSelectedCRD}
+          crds={crds}
+          crdsLoaded={crdsLoaded}
+          crdsError={crdsError}
+        />
+      </ModalBody>
+      <ModalFooter>
         <Button
           key="confirm"
           variant="primary"
@@ -171,7 +185,7 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
           type="submit"
         >
           {t("OK")}
-        </Button>,
+        </Button>
         <Button
           key="cancel"
           variant="link"
@@ -179,16 +193,8 @@ const CustomKindModal: React.FC<CustomKindModalProps> = ({
           data-test="cancel-custom-kind"
         >
           {t("Cancel")}
-        </Button>,
-      ]}
-    >
-      <CustomKindModalContent
-        selectedCRD={selectedCRD}
-        onCRDSelect={setSelectedCRD}
-        crds={crds}
-        crdsLoaded={crdsLoaded}
-        crdsError={crdsError}
-      />
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

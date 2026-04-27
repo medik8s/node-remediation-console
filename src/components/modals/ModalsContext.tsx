@@ -11,7 +11,9 @@ export type ModalsContextApi = {
 
 const ModalsContext = React.createContext<ModalsContextApi>(null);
 
-export const ModalsContextProvider: React.FC = ({ children }) => {
+export const ModalsContextProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const [openModalId, setOpenModalId] = React.useState<ModalId>();
   const [nodeHealthCheck, setNodeHealthCheck] =
     React.useState<NodeHealthCheck>();

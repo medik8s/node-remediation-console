@@ -108,6 +108,7 @@ export const DetailsItem: React.FC<DetailsItemProps> = ({
 
 export type DetailsItemProps = {
   canEdit?: boolean;
+  children?: React.ReactNode;
   defaultValue?: React.ReactNode;
   editAsGroup?: boolean;
   hideEmpty?: boolean;
@@ -120,6 +121,7 @@ export type DetailsItemProps = {
 };
 
 type EditButtonProps = {
+  children?: React.ReactNode;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   testId?: string;
 };

@@ -14,7 +14,7 @@ import { nodeHealthCheckKind, nodeHealthCheckStringKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 //import { initialNodeHealthCheckData } from "data/initialNodeHealthCheckData";
 import Modals from "components/modals/Modals";
-import { Selector } from "@openshift-console/dynamic-plugin-sdk-internal/lib/api/common-types";
+import { Selector } from "@openshift-console/dynamic-plugin-sdk";
 import { ModalsContextProvider } from "components/modals/ModalsContext";
 import { NodeHealthchecksTable } from "./NodeHealthCheckTable";
 import { withFallback } from "copiedFromConsole/error";

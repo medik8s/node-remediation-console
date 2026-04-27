@@ -7,6 +7,9 @@ import {
   HelperText,
   HelperTextItem,
   Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
@@ -156,9 +159,18 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       variant={ModalVariant.small}
-      title={title}
       className="nhc-modal"
-      actions={[
+    >
+      <ModalHeader title={title} />
+      <ModalBody>
+        <Form>
+          <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
+          {error && (
+            <Alert variant="danger" title={failureErrorMessage} isInline />
+          )}
+        </Form>
+      </ModalBody>
+      <ModalFooter>
         <Button
           key="confirm"
           variant="primary"
@@ -169,7 +181,7 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
           type="submit"
         >
           {confirmButtonText}
-        </Button>,
+        </Button>
         <Button
           key="cancel"
           variant="secondary"
@@ -178,15 +190,8 @@ const EditPauseReasonsModal: React.FC<PauseReasonsModalProps> = ({
           isDisabled={isSubmitting}
         >
           {t("Cancel")}
-        </Button>,
-      ]}
-    >
-      <Form>
-        <PauseReasonsField {...{ onAdd, onRemove, pauseReasons, onEdit }} />
-        {error && (
-          <Alert variant="danger" title={failureErrorMessage} isInline />
-        )}
-      </Form>
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

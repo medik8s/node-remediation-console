@@ -80,34 +80,37 @@ const getFormDataSchema = (t: TFunction) =>
     ),
     remediator: yup.object().when("useEscalating", {
       is: false,
-      then: yup.object().shape({ template: remediatorSchema }),
+      then: (schema) => schema.shape({ template: remediatorSchema }),
     }),
     escalatingRemediations: yup.array().when("useEscalating", {
       is: true,
-      then: yup.array().of(
-        yup.object().shape({
-          template: remediatorSchema,
-          timeout: requiredSchema.concat(
-            yup.string().matches(new RegExp(DURATION_REGEX), {
-              message: `${t(
-                "Expected value matches regular expression:"
-              )} ${DURATION_REGEX}`,
-            })
-          ),
-        })
-      ),
+      then: (schema) =>
+        schema.of(
+          yup.object().shape({
+            template: remediatorSchema,
+            timeout: requiredSchema.concat(
+              yup.string().matches(new RegExp(DURATION_REGEX), {
+                message: `${t(
+                  "Expected value matches regular expression:"
+                )} ${DURATION_REGEX}`,
+              })
+            ),
+          })
+        ),
     }),
     nodeSelector: yup.array().of(yup.string()).required().min(1),
   });
 
 export const getValidationSchema = (t: TFunction) =>
   yup.object({
-    formData: yup.mixed().when("editorType", {
-      is: EditorType.Form,
-      then: getFormDataSchema(t),
-    }),
-    yamlData: yup.mixed().when("editorType", {
-      is: EditorType.YAML,
-      then: requiredSchema,
-    }),
+    formData: yup
+      .mixed()
+      .when("editorType", (values, schema) =>
+        values[0] === EditorType.Form ? getFormDataSchema(t) : schema
+      ),
+    yamlData: yup
+      .mixed()
+      .when("editorType", (values, schema) =>
+        values[0] === EditorType.YAML ? requiredSchema : schema
+      ),
   });

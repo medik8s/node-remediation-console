@@ -3,9 +3,10 @@ import { PlusCircleIcon } from "@patternfly/react-icons";
 import * as React from "react";
 
 const AddMoreButton: React.FC<{
+  children?: React.ReactNode;
   onClick: () => void;
   dataTest: string;
-}> = ({ onClick, dataTest }) => {
+}> = ({ children, onClick, dataTest }) => {
   return (
     <Button
       icon={<PlusCircleIcon />}
@@ -14,7 +15,7 @@ const AddMoreButton: React.FC<{
       variant="link"
       data-test={dataTest}
     >
-      Add more
+      {children ?? "Add more"}
     </Button>
   );
 };

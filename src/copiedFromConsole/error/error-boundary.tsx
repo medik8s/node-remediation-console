@@ -3,6 +3,7 @@ import { ErrorBoundaryFallbackProps } from "./types";
 import { ErrorBoundaryFallbackPage } from "@openshift-console/dynamic-plugin-sdk";
 
 type ErrorBoundaryProps = {
+  children?: React.ReactNode;
   FallbackComponent?: React.ComponentType<ErrorBoundaryFallbackProps>;
 };
 

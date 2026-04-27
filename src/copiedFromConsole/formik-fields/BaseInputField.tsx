@@ -4,7 +4,6 @@ import {
   FormHelperText,
   HelperText,
   HelperTextItem,
-  ValidatedOptions,
 } from "@patternfly/react-core";
 import { useField } from "formik";
 import { BaseInputFieldProps } from "./field-types";
@@ -36,13 +35,13 @@ const BaseInputField: React.FC<
   const errorMessage = !isValid ? error : "";
   useFormikValidationFix(field.value);
 
-  const isValidated = !isValid ? ValidatedOptions.error : validated;
+  const isValidated = !isValid ? "error" : validated ?? "default";
   return (
     <FormGroup
       fieldId={fieldId}
       label={label}
       isRequired={required}
-      labelIcon={labelIcon}
+      labelHelp={labelIcon}
     >
       {children({
         ...field,

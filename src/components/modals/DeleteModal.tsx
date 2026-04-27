@@ -3,6 +3,9 @@ import {
   Button,
   ButtonVariant,
   Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   ModalVariant,
 } from "@patternfly/react-core";
 import { deleteNodeHealthCheck } from "apis/nodeHealthCheckApis";
@@ -37,12 +40,25 @@ const DeleteModal: React.FC<
   return (
     <Modal
       className="nhc-modal"
-      title={t("Delete NodeHealthCheck")}
-      titleIconVariant="warning"
       isOpen={isOpen}
       onClose={onClose}
       variant={ModalVariant.small}
-      actions={[
+    >
+      <ModalHeader
+        title={t("Delete NodeHealthCheck")}
+        titleIconVariant="warning"
+      />
+      <ModalBody>
+        {t("Are you sure you want to delete {{name}}?", { name })}
+        {error && (
+          <Alert
+            variant="danger"
+            title={t("Failed to delete {{name}}", { name })}
+            isInline
+          />
+        )}
+      </ModalBody>
+      <ModalFooter>
         <Button
           aria-label="delete"
           key="confirm"
@@ -53,7 +69,7 @@ const DeleteModal: React.FC<
           isDisabled={isDeleting}
         >
           {t("Delete")}
-        </Button>,
+        </Button>
         <Button
           key="cancel"
           variant={ButtonVariant.secondary}
@@ -62,17 +78,8 @@ const DeleteModal: React.FC<
           isDisabled={isDeleting}
         >
           {t("Cancel")}
-        </Button>,
-      ]}
-    >
-      {t("Are you sure you want to delete {{name}}?", { name })}
-      {error && (
-        <Alert
-          variant="danger"
-          title={t("Failed to delete {{name}}", { name })}
-          isInline
-        />
-      )}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

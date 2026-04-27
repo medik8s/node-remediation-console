@@ -38,7 +38,7 @@ const CheckboxField = ({
       fieldId={name}
       label={formLabel}
       isRequired={required}
-      labelIcon={labelIcon}
+      labelHelp={labelIcon}
     >
       <Checkbox
         {...{

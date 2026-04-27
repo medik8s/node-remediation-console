@@ -9,8 +9,10 @@ import {
   ButtonVariant,
   Form,
   Modal,
-  ModalBoxFooter,
-  ModalProps,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  ModalHeaderProps,
   ModalVariant,
   Stack,
   StackItem,
@@ -30,12 +32,12 @@ type TabModalProps<T extends K8sResourceCommon = K8sResourceCommon> = {
   positionTop?: boolean;
   submitBtnVariant?: ButtonVariant;
   submitBtnType?: ButtonProps["type"];
-  titleIconVariant?: ModalProps["titleIconVariant"];
+  titleIconVariant?: ModalHeaderProps["titleIconVariant"];
 };
 
 export type TabModalFC = <T extends K8sResourceCommon = K8sResourceCommon>(
   props: TabModalProps<T>
-) => JSX.Element;
+) => React.ReactNode;
 
 const TabModal: TabModalFC = React.memo(
   ({
@@ -81,18 +83,20 @@ const TabModal: TabModalFC = React.memo(
     return (
       <Modal
         variant={modalVariant ?? "small"}
-        position={positionTop ? "top" : undefined}
+        position={positionTop ? "top" : "default"}
         className="ocs-modal"
         onClose={closeModal}
-        title={headerText}
-        titleIconVariant={titleIconVariant}
         isOpen={isOpen}
         id="tab-modal"
       >
-        <Form>
-          {children}
-          {error && (
-            <StackItem>
+        <ModalHeader
+          title={headerText}
+          titleIconVariant={titleIconVariant}
+        />
+        <ModalBody>
+          <Form>
+            {children}
+            {error && (
               <Alert
                 isInline
                 variant={AlertVariant.danger}
@@ -109,23 +113,23 @@ const TabModal: TabModalFC = React.memo(
                   )}
                 </Stack>
               </Alert>
-            </StackItem>
-          )}
-          <ModalBoxFooter>
-            <Button
-              onClick={handleSubmit}
-              isDisabled={isDisabled || isSubmitting}
-              isLoading={isSubmitting}
-              variant={submitBtnVariant ?? "primary"}
-              type={submitBtnType}
-            >
-              {submitBtnText || t("Save")}
-            </Button>
-            <Button onClick={closeModal} variant="link">
-              {t("Cancel")}
-            </Button>
-          </ModalBoxFooter>
-        </Form>
+            )}
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            onClick={handleSubmit}
+            isDisabled={isDisabled || isSubmitting}
+            isLoading={isSubmitting}
+            variant={submitBtnVariant ?? "primary"}
+            type={submitBtnType}
+          >
+            {submitBtnText || t("Save")}
+          </Button>
+          <Button onClick={closeModal} variant="link">
+            {t("Cancel")}
+          </Button>
+        </ModalFooter>
       </Modal>
     );
   }

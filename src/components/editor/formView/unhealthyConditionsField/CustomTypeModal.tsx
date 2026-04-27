@@ -6,6 +6,9 @@ import {
   HelperText,
   HelperTextItem,
   Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   ModalVariant,
   TextInput,
 } from "@patternfly/react-core";
@@ -38,9 +41,28 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       variant={ModalVariant.small}
-      title={t("Use custom type")}
       data-test="use-custom-type-modal"
-      actions={[
+    >
+      <ModalHeader title={t("Use custom type")} />
+      <ModalBody>
+        <Form>
+          <FormGroup fieldId="custom-type" isRequired label={t("Type")}>
+            <TextInput
+              name={fieldName}
+              value={customType}
+              onChange={(_, value) => setCustomType(value)}
+              data-test="custom-type-input"
+              aria-label="custom type"
+            />
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem>{t("Name of the custom type")}</HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          </FormGroup>
+        </Form>
+      </ModalBody>
+      <ModalFooter>
         <Button
           key="confirm"
           variant="primary"
@@ -53,7 +75,7 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
           type="submit"
         >
           {t("Create")}
-        </Button>,
+        </Button>
         <Button
           key="cancel"
           variant="link"
@@ -61,25 +83,8 @@ const CustomTypeModal: React.FC<CustomTypeModalProps> = ({
           data-test="cancel-custom-type"
         >
           {t("Cancel")}
-        </Button>,
-      ]}
-    >
-      <Form>
-        <FormGroup fieldId="custom-type" isRequired label={t("Type")}>
-          <TextInput
-            name={fieldName}
-            value={customType}
-            onChange={(_, value) => setCustomType(value)}
-            data-test="custom-type-input"
-            aria-label="custom type"
-          />
-          <FormHelperText>
-            <HelperText>
-              <HelperTextItem>{t("Name of the custom type")}</HelperTextItem>
-            </HelperText>
-          </FormHelperText>
-        </FormGroup>
-      </Form>
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };
