@@ -4,7 +4,6 @@ import { nodeHealthCheckKind } from "data/model";
 import { NodeHealthCheck } from "data/types";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import * as React from "react";
-import { Helmet } from "react-helmet";
 import NodeHealthCheckForm from "./NodeHealthCheckForm";
 import { useLocation } from "react-router";
 import { withFallback } from "../../copiedFromConsole/error";
@@ -29,6 +28,7 @@ const NodeHealthCheckEditPage_ = () => {
       name,
     });
   const title = t("Edit NodeHealthCheck");
+
   const nodeHealthCheckForm = (
     <NodeHealthCheckForm
       name={name}
@@ -40,9 +40,6 @@ const NodeHealthCheckEditPage_ = () => {
 
   return (
     <StatusBox loaded={loaded} loadError={loadError} data={nodeHealthCheck}>
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
       {nodeHealthCheckForm}
     </StatusBox>
   );

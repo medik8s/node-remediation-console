@@ -70,7 +70,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/restrict-template-expressions": "warn",
     "react-hooks/rules-of-hooks": "error",
-    "react/self-closing-comp": "error",
+    "react/self-closing-comp": "error",      
     "react/no-unescaped-entities": [
       "error",
       {

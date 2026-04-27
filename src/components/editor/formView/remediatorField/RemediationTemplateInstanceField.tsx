@@ -45,7 +45,7 @@ export const RemediationTemplateField: React.FC<
       return undefined;
     }
     return instances.find(
-      (i) => i.name === nameField.value && i.namespace === namespaceField.value,
+      (i) => i.name === nameField.value && i.namespace === namespaceField.value
     );
   }, [instances, nameField.value, namespaceField.value]);
 
@@ -82,12 +82,12 @@ export const RemediationTemplateField: React.FC<
 
   const createInstanceUrl = React.useMemo(
     () => getCreateInstanceUrl(apiVersionField.value, kind),
-    [apiVersionField.value, kind],
+    [apiVersionField.value, kind]
   );
 
   const onSelect = (_event: unknown, selection: string | number) => {
     const instance = instances.find(
-      (i) => `${i.namespace}/${i.name}` === selection,
+      (i) => `${i.namespace}/${i.name}` === selection
     );
     if (instance) {
       setFieldValue(nameFieldName, instance.name);

@@ -45,7 +45,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const { t } = useNodeHealthCheckTranslation();
   const [isOpen, setOpen] = React.useState(false);
   const [field, { touched, error }, { setValue }] = useField<string[]>(
-    props.name,
+    props.name
   );
   const textInputRef = React.useRef<HTMLInputElement>();
   const fieldId = getFieldId(props.name, "multiinput");

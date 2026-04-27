@@ -9,7 +9,9 @@ const EnhancedTextList: React.FC<{ textList: string[] }> = ({ textList }) => (
   <List isPlain className="nhc-enhanced-text-list__list">
     {textList.map((text, idx) => (
       <EllipsisToolTip content={text} key={idx}>
-        <ListItem className="nhc-enhanced-text-list__list-item">{text}</ListItem>
+        <ListItem className="nhc-enhanced-text-list__list-item">
+          {text}
+        </ListItem>
       </EllipsisToolTip>
     ))}
   </List>

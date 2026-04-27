@@ -1,4 +1,4 @@
-import { useUserSettings } from "@openshift-console/dynamic-plugin-sdk-internal";
+import { useUserSettings } from "@openshift-console/dynamic-plugin-sdk";
 import * as React from "react";
 
 import { EditorType } from "data/types";

@@ -63,7 +63,7 @@ const RemediationTemplateField = () => {
           <>
             <Content>
               {t(
-                "Rearrange the templates using drag and drop or by editing the 'Order' field. The remediations will be executed in the specified order."
+                "Set the run order of remediations with the 'Order' field (lower numbers run first). The remediations will be executed in that order."
               )}
             </Content>
             <RemediatorsArrayField />

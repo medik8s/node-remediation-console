@@ -1,6 +1,6 @@
 import { nodeHealthCheckStringKind } from "data/model";
 import * as React from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 const MACHINE_HEALTHCHECKS_URL =
   "/k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineHealthCheck";
@@ -23,17 +23,17 @@ const getNodeHealthCheckUrl = (name?: string) => {
 };
 
 export const useNodeHealthCheckNavigation = (): NavigationApi => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return React.useMemo(
     () => ({
       getNodeHealthCheckUrl,
-      gotoList: () => history.push(getNodeHealthCheckUrl()),
-      gotoDetails: (name: string) => history.push(getNodeHealthCheckUrl(name)),
+      gotoList: () => navigate(getNodeHealthCheckUrl()),
+      gotoDetails: (name: string) => navigate(getNodeHealthCheckUrl(name)),
       gotoEditor: (name: string) =>
-        history.push(`${getNodeHealthCheckUrl(name)}/edit`),
-      goBack: () => history.goBack(),
-      gotoMachineHealthChecks: () => history.push(MACHINE_HEALTHCHECKS_URL),
+        navigate(`${getNodeHealthCheckUrl(name)}/edit`),
+      goBack: () => navigate(-1),
+      gotoMachineHealthChecks: () => navigate(MACHINE_HEALTHCHECKS_URL),
     }),
-    [history],
+    [navigate]
   );
 };

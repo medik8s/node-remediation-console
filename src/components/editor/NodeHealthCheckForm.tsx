@@ -17,7 +17,7 @@ import { getFormValues, getNodeHealthCheck } from "data/formValues";
 import { LoadingInline } from "copiedFromConsole/utils/status-box";
 import "./nhc-form.css";
 import { useOpenShiftVersion } from "copiedFromConsole/hooks/useOpenShiftVersion";
-import { Flex, FlexItem, PageSection } from "@patternfly/react-core";
+import { PageSection, Stack, StackItem } from "@patternfly/react-core";
 export interface NodeHealthCheckProps {
   title: string;
   name: string;
@@ -105,17 +105,16 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
 
   return (
     <PageSection>
-      <Flex
-        direction={{ default: "column" }}
-        spaceItems={{ default: "spaceItemsSm" }}
+      <Stack
+        hasGutter
         style={{
           height: "100%",
         }}
       >
-        <FlexItem>
+        <StackItem>
           <PageHeading title={title} helpText={<HelpText />} />
-        </FlexItem>
-        <FlexItem grow={{ default: "grow" }}>
+        </StackItem>
+        <StackItem isFilled>
           <Formik
             enableReinitialize
             initialValues={initialValues}
@@ -128,8 +127,8 @@ const NodeHealthCheckForm__: React.FC<NodeHealthCheckProps> = ({
               handleCancel={() => navigation.goBack()}
             />
           </Formik>
-        </FlexItem>
-      </Flex>
+        </StackItem>
+      </Stack>
     </PageSection>
   );
 };

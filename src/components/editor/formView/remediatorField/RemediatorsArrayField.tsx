@@ -1,15 +1,10 @@
 import {
-  Button,
   Divider,
   ExpandableSection,
   Flex,
   FlexItem,
   Label,
 } from "@patternfly/react-core";
-import type { DragEndEvent } from "@dnd-kit/core";
-import { DragDropSort } from "@patternfly/react-drag-drop";
-import type { DraggableObject } from "@patternfly/react-drag-drop/dist/esm/components/DragDrop/DragDropContainer";
-
 import { FieldArray, FieldArrayRenderProps, useField } from "formik";
 import * as React from "react";
 import {
@@ -20,7 +15,7 @@ import { Remediator } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import RemediatorField from "./RemediatorField";
 import { WithRemoveButton } from "../../../shared/WithRemoveButton";
-import { GripVerticalIcon, InfoCircleIcon } from "@patternfly/react-icons";
+import { InfoCircleIcon } from "@patternfly/react-icons";
 import { getDurationHelptext } from "../../../../copiedFromConsole/utils/durationUtils";
 import HelpIcon from "../../../shared/HelpIcon";
 import AddMoreButton from "../../../shared/AddMoreButton";
@@ -67,7 +62,7 @@ const TimeoutField = ({ fieldName }: { fieldName: string }) => {
       labelIcon={
         <HelpIcon
           helpText={t(
-            "The timeout field determines when the next remediation template is invoked.",
+            "The timeout field determines when the next remediation template is invoked."
           )}
         />
       }
@@ -91,7 +86,7 @@ const OrderField = ({
       labelIcon={
         <HelpIcon
           helpText={t(
-            "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier.",
+            "The order field determines the order in which the remediations are invoked. The lower order number is invoked earlier."
           )}
         />
       }
@@ -124,43 +119,23 @@ const SingleRemediatorField = ({
         isDisabled={isRemoveDisabled}
         dataTest={"remove-remediator-button"}
       >
-        <Flex
-          alignItems={{ default: "alignItemsFlexStart" }}
-          flexWrap={{ default: "nowrap" }}
+        <ExpandableSection
+          toggleContent={
+            <ToggleContent fieldName={fieldName} isExpanded={isExpanded} />
+          }
+          isIndented
+          isExpanded={isExpanded}
+          onToggle={() => toggleExpand(index)}
         >
-          <FlexItem
-            spacer={{ default: "spacerSm" }}
-            className="pf-v6-c-expandable-section"
-          >
-            <Button
-              icon={<GripVerticalIcon />}
-              style={{
-                padding:
-                  "var(--pf-c-expandable-section__toggle--PaddingTop) 0 var(--pf-c-expandable-section__toggle--PaddingBottom) 0",
-              }}
-              variant="plain"
+          <>
+            <RemediatorField fieldName={`${fieldName}`} />
+            <TimeoutField fieldName={`${fieldName}.timeout`} />
+            <OrderField
+              fieldName={`${fieldName}.order`}
+              onChange={onOrderChanged}
             />
-          </FlexItem>
-          <FlexItem grow={{ default: "grow" }}>
-            <ExpandableSection
-              toggleContent={
-                <ToggleContent fieldName={fieldName} isExpanded={isExpanded} />
-              }
-              isIndented
-              isExpanded={isExpanded}
-              onToggle={() => toggleExpand(index)}
-            >
-              <>
-                <RemediatorField fieldName={`${fieldName}`} />
-                <TimeoutField fieldName={`${fieldName}.timeout`} />
-                <OrderField
-                  fieldName={`${fieldName}.order`}
-                  onChange={onOrderChanged}
-                />
-              </>
-            </ExpandableSection>
-          </FlexItem>
-        </Flex>
+          </>
+        </ExpandableSection>
       </WithRemoveButton>
       <Divider />
     </>
@@ -169,7 +144,7 @@ const SingleRemediatorField = ({
 
 const getExpanded = (
   remediators: Remediator[],
-  expandLast?: boolean,
+  expandLast?: boolean
 ): Record<number, boolean> => {
   const ret: Record<number, boolean> = {};
   for (let i = 0; i < remediators.length; ++i) {
@@ -193,32 +168,18 @@ const RemediatorsArrayFieldContent = ({
   const { t } = useNodeHealthCheckTranslation();
 
   const [expanded, setExpanded] = React.useState<Record<number, boolean>>(
-    getExpanded(remediators || [], remediators?.length === 1),
+    getExpanded(remediators || [], remediators?.length === 1)
   );
 
   const onOrderFieldChange = (id: number) => {
     const newRemediators = getSortedRemediators(remediators);
     if (!isEqual(newRemediators, remediators)) {
-      setRemediators(getSortedRemediators(remediators));
+      void setRemediators(getSortedRemediators(remediators));
       setExpanded({ ...getExpanded(remediators), [id]: true });
     }
   };
 
   const debounce = useDebounce(onOrderFieldChange, 300);
-
-  const onSortDrop = (_event: DragEndEvent, newItems: DraggableObject[]) => {
-    debounce.cancel();
-    const newRemediators: Remediator[] = [];
-    for (let idx = 0; idx < newItems.length; idx++) {
-      const item = newItems[idx];
-      const id = typeof item.id === "string" ? Number(item.id) : item.id;
-      const r = remediators.find((x) => x.id === id);
-      if (r) {
-        newRemediators.push({ ...r, order: idx });
-      }
-    }
-    setRemediators(newRemediators);
-  };
 
   const onAdd = () => {
     const prevRemediatorOrder = remediators[remediators.length - 1]?.order;
@@ -231,32 +192,27 @@ const RemediatorsArrayFieldContent = ({
     push(newRemediator);
   };
 
-  const sortableItems = remediators.map((_remediator, index) => ({
-    id: _remediator.id,
-    props: { useDragButton: false as const },
-    content: (
-      <SingleRemediatorField
-        key={_remediator.id}
-        index={index}
-        remove={remove}
-        fieldName={`${fieldName}[${index}]`}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        onOrderChanged={() => debounce(_remediator.id)}
-        isExpanded={expanded[_remediator.id]}
-        toggleExpand={() =>
-          setExpanded({
-            ...expanded,
-            [_remediator.id]: !expanded[_remediator.id],
-          })
-        }
-        isRemoveDisabled={remediators.length === 1}
-      />
-    ),
-  }));
-
   return (
     <>
-      <DragDropSort items={sortableItems} onDrop={onSortDrop} />
+      {remediators.map((_remediator, index) => (
+        <React.Fragment key={_remediator.id}>
+          <SingleRemediatorField
+            index={index}
+            remove={remove}
+            fieldName={`${fieldName}[${index}]`}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            onOrderChanged={() => debounce(_remediator.id)}
+            isExpanded={expanded[_remediator.id]}
+            toggleExpand={() =>
+              setExpanded({
+                ...expanded,
+                [_remediator.id]: !expanded[_remediator.id],
+              })
+            }
+            isRemoveDisabled={remediators.length === 1}
+          />
+        </React.Fragment>
+      ))}
       <AddMoreButton onClick={onAdd} dataTest="add-remediator-button">
         {t("Add more")}
       </AddMoreButton>

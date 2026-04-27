@@ -1,5 +1,5 @@
 import * as React from "react";
-import classNames from "classnames";
+import * as classNames from "classnames";
 import { Button, Popover } from "@patternfly/react-core";
 import { OutlinedQuestionCircleIcon } from "@patternfly/react-icons";
 type PopoverIconProps = {
