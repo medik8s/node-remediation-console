@@ -1,4 +1,4 @@
-import { useUserSettings } from "@openshift-console/dynamic-plugin-sdk";
+import { useUserPreference } from "@openshift-console/dynamic-plugin-sdk";
 import * as React from "react";
 
 import { EditorType } from "data/types";
@@ -16,7 +16,7 @@ export const useEditorType = (
     lastViewedEditorType,
     setLastViewedEditorType,
     lastViewedEditorTypeLoaded,
-  ] = useUserSettings<EditorType>(lastViewUserSettingKey);
+  ] = useUserPreference<EditorType>(lastViewUserSettingKey);
   const [preferredEditorType, preferredEditorTypeLoaded] =
     usePreferredCreateEditMethod();
   const isEditorTypeEnabled = (type: EditorType): boolean =>

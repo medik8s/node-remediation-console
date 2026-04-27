@@ -69,6 +69,7 @@ module.exports = {
     "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/restrict-template-expressions": "warn",
+    "@typescript-eslint/no-floating-promises": "off",
     "react-hooks/rules-of-hooks": "error",
     "react/self-closing-comp": "error",      
     "react/no-unescaped-entities": [

@@ -1,4 +1,4 @@
-import { useUserSettings } from "@openshift-console/dynamic-plugin-sdk";
+import { useUserPreference } from "@openshift-console/dynamic-plugin-sdk";
 
 export const PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_VALUE_LATEST = "latest";
 const PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_KEY =
@@ -6,6 +6,6 @@ const PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_KEY =
 
 export const usePreferredCreateEditMethod = (): [string, boolean] => {
   const [preferredCreateEditMethod, , preferredCreateEditMethodLoaded] =
-    useUserSettings<string>(PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_KEY);
+    useUserPreference<string>(PREFERRED_CREATE_EDIT_METHOD_USER_SETTING_KEY);
   return [preferredCreateEditMethod, preferredCreateEditMethodLoaded];
 };
