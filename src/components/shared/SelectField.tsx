@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   FormGroup,
   MenuToggle,
-  MenuToggleElement,
   Select,
   SelectList,
   SelectOption,
@@ -79,7 +78,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   return (
     <FormGroup fieldId={fieldId} label={label} isRequired={isRequired}>
       <Select
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        toggle={(toggleRef: React.RefObject<HTMLButtonElement | null>) => (
           <MenuToggle
             ref={toggleRef}
             data-test={`toggle-${label}-select`}
@@ -94,7 +93,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         onOpenChange={setIsOpen}
         onSelect={onSelect}
         isOpen={isOpen}
-        readOnly={isDisabled}
+        selected={value}
       >
         <SelectList>{getSelectItems()}</SelectList>
       </Select>

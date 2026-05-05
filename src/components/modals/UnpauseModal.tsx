@@ -2,13 +2,15 @@ import {
   Button,
   Modal,
   ModalVariant,
-  Text,
   Alert,
-  TextVariants,
   Stack,
   StackItem,
-  TextContent,
   Icon,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Content,
+  ContentVariants,
 } from "@patternfly/react-core";
 import { unpauseNodeHealthCheck } from "apis/nodeHealthCheckApis";
 import * as React from "react";
@@ -16,7 +18,7 @@ import * as React from "react";
 import { NodeHealthCheckModalProps } from "./propTypes";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { InfoCircleIcon } from "@patternfly/react-icons";
-import { global_palette_blue_300 as infoColor } from "@patternfly/react-tokens";
+import { t_global_icon_color_status_info_default as infoColor } from "@patternfly/react-tokens";
 import EnhancedTextList from "components/shared/EnhancedTextList";
 
 export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
@@ -45,9 +47,35 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       variant={ModalVariant.small}
-      title={t("Unpause NodeHealthCheck")}
-      description={t("Are you sure you want to unpause Node health check?")}
-      actions={[
+    >
+      <ModalHeader
+        title={t("Unpause NodeHealthCheck")}
+        description={t("Are you sure you want to unpause Node health check?")}
+      />
+      <ModalBody>
+        <Stack hasGutter>
+          <StackItem>
+            <Content component={ContentVariants.h4}>
+              {t(`Pause reasons`)}
+            </Content>
+          </StackItem>
+          <StackItem>
+            <EnhancedTextList textList={pauseRequests} />
+          </StackItem>
+          <StackItem>
+            <Content>
+              <Icon size="sm" color={infoColor.value}>
+                <InfoCircleIcon />
+              </Icon>
+              &nbsp;{`${infoMessage}`}
+            </Content>
+          </StackItem>
+        </Stack>
+        {error && (
+          <Alert variant="danger" title={t("Failed to unpause")} isInline />
+        )}
+      </ModalBody>
+      <ModalFooter>
         <Button
           key="confirm"
           variant="primary"
@@ -57,7 +85,7 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           data-test="confirm"
         >
           {t("Unpause")}
-        </Button>,
+        </Button>
         <Button
           key="cancel"
           variant="secondary"
@@ -66,30 +94,8 @@ export const UnpauseModal: React.FC<NodeHealthCheckModalProps> = ({
           isDisabled={isSubmitting}
         >
           {t("Cancel")}
-        </Button>,
-      ]}
-    >
-      <Stack hasGutter>
-        <StackItem>
-          <TextContent>
-            <Text component={TextVariants.h4}>{t(`Pause reasons`)}</Text>
-          </TextContent>
-        </StackItem>
-        <StackItem>
-          <EnhancedTextList textList={pauseRequests} />
-        </StackItem>
-        <StackItem>
-          <Text>
-            <Icon size="sm" color={infoColor.value}>
-              <InfoCircleIcon />
-            </Icon>
-            &nbsp;{`${infoMessage}`}
-          </Text>
-        </StackItem>
-      </Stack>
-      {error && (
-        <Alert variant="danger" title={t("Failed to unpause")} isInline />
-      )}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };

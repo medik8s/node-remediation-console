@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useField } from "formik";
 import {
+  Button,
   FormGroup,
   FormHelperText,
   HelperText,
   HelperTextItem,
+  MenuFooter,
   MenuToggle,
-  MenuToggleElement,
   Select,
   SelectProps,
   Spinner,
@@ -54,7 +55,6 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const onToggle = (isOpen: boolean) => setOpen(isOpen);
   const onClearSelection = () => {
     setValue([]);
     setOpen(false);
@@ -93,29 +93,27 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         {...field}
         {...props}
         id={fieldId}
-        validated={isValid ? "default" : "error"}
         aria-describedby={`${fieldId}-helper`}
-        placeholderText={t("Filter by label")}
         isOpen={isOpen}
-        onToggle={onToggle}
+        onOpenChange={setOpen}
         onSelect={onSelect}
-        selections={field.value}
-        onClear={onClearSelection}
-        maxHeight={400}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        selected={field.value}
+        variant="typeahead"
+        toggle={(toggleRef: React.RefObject<HTMLButtonElement | null>) => (
           <MenuToggle
             variant="typeahead"
             ref={toggleRef}
             onClick={() => setOpen(!isOpen)}
             isExpanded={isOpen}
             isFullWidth
+            status={isValid ? undefined : "danger"}
           >
             <TextInputGroup isPlain>
               <TextInputGroupMain
                 value={filterValue}
-                onClick={() => onToggle(!isOpen)}
+                onClick={() => setOpen(!isOpen)}
                 onChange={(_, val) => setFilterValue(val)}
-                onKeyDown={() => onToggle(true)}
+                onKeyDown={() => setOpen(true)}
                 id="multi-typeahead-select-checkbox-input"
                 autoComplete="off"
                 innerRef={textInputRef}
@@ -129,9 +127,14 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         )}
         maxMenuHeight="25rem"
         isScrollable
-        appendTo={() => containerRef.current || document.body}
+        popperProps={{ appendTo: () => containerRef.current || document.body }}
       >
         {children}
+        <MenuFooter>
+          <Button variant="link" onClick={onClearSelection}>
+            {t("Clear selection")}
+          </Button>
+        </MenuFooter>
       </Select>
       <FormHelperText>
         <HelperText>
@@ -151,7 +154,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       fieldId={fieldId}
       label={label}
       isRequired={isRequired}
-      labelIcon={labelIcon}
+      labelHelp={labelIcon}
       data-test={`multi-select-${label}`}
     >
       {formContent}

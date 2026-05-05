@@ -12,7 +12,7 @@ import NodeStatus, { nodeStatus } from "copiedFromConsole/nodes/NodeStatus";
 import { sortable, SortByDirection } from "@patternfly/react-table";
 
 import { useField } from "formik";
-import { EmptyState, Title } from "@patternfly/react-core";
+import { EmptyState } from "@patternfly/react-core";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import { getNodeRolesText } from "data/nodeRoles";
 import useSelectedNodes from "apis/useSelectedNodes";
@@ -83,13 +83,14 @@ const getEmptyMsg = (selectedLabels: string[]) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { t } = useNodeHealthCheckTranslation();
     return (
-      <EmptyState>
-        <Title headingLevel="h2" size="lg">
-          {selectedLabels.length === 0
+      <EmptyState
+        headingLevel="h2"
+        titleText={
+          selectedLabels.length === 0
             ? t("No nodes were selected, use filter to select nodes")
-            : t("No nodes match the selected labels")}
-        </Title>
-      </EmptyState>
+            : t("No nodes match the selected labels")
+        }
+      />
     );
   };
   return component;

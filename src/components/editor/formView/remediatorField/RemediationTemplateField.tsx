@@ -1,4 +1,4 @@
-import { FormSection, Text, FormGroup } from "@patternfly/react-core";
+import { Content, FormSection, FormGroup } from "@patternfly/react-core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { getDefaultRemediator } from "../../../../data/remediator";
@@ -61,11 +61,11 @@ const RemediationTemplateField = () => {
         )}
         {values.formData.useEscalating && (
           <>
-            <Text>
+            <Content>
               {t(
-                "Rearrange the templates using drag and drop or by editing the 'Order' field. The remediations will be executed in the specified order."
+                "Set the run order of remediations with the 'Order' field (lower numbers run first). The remediations will be executed in that order."
               )}
-            </Text>
+            </Content>
             <RemediatorsArrayField />
           </>
         )}

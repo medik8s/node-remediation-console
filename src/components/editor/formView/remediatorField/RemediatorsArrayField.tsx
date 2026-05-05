@@ -1,12 +1,10 @@
 import {
-  Button,
   Divider,
   ExpandableSection,
   Flex,
   FlexItem,
   Label,
 } from "@patternfly/react-core";
-
 import { FieldArray, FieldArrayRenderProps, useField } from "formik";
 import * as React from "react";
 import {
@@ -16,9 +14,8 @@ import {
 import { Remediator } from "../../../../data/types";
 import { useNodeHealthCheckTranslation } from "../../../../localization/useNodeHealthCheckTranslation";
 import RemediatorField from "./RemediatorField";
-import { DragDrop, Draggable, Droppable } from "@patternfly/react-core";
 import { WithRemoveButton } from "../../../shared/WithRemoveButton";
-import { GripVerticalIcon, InfoCircleIcon } from "@patternfly/react-icons";
+import { InfoCircleIcon } from "@patternfly/react-icons";
 import { getDurationHelptext } from "../../../../copiedFromConsole/utils/durationUtils";
 import HelpIcon from "../../../shared/HelpIcon";
 import AddMoreButton from "../../../shared/AddMoreButton";
@@ -122,60 +119,27 @@ const SingleRemediatorField = ({
         isDisabled={isRemoveDisabled}
         dataTest={"remove-remediator-button"}
       >
-        <Flex
-          alignItems={{ default: "alignItemsFlexStart" }}
-          flexWrap={{ default: "nowrap" }}
+        <ExpandableSection
+          toggleContent={
+            <ToggleContent fieldName={fieldName} isExpanded={isExpanded} />
+          }
+          isIndented
+          isExpanded={isExpanded}
+          onToggle={() => toggleExpand(index)}
         >
-          <FlexItem
-            spacer={{ default: "spacerSm" }}
-            className="pf-c-expandable-section"
-          >
-            <Button
-              icon={<GripVerticalIcon />}
-              style={{
-                padding:
-                  "var(--pf-c-expandable-section__toggle--PaddingTop) 0 var(--pf-c-expandable-section__toggle--PaddingBottom) 0",
-              }}
-              variant="plain"
+          <>
+            <RemediatorField fieldName={`${fieldName}`} />
+            <TimeoutField fieldName={`${fieldName}.timeout`} />
+            <OrderField
+              fieldName={`${fieldName}.order`}
+              onChange={onOrderChanged}
             />
-          </FlexItem>
-          <FlexItem grow={{ default: "grow" }}>
-            <ExpandableSection
-              toggleContent={
-                <ToggleContent fieldName={fieldName} isExpanded={isExpanded} />
-              }
-              isIndented
-              isExpanded={isExpanded}
-              onToggle={() => toggleExpand(index)}
-            >
-              <>
-                <RemediatorField fieldName={`${fieldName}`} />
-                <TimeoutField fieldName={`${fieldName}.timeout`} />
-                <OrderField
-                  fieldName={`${fieldName}.order`}
-                  onChange={onOrderChanged}
-                />
-              </>
-            </ExpandableSection>
-          </FlexItem>
-        </Flex>
+          </>
+        </ExpandableSection>
       </WithRemoveButton>
       <Divider />
     </>
   );
-};
-
-interface SourceType {
-  droppableId: string;
-  index: number;
-}
-type DestinationType = SourceType;
-
-const reorder = (list: Remediator[], startIndex: number, endIndex: number) => {
-  const result = list;
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
 };
 
 const getExpanded = (
@@ -210,24 +174,12 @@ const RemediatorsArrayFieldContent = ({
   const onOrderFieldChange = (id: number) => {
     const newRemediators = getSortedRemediators(remediators);
     if (!isEqual(newRemediators, remediators)) {
-      setRemediators(getSortedRemediators(remediators));
+      void setRemediators(getSortedRemediators(remediators));
       setExpanded({ ...getExpanded(remediators), [id]: true });
     }
   };
 
   const debounce = useDebounce(onOrderFieldChange, 300);
-
-  const onDrop = (source: SourceType, dest: DestinationType) => {
-    debounce.cancel();
-    if (dest) {
-      const newItems = reorder(remediators, source.index, dest.index).map(
-        (r, idx) => ({ ...r, order: idx })
-      );
-      setRemediators(newItems);
-      return true;
-    }
-    return false;
-  };
 
   const onAdd = () => {
     const prevRemediatorOrder = remediators[remediators.length - 1]?.order;
@@ -242,32 +194,25 @@ const RemediatorsArrayFieldContent = ({
 
   return (
     <>
-      <DragDrop onDrop={onDrop}>
-        <Droppable>
-          <>
-            {remediators?.map((_remediator, index) => (
-              <Draggable key={index}>
-                <SingleRemediatorField
-                  key={_remediator.id}
-                  index={index}
-                  remove={remove}
-                  fieldName={`${fieldName}[${index}]`}
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-                  onOrderChanged={() => debounce(_remediator.id)}
-                  isExpanded={expanded[_remediator.id]}
-                  toggleExpand={() =>
-                    setExpanded({
-                      ...expanded,
-                      [_remediator.id]: !expanded[_remediator.id],
-                    })
-                  }
-                  isRemoveDisabled={remediators.length === 1}
-                />
-              </Draggable>
-            ))}
-          </>
-        </Droppable>
-      </DragDrop>
+      {remediators.map((_remediator, index) => (
+        <React.Fragment key={_remediator.id}>
+          <SingleRemediatorField
+            index={index}
+            remove={remove}
+            fieldName={`${fieldName}[${index}]`}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            onOrderChanged={() => debounce(_remediator.id)}
+            isExpanded={expanded[_remediator.id]}
+            toggleExpand={() =>
+              setExpanded({
+                ...expanded,
+                [_remediator.id]: !expanded[_remediator.id],
+              })
+            }
+            isRemoveDisabled={remediators.length === 1}
+          />
+        </React.Fragment>
+      ))}
       <AddMoreButton onClick={onAdd} dataTest="add-remediator-button">
         {t("Add more")}
       </AddMoreButton>

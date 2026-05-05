@@ -1,14 +1,13 @@
 import { GreenCheckCircleIcon } from "@openshift-console/dynamic-plugin-sdk";
 import {
   Popover,
-  TextContent,
-  TextVariants,
-  Text,
-  TextListItem,
+  Content,
+  ContentVariants,
   Button,
   Stack,
   StackItem,
-  TextList,
+  List,
+  ListItem,
   PopoverProps,
 } from "@patternfly/react-core";
 import {
@@ -19,18 +18,14 @@ import {
   AngleRightIcon,
 } from "@patternfly/react-icons";
 import { ModalId } from "components/modals/Modals";
-import {
-  NodeHealthCheck,
-  StatusPhase,
-  NodeHealthCheckStatus,
-} from "data/types";
+import { NodeHealthCheck, StatusPhase } from "data/types";
 import * as React from "react";
 import { useNodeHealthCheckTranslation } from "localization/useNodeHealthCheckTranslation";
 import NotAvailable from "../list/NotAvailable";
 import { useModals } from "components/modals/ModalsContext";
 import { TFunction } from "i18next";
-import { global_link_Color as okColor } from "@patternfly/react-tokens";
-import { global_danger_color_100 as dangerColor } from "@patternfly/react-tokens";
+import { t_global_text_color_link_default as okColor } from "@patternfly/react-tokens";
+import { t_global_color_status_danger_100 as dangerColor } from "@patternfly/react-tokens";
 import EllipsisToolTip from "components/shared/EllipsisTooltip";
 import "./nhc-status.css";
 
@@ -101,20 +96,20 @@ const PausePopoverContent: React.FC<{
   return (
     <Stack>
       <StackItem>
-        <Text component={TextVariants.h4} data-test="status-reason">
+        <Content component={ContentVariants.h4} data-test="status-reason">
           {t("{{count}} pause reason", { count: pauseReasons.length })}
-        </Text>
+        </Content>
       </StackItem>
       <StackItem>
-        <TextList className="nhc-enhanced-text-list__list">
+        <List isPlain className="nhc-enhanced-text-list__list">
           {pauseReasonsToShow.map((reason, idx) => (
             <EllipsisToolTip content={reason} key={idx}>
-              <TextListItem className="nhc-enhanced-text-list__list-item">
+              <ListItem className="nhc-enhanced-text-list__list-item">
                 {reason}
-              </TextListItem>
+              </ListItem>
             </EllipsisToolTip>
           ))}
-        </TextList>
+        </List>
       </StackItem>
       {pauseReasons.length > 3 && (
         <StackItem>
@@ -165,10 +160,12 @@ const PopoverContent: React.FC<{
           onEditPauseReasons={onEditPauseReasons}
         />
       ) : (
-        <TextContent>
-          <Text component={TextVariants.h4}>{getPhaseLabel(t, phase)}</Text>
-          <Text data-test="status-reason">{reason}</Text>
-        </TextContent>
+        <>
+          <Content component={ContentVariants.h4}>
+            {getPhaseLabel(t, phase)}
+          </Content>
+          <Content data-test="status-reason">{reason}</Content>
+        </>
       )}
     </>
   );

@@ -3,7 +3,7 @@ import * as classNames from "classnames";
 import * as _ from "lodash-es";
 import { K8sResourceKindReference } from "@openshift-console/dynamic-plugin-sdk";
 
-export const ResourceIcon: React.SFC<ResourceIconProps> = ({
+export const ResourceIcon: React.FC<ResourceIconProps> = ({
   className,
   abbr,
   color,

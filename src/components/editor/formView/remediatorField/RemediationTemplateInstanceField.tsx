@@ -1,12 +1,11 @@
 import {
+  Button,
   FormGroup,
+  MenuFooter,
   MenuToggle,
-  MenuToggleElement,
   Select,
   SelectList,
   SelectOption,
-  MenuFooter,
-  Button,
 } from "@patternfly/react-core";
 import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 import { useField, useFormikContext } from "formik";
@@ -129,8 +128,8 @@ export const RemediationTemplateField: React.FC<
         onOpenChange={setIsOpen}
         onOpenChangeKeys={["Escape"]}
         onSelect={onSelect}
-        selections={selectedValue}
-        toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+        selected={selectedValue}
+        toggle={(toggleRef: React.RefObject<HTMLButtonElement | null>) => (
           <MenuToggle
             ref={toggleRef}
             onClick={onToggle}
@@ -166,7 +165,7 @@ export const RemediationTemplateField: React.FC<
               isInline
               onClick={onCreateNewInstanceClick}
               icon={<ExternalLinkAltIcon />}
-              iconPosition="right"
+              iconPosition="end"
             >
               {t("Create new instance")}
             </Button>

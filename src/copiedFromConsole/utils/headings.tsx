@@ -12,16 +12,15 @@ import {
   BreadcrumbItem,
   Split,
   SplitItem,
-  Text,
-  TextContent,
-  TextVariants,
+  Content,
+  ContentVariants,
   Title,
   Flex,
   FlexItem,
   Grid,
   GridItem,
 } from "@patternfly/react-core";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import ActionsMenu from "./ActionsMenu";
 import { isEmpty } from "lodash-es";
 import { nodeHealthCheckKind } from "../../data/model";
@@ -45,7 +44,7 @@ export type PageHeadingProps = {
   detail?: boolean;
 };
 
-export const BreadCrumbs: React.SFC<BreadCrumbsProps> = ({ breadcrumbs }) => (
+export const BreadCrumbs: React.FC<BreadCrumbsProps> = ({ breadcrumbs }) => (
   <Breadcrumb>
     {breadcrumbs.map((crumb, i, { length }) => {
       const isLast = i === length - 1;
@@ -70,7 +69,7 @@ export const BreadCrumbs: React.SFC<BreadCrumbsProps> = ({ breadcrumbs }) => (
 );
 
 export const PageHeading: React.FC<PageHeadingProps> = (
-  props: PageHeadingProps
+  props: PageHeadingProps,
 ) => {
   const {
     title,
@@ -124,9 +123,7 @@ export const PageHeading: React.FC<PageHeadingProps> = (
                 )}
               </Flex>
               {helpText && (
-                <TextContent>
-                  <Text component={TextVariants.p}>{helpText}</Text>
-                </TextContent>
+                <Content component={ContentVariants.p}>{helpText}</Content>
               )}
             </FlexItem>
             {hasMenuActions && (
@@ -141,7 +138,7 @@ export const PageHeading: React.FC<PageHeadingProps> = (
   );
 };
 
-export const SectionHeading: React.SFC<SectionHeadingProps> = ({
+export const SectionHeading: React.FC<SectionHeadingProps> = ({
   text,
   children,
   style,
@@ -156,8 +153,8 @@ export const SectionHeading: React.SFC<SectionHeadingProps> = ({
 );
 
 export type SectionHeadingProps = {
-  children?: unknown;
-  style?: unknown;
+  children?: React.ReactNode;
+  style?: React.CSSProperties;
   text: string;
   required?: boolean;
   id?: string;

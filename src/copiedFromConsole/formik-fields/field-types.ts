@@ -1,9 +1,10 @@
 import {
-  ValidatedOptions,
   TextInputTypes,
   SelectOptionProps,
   SelectProps,
 } from "@patternfly/react-core";
+
+export type ValidatedFieldState = "success" | "warning" | "error" | "default";
 export interface FieldProps {
   name: string;
   label?: React.ReactNode;
@@ -14,7 +15,7 @@ export interface FieldProps {
   isReadOnly?: boolean;
   className?: string;
   isDisabled?: boolean;
-  validated?: ValidatedOptions;
+  validated?: ValidatedFieldState;
   dataTest?: string;
   labelIcon?: React.ReactElement;
 }
