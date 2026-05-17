@@ -7,7 +7,7 @@ export const PREDEFINED_REMEDIATION_TEMPLATE_KINDS = [
 ] as const;
 
 export type PredefinedRemediationTemplateKind =
-  typeof PREDEFINED_REMEDIATION_TEMPLATE_KINDS[number];
+  (typeof PREDEFINED_REMEDIATION_TEMPLATE_KINDS)[number];
 
 export interface RemediationTemplateKindInfo {
   groupVersionKind: ExtensionK8sModel;
