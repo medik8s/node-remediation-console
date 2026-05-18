@@ -23,12 +23,12 @@ IMG ?= $(IMAGE_REGISTRY)/node-remediation-console:$(IMAGE_TAG)
 # Push the docker image
 .PHONY: lint
 lint:
-	yarn install && yarn lint
+	npm ci && npm run lint
 
-# Clean node_modules and yarn cache to avoid disk space issues
+# Clean node_modules and npm cache to avoid disk space issues
 .PHONY: clean
 clean: 
-	rm -rf node_modules && yarn cache clean
+	rm -rf node_modules && npm cache clean --force
 
 # Build the docker image
 .PHONY: docker-build
