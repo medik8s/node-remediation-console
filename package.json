@@ -16,10 +16,10 @@
     "http-server": "./http-server.sh dist"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.22.9",
-    "@babel/preset-react": "^7.22.5",
-    "@babel/preset-typescript": "^7.22.5",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "@openshift-console/dynamic-plugin-sdk": "^4.22.0-prerelease.3",
     "@openshift-console/dynamic-plugin-sdk-internal": "^4.22.0-prerelease.3",
     "@openshift-console/dynamic-plugin-sdk-webpack": "^4.22.0-prerelease.3",
@@ -39,7 +39,7 @@
     "@types/yup": "^0.29.14",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
-    "babel-loader": "^9.2.1",
+    "babel-loader": "^10.1.1",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^5.2.7",
     "eslint": "^8.18.0",
