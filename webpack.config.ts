@@ -76,7 +76,10 @@ const config: Configuration = {
     },
   },
   plugins: [
-    new ConsoleRemotePlugin(),
+    // SDK 4.23 prerelease still declares react-router ~7.13.1 in peerDependencies,
+    // but console release-4.23 ships react-router ~7.18.1 (openshift/console#16726).
+    // Disable shared module validation until the SDK publishes a corrected prerelease.
+    new ConsoleRemotePlugin({ validateSharedModules: false }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, "locales"), to: "locales" }],
     }),
