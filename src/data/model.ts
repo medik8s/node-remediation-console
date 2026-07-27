@@ -20,6 +20,9 @@ export const parseApiVersion = (
 ): { group: string; version: string } | undefined => {
   if (!apiVersion) return undefined;
   const parts = apiVersion.split("/");
+  if (parts.length === 1 && parts[0]) {
+    return { group: "", version: parts[0] };
+  }
   if (parts.length === 2 && parts[0] && parts[1]) {
     return { group: parts[0], version: parts[1] };
   }

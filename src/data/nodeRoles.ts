@@ -75,5 +75,5 @@ export const getNodeRoles = (node: NodeKind): string[] => {
 };
 
 export const getNodeRolesText = (node: NodeKind): string => {
-  return uniq(getNodeRoles(node)).sort().join(", ") ?? "-";
+  return uniq(getNodeRoles(node)).sort().join(", ") || "-";
 };

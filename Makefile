@@ -25,6 +25,11 @@ IMG ?= $(IMAGE_REGISTRY)/node-remediation-console:$(IMAGE_TAG)
 lint:
 	npm ci && npm run lint
 
+# Run tests
+.PHONY: test
+test:
+	npm run test
+
 # Clean node_modules and npm cache to avoid disk space issues
 .PHONY: clean
 clean: 
