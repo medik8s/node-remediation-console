@@ -65,9 +65,9 @@ export const getSortedRemediators = <
   );
 
 /**
- * Checks if a remediation template has both name and namespace (is fully selected)
+ * Checks if a remediation template has a name (is selected)
  * @param template - The remediation template
- * @returns true if template has both name and namespace
+ * @returns true if template has a name
  */
 export const isRemediationTemplateSelected = (
   template: RemediationTemplate | undefined

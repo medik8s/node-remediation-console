@@ -22,5 +22,6 @@ export const throwParseError = (
 };
 
 export const isParseError = (error: unknown): error is ParseError =>
+  error !== null &&
   typeof error === "object" &&
   Object.values(ParseErrorCode).includes(error["parseErrorCode"]);
